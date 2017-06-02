@@ -1,0 +1,20 @@
+<resources>
+
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
+    </style>
+
+    <style name="WebProgressBarStyle" parent="@android:style/Widget.ProgressBar.Horizontal"></style>
+
+    <style name="MyPopupTheme" parent="ThemeOverlay.AppCompat.Dark">
+        <item name="android:colorBackground">#ff808080</item>
+        <item name="android:textColor">#FFFFFF</item>
+    </style>
+
+    <!-- 设置toolbar打开侧滑时按钮的颜色，大小-->
+    <style name="DrawerArrowStyle" parent="Widget.AppCompat.DrawerArrowToggle">
+        <item name="color">@color/white</item>
+    </style>
+</resources>
