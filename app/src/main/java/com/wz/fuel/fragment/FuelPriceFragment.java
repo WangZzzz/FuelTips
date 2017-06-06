@@ -8,11 +8,14 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.wz.fragment.WBaseFragment;
 import com.wz.fuel.AppConstants;
 import com.wz.fuel.R;
+import com.wz.fuel.activity.MainActivity;
 import com.wz.fuel.mvp.bean.FuelBean;
 import com.wz.fuel.mvp.presenter.FuelPricePresenter;
 import com.wz.fuel.mvp.view.IView;
@@ -83,7 +86,14 @@ public class FuelPriceFragment extends WBaseFragment implements IView<FuelBean> 
 
     @Override
     public void onError(String errorMsg) {
-
+        ToastMsgUtil.error(getActivity(), errorMsg, 1);
+        ListView listView = new ListView(getContext());
+        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                return false;
+            }
+        });
     }
 
     @Override
@@ -110,12 +120,12 @@ public class FuelPriceFragment extends WBaseFragment implements IView<FuelBean> 
 
     @Override
     public void showProgressDialog() {
-
+        ((MainActivity) getActivity()).showProgressDialog(null);
     }
 
     @Override
     public void hideProgressDialog() {
-
+        ((MainActivity) getActivity()).hideProgressDialog();
     }
 
     @Override

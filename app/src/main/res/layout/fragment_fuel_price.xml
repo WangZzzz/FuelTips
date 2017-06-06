@@ -19,7 +19,7 @@
         <TextView
             android:id="@+id/tv_price_gas_89"
             style="@style/tv_fuel_price"
-            android:text="5.94"/>
+            android:text="0.00"/>
 
         <TextView
             style="@style/tv_fuel_price_des"
@@ -44,7 +44,7 @@
         <TextView
             android:id="@+id/tv_price_gas_92"
             style="@style/tv_fuel_price"
-            android:text="5.94"/>
+            android:text="0.00"/>
 
         <TextView
             style="@style/tv_fuel_price_des"
@@ -70,7 +70,7 @@
         <TextView
             android:id="@+id/tv_price_gas_95"
             style="@style/tv_fuel_price"
-            android:text="5.94"/>
+            android:text="0.00"/>
 
         <TextView
             style="@style/tv_fuel_price_des"
@@ -97,7 +97,7 @@
         <TextView
             android:id="@+id/tv_price_diesel_0"
             style="@style/tv_fuel_price"
-            android:text="5.94"/>
+            android:text="0.00"/>
 
         <TextView
             style="@style/tv_fuel_price_des"

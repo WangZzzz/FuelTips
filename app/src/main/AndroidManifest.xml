@@ -34,8 +34,6 @@
             android:process=":remote">
         </service>
 
-        <activity android:name=".WebViewActivity">
-        </activity>
     </application>
 
 </manifest>

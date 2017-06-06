@@ -43,7 +43,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
         android:layerType="software"
-        android:src="@drawable/bg_dashed_line"/>
+        android:src="@drawable/bg_grey_dashed_line"/>
 
     <ListView
         android:id="@+id/lv_province"

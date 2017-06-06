@@ -55,7 +55,6 @@ public class MainActivity extends WBaseActivity implements View.OnClickListener 
 
     private FuelRecordFragment mFuelRecordFragment;
     private FuelPriceFragment mFuelPriceFragment;
-
     private LocationClient mLocationClient;
 
     @Override
@@ -184,7 +183,7 @@ public class MainActivity extends WBaseActivity implements View.OnClickListener 
         return provnice;
     }
 
-    private void showProgressDialog(String msg) {
+    public void showProgressDialog(String msg) {
         if (mDialog == null) {
             mDialog = new ProgressDialog(this);
             mDialog.setTitle("提示");
@@ -192,9 +191,28 @@ public class MainActivity extends WBaseActivity implements View.OnClickListener 
             mDialog.setCancelable(false);
             mDialog.setCanceledOnTouchOutside(false);
         }
+        if (!TextUtils.isEmpty(msg)) {
+            mDialog.setMessage(msg);
+        } else {
+            mDialog.setMessage("加载中，请稍候...");
+        }
+        if (!mDialog.isShowing()) {
+            mDialog.show();
+        }
     }
 
-    private void hideProgressDialog() {
+    public void hideProgressDialog() {
+        if (mDialog != null && mDialog.isShowing()) {
+            mDialog.dismiss();
+        }
+    }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (mDialog != null) {
+            mDialog.dismiss();
+            mDialog = null;
+        }
     }
 }
