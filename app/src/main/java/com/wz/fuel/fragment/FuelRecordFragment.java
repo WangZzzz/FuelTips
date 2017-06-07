@@ -10,11 +10,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 
 import com.wz.fragment.WBaseFragment;
 import com.wz.fuel.R;
 import com.wz.fuel.adapter.FuelRecordAdapter;
+import com.wz.fuel.db.GreenDaoManager;
 import com.wz.fuel.mvp.bean.FuelRecordBean;
+import com.wz.fuel.mvp.bean.FuelRecordBeanDao;
 import com.wz.util.ToastMsgUtil;
 import com.wz.util.WLog;
 import com.wz.view.OnItemClickListener;
@@ -42,6 +45,8 @@ public class FuelRecordFragment extends WBaseFragment {
     private FuelRecordAdapter mAdapter;
     private List<FuelRecordBean> mFuelRecords;
 
+    private PopupWindow mPopupWindow;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,6 +58,12 @@ public class FuelRecordFragment extends WBaseFragment {
         View view = inflater.inflate(R.layout.fragment_fuel_record, container, false);
         unbinder = ButterKnife.bind(this, view);
         initRecyclerView();
+        mLlAddFuelRecord.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addFuelRecord();
+            }
+        });
         return view;
     }
 
@@ -93,5 +104,16 @@ public class FuelRecordFragment extends WBaseFragment {
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
+    }
+
+    private void addFuelRecord() {
+        FuelRecordBeanDao recordDao = GreenDaoManager.getInstance().getDaoSession().getFuelRecordBeanDao();
+        ToastMsgUtil.showToast(getContext(), "添加记录", 0);
+    }
+
+    private void initPopWindow() {
+        View view = LayoutInflater.from(getActivity()).inflate(R.layout.add_record_pop_window, null);
+        mPopupWindow = new PopupWindow(getActivity());
+        mPopupWindow.setContentView(view);
     }
 }

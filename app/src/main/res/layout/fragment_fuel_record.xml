@@ -2,17 +2,17 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F3F3F3">
+    android:background="#EAEAEA">
 
     <LinearLayout
         android:id="@+id/ll_add_fuel_record"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_marginBottom="5dp"
-        android:layout_marginTop="5dp"
+        android:background="@drawable/selector_grey_bg"
         android:gravity="center"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:padding="5dp">
 
         <ImageView
             android:layout_width="35dp"

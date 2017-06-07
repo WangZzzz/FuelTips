@@ -4,7 +4,7 @@
     android:id="@+id/toolbar"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="#0176da"
+    android:background="#01A2ED"
     app:popupTheme="@style/MyPopupTheme">
 
     <TextView

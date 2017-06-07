@@ -2,4 +2,11 @@
     <string name="app_name">FuelTips</string>
 
     <!-- TODO: Remove or change this placeholder text -->
+    <string-array name="fuel_type_str">
+        <item>89号汽油</item>
+        <item>92号汽油</item>
+        <item>95号汽油</item>
+        <item>0号柴油</item>
+        <item>其他</item>
+    </string-array>
 </resources>

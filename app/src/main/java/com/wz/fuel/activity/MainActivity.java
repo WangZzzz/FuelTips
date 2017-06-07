@@ -68,9 +68,12 @@ public class MainActivity extends WBaseActivity implements View.OnClickListener 
     private void init() {
         mLocationClient = new LocationClient(this);
         mLocationClient.registerLocationListener(mLocationListener);
-        LocationClientOption option = mLocationClient.getLocOption();
+        LocationClientOption option = new LocationClientOption();
         //需要设置此项，否则无法获取具体的地址
         option.setIsNeedAddress(true);
+        //可选，默认true，定位SDK内部是一个SERVICE，并放到了独立进程，设置是否在stop的时候杀死这个进程，默认不杀死
+        option.setIgnoreKillProcess(false);
+        mLocationClient.setLocOption(option);
         initToolbar();
         initTabHost();
     }
@@ -137,6 +140,10 @@ public class MainActivity extends WBaseActivity implements View.OnClickListener 
                         mTvProvince.setText("未知省份");
                     }
                 } else if (resultCode == RESULT_OK) {
+                    if (mLocationClient != null) {
+                        mLocationClient.unRegisterLocationListener(mLocationListener);
+                        mLocationClient.stop();
+                    }
                     mTvProvince.setText(AppConstants.sProvince);
                     mFuelPriceFragment.refresh();
                 }
@@ -209,10 +216,14 @@ public class MainActivity extends WBaseActivity implements View.OnClickListener 
 
     @Override
     protected void onDestroy() {
-        super.onDestroy();
+        if (mLocationClient != null) {
+            mLocationClient.unRegisterLocationListener(mLocationListener);
+            mLocationClient.stop();
+        }
         if (mDialog != null) {
             mDialog.dismiss();
             mDialog = null;
         }
+        super.onDestroy();
     }
 }

@@ -17,4 +17,6 @@ public class AppConstants {
     public static final String SP_PROVINCE = "sp_province";
 
     public static final String SP_CONFIG = "global_config";
+
+    public static final String DB_NAME = "fuel_tips";
 }

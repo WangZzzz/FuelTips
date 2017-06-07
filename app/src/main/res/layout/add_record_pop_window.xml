@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/iv_close"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_margin="5dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/icon_close"/>
+
+    <TextView
+        android:id="@+id/tv_fuel_type"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/iv_close"
+        android:text="油品类型："
+        />
+
+    <Spinner
+        android:id="@+id/spinner_fuel_type"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_fuel_type"
+        android:entries="@array/fuel_type_str"/>
+</RelativeLayout>
