@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="10dp">
 
     <ImageView
         android:id="@+id/iv_close"
@@ -9,14 +11,12 @@
         android:layout_height="40dp"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
-        android:layout_margin="5dp"
         android:scaleType="fitXY"
         android:src="@drawable/icon_close"/>
 
     <TextView
         android:id="@+id/tv_fuel_type"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        style="@style/tv_add_record_style"
         android:layout_below="@+id/iv_close"
         android:text="油品类型："
         />
@@ -26,5 +26,153 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/tv_fuel_type"
+        android:layout_centerHorizontal="true"
         android:entries="@array/fuel_type_str"/>
+
+    <TextView
+        android:id="@+id/tv_price_info"
+        style="@style/tv_add_record_style"
+        android:layout_below="@+id/spinner_fuel_type"
+        android:text="价格信息："/>
+
+    <LinearLayout
+        android:id="@+id/ll_unit_price"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_price_info"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal">
+
+        <TextView
+            style="@style/tv_add_record_style"
+            android:text="单价"
+            android:textSize="18sp"/>
+
+        <EditText
+            android:id="@+id/et_unit_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="0.00"
+            android:inputType="numberDecimal"
+            android:maxLength="4"
+            android:maxLines="1"
+            android:textColor="@color/red"
+            android:textSize="22sp"
+            android:textStyle="italic"/>
+
+        <TextView
+            style="@style/tv_add_record_style"
+            android:text="元/升"
+            android:textSize="18sp"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_price_reduce"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ll_unit_price"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal">
+
+        <TextView
+            style="@style/tv_add_record_style"
+            android:text="直降"
+            android:textSize="18sp"/>
+
+        <EditText
+            android:id="@+id/et_price_cut"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="0.00"
+            android:inputType="numberDecimal"
+            android:maxLines="1"
+            android:textColor="@color/red"
+            android:textSize="24sp"
+            android:textStyle="italic"/>
+
+        <TextView
+            style="@style/tv_add_record_style"
+            android:text="元/升"
+            android:textSize="18sp"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_price_discount"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ll_price_reduce"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal">
+
+        <TextView
+            style="@style/tv_add_record_style"
+            android:text="折扣"
+            android:textSize="18sp"/>
+
+        <EditText
+            android:id="@+id/et_price_discount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="0.0"
+            android:inputType="numberDecimal"
+            android:maxLines="1"
+            android:textColor="@color/red"
+            android:textSize="24sp"
+            android:textStyle="italic"/>
+
+        <TextView
+            style="@style/tv_add_record_style"
+            android:text="折"
+            android:textSize="18sp"/>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_fuel_liter"
+        style="@style/tv_add_record_style"
+        android:layout_below="@+id/ll_price_discount"
+        android:text="加油容量："/>
+
+    <LinearLayout
+        android:id="@+id/ll_fuel_liter"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_fuel_liter"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal">
+
+        <TextView
+            style="@style/tv_add_record_style"
+            android:text="加油量"
+            android:textSize="18sp"/>
+
+        <EditText
+            android:id="@+id/et_fuel_liter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="0.00"
+            android:inputType="numberDecimal"
+            android:maxLines="1"
+            android:textColor="@color/red"
+            android:textSize="24sp"
+            android:textStyle="italic"/>
+
+        <TextView
+            style="@style/tv_add_record_style"
+            android:text="升"
+            android:textSize="18sp"/>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_fuel_date"
+        style="@style/tv_add_record_style"
+        android:layout_below="@+id/ll_fuel_liter"
+        android:text="加油时间："/>
+
+    <Button
+        android:id="@+id/btn_confirm"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_fuel_date"
+        android:layout_centerHorizontal="true"
+        android:text="确认"/>
 </RelativeLayout>

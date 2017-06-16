@@ -1,6 +1,7 @@
 package com.wz.fuel.fragment;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -10,14 +11,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.PopupWindow;
 
 import com.wz.fragment.WBaseFragment;
 import com.wz.fuel.R;
+import com.wz.fuel.activity.AddFuelRecordActivity;
 import com.wz.fuel.adapter.FuelRecordAdapter;
 import com.wz.fuel.db.GreenDaoManager;
 import com.wz.fuel.mvp.bean.FuelRecordBean;
 import com.wz.fuel.mvp.bean.FuelRecordBeanDao;
+import com.wz.fuel.view.AddFuelRecordPopupWindow;
 import com.wz.util.ToastMsgUtil;
 import com.wz.util.WLog;
 import com.wz.view.OnItemClickListener;
@@ -45,7 +47,7 @@ public class FuelRecordFragment extends WBaseFragment {
     private FuelRecordAdapter mAdapter;
     private List<FuelRecordBean> mFuelRecords;
 
-    private PopupWindow mPopupWindow;
+    private AddFuelRecordPopupWindow mPopupWindow;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -104,16 +106,29 @@ public class FuelRecordFragment extends WBaseFragment {
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
+        if (mPopupWindow != null && mPopupWindow.isShowing()) {
+            mPopupWindow.dismiss();
+        }
     }
 
     private void addFuelRecord() {
         FuelRecordBeanDao recordDao = GreenDaoManager.getInstance().getDaoSession().getFuelRecordBeanDao();
         ToastMsgUtil.showToast(getContext(), "添加记录", 0);
+//        showPopWindow();
+        startActivity(new Intent(getActivity(), AddFuelRecordActivity.class));
     }
 
-    private void initPopWindow() {
-        View view = LayoutInflater.from(getActivity()).inflate(R.layout.add_record_pop_window, null);
-        mPopupWindow = new PopupWindow(getActivity());
-        mPopupWindow.setContentView(view);
+    private void showPopWindow() {
+        if (mPopupWindow == null) {
+            WLog.d(TAG, "initPopWindow");
+            mPopupWindow = new AddFuelRecordPopupWindow(getActivity());
+        }
+        mPopupWindow.showPopupWidow(getView());
+    }
+
+    private void hidePopWindow() {
+        if (mPopupWindow != null) {
+            mPopupWindow.hidePopupWindow();
+        }
     }
 }

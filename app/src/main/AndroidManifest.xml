@@ -35,6 +35,8 @@
             android:process=":remote">
         </service>
 
+        <activity android:name=".activity.AddFuelRecordActivity">
+        </activity>
     </application>
 
 </manifest>

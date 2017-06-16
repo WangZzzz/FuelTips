@@ -109,7 +109,11 @@ public class FuelPricePresenter extends IPresenter<FuelBean> {
         if (!TextUtils.isEmpty(str)) {
             if (str.length() > 3) {
                 String tmpStr = str.substring(0, 4);
-                return Float.parseFloat(tmpStr);
+                if (tmpStr.contains("(")) {
+                    return Float.parseFloat(tmpStr.substring(0, 3));
+                } else {
+                    return Float.parseFloat(tmpStr);
+                }
             } else {
                 return Float.parseFloat(str);
             }
