@@ -2,7 +2,7 @@ package com.wz.fuel.mvp.presenter;
 
 import android.text.TextUtils;
 
-import com.wz.fuel.mvp.bean.FuelBean;
+import com.wz.fuel.mvp.bean.FuelPriceBean;
 import com.wz.fuel.mvp.view.IView;
 import com.wz.network.NetClient;
 import com.wz.util.WLog;
@@ -25,11 +25,11 @@ import retrofit2.http.GET;
 /**
  * 获取今日油价
  */
-public class FuelPricePresenter extends IPresenter<FuelBean> {
+public class FuelPricePresenter extends IPresenter<FuelPriceBean> {
 
     private static final String TAG = FuelPricePresenter.class.getSimpleName();
 
-    public FuelPricePresenter(IView<FuelBean> iView) {
+    public FuelPricePresenter(IView<FuelPriceBean> iView) {
         super(iView);
     }
 
@@ -47,7 +47,7 @@ public class FuelPricePresenter extends IPresenter<FuelBean> {
 
                     @Override
                     public void onNext(String s) {
-                        List<FuelBean> fuelBeanList = parseHtml(s);
+                        List<FuelPriceBean> fuelBeanList = parseHtml(s);
                         mView.onSuccess(fuelBeanList);
                     }
 
@@ -69,8 +69,8 @@ public class FuelPricePresenter extends IPresenter<FuelBean> {
         Observable<String> getFuelPrice();
     }
 
-    private List<FuelBean> parseHtml(String html) {
-        List<FuelBean> fuelBeanList = new ArrayList<>();
+    private List<FuelPriceBean> parseHtml(String html) {
+        List<FuelPriceBean> fuelBeanList = new ArrayList<>();
         Document document = Jsoup.parse(html);
         if (document != null) {
             Elements elements = document.select("div[class=oilTableOut] tbody tr");
@@ -79,7 +79,7 @@ public class FuelPricePresenter extends IPresenter<FuelBean> {
                 Elements priceElements = element.select("td");
 
                 try {
-                    FuelBean fuelBean1 = new FuelBean();
+                    FuelPriceBean fuelBean1 = new FuelPriceBean();
                     fuelBean1.province = provinceElements.get(0).text();
                     fuelBean1.price_gas_89 = getPriceFromStr(priceElements.get(0).text());
                     fuelBean1.price_gas_92 = getPriceFromStr(priceElements.get(1).text());
@@ -88,7 +88,7 @@ public class FuelPricePresenter extends IPresenter<FuelBean> {
                     fuelBeanList.add(fuelBean1);
                     WLog.d(TAG, fuelBean1.toString());
                     if (provinceElements.size() == 2) {
-                        FuelBean fuelBean2 = new FuelBean();
+                        FuelPriceBean fuelBean2 = new FuelPriceBean();
                         fuelBean2.province = provinceElements.get(1).text();
                         fuelBean2.price_gas_89 = getPriceFromStr(priceElements.get(4).text());
                         fuelBean2.price_gas_92 = getPriceFromStr(priceElements.get(5).text());

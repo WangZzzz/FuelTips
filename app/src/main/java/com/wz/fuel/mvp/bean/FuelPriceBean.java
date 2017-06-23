@@ -3,7 +3,7 @@ package com.wz.fuel.mvp.bean;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class FuelBean implements Parcelable {
+public class FuelPriceBean implements Parcelable {
     public String province;
     public float price_gas_89;
     public float price_gas_92;
@@ -31,10 +31,10 @@ public class FuelBean implements Parcelable {
         dest.writeFloat(this.price_diesel_0);
     }
 
-    public FuelBean() {
+    public FuelPriceBean() {
     }
 
-    protected FuelBean(Parcel in) {
+    protected FuelPriceBean(Parcel in) {
         this.province = in.readString();
         this.price_gas_89 = in.readFloat();
         this.price_gas_92 = in.readFloat();
@@ -42,15 +42,15 @@ public class FuelBean implements Parcelable {
         this.price_diesel_0 = in.readFloat();
     }
 
-    public static final Parcelable.Creator<FuelBean> CREATOR = new Parcelable.Creator<FuelBean>() {
+    public static final Parcelable.Creator<FuelPriceBean> CREATOR = new Parcelable.Creator<FuelPriceBean>() {
         @Override
-        public FuelBean createFromParcel(Parcel source) {
-            return new FuelBean(source);
+        public FuelPriceBean createFromParcel(Parcel source) {
+            return new FuelPriceBean(source);
         }
 
         @Override
-        public FuelBean[] newArray(int size) {
-            return new FuelBean[size];
+        public FuelPriceBean[] newArray(int size) {
+            return new FuelPriceBean[size];
         }
     };
 }

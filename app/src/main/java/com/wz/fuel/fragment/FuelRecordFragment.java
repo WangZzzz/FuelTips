@@ -1,6 +1,7 @@
 package com.wz.fuel.fragment;
 
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -13,13 +14,14 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import com.wz.fragment.WBaseFragment;
+import com.wz.fuel.AppConstants;
 import com.wz.fuel.R;
 import com.wz.fuel.activity.AddFuelRecordActivity;
+import com.wz.fuel.activity.MainActivity;
 import com.wz.fuel.adapter.FuelRecordAdapter;
 import com.wz.fuel.db.GreenDaoManager;
 import com.wz.fuel.mvp.bean.FuelRecordBean;
 import com.wz.fuel.mvp.bean.FuelRecordBeanDao;
-import com.wz.fuel.view.AddFuelRecordPopupWindow;
 import com.wz.util.ToastMsgUtil;
 import com.wz.util.WLog;
 import com.wz.view.OnItemClickListener;
@@ -44,14 +46,15 @@ public class FuelRecordFragment extends WBaseFragment {
     RecyclerView mRvFuelRecord;
     Unbinder unbinder;
 
+    private MainActivity mActivity;
+
     private FuelRecordAdapter mAdapter;
     private List<FuelRecordBean> mFuelRecords;
-
-    private AddFuelRecordPopupWindow mPopupWindow;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mActivity = (MainActivity) getActivity();
         WLog.d(TAG, "onCreate");
     }
 
@@ -106,29 +109,25 @@ public class FuelRecordFragment extends WBaseFragment {
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
-        if (mPopupWindow != null && mPopupWindow.isShowing()) {
-            mPopupWindow.dismiss();
-        }
     }
 
     private void addFuelRecord() {
         FuelRecordBeanDao recordDao = GreenDaoManager.getInstance().getDaoSession().getFuelRecordBeanDao();
-        ToastMsgUtil.showToast(getContext(), "添加记录", 0);
-//        showPopWindow();
-        startActivity(new Intent(getActivity(), AddFuelRecordActivity.class));
+        Intent intent = new Intent(getActivity(), AddFuelRecordActivity.class);
+        intent.putExtra(AppConstants.EXTRA_FUEL_PRICE_BEAN, mActivity.getCurrentFuelPriceBean());
+        startActivityForResult(intent, AppConstants.REQUEST_ADD_FUEL_RECORD);
     }
 
-    private void showPopWindow() {
-        if (mPopupWindow == null) {
-            WLog.d(TAG, "initPopWindow");
-            mPopupWindow = new AddFuelRecordPopupWindow(getActivity());
-        }
-        mPopupWindow.showPopupWidow(getView());
-    }
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode) {
+            case AppConstants.REQUEST_ADD_FUEL_RECORD:
+                if (resultCode == Activity.RESULT_OK) {
 
-    private void hidePopWindow() {
-        if (mPopupWindow != null) {
-            mPopupWindow.hidePopupWindow();
+                } else if (resultCode == Activity.RESULT_CANCELED) {
+                    ToastMsgUtil.info(getActivity(), "取消添加", 1);
+                }
+                break;
         }
     }
 }

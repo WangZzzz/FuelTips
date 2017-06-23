@@ -34,10 +34,10 @@
 
         <LinearLayout
             android:id="@+id/ll_unit_price"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/tv_price_info"
-            android:gravity="center_horizontal"
+            android:layout_centerHorizontal="true"
             android:orientation="horizontal">
 
             <TextView
@@ -65,10 +65,10 @@
 
         <LinearLayout
             android:id="@+id/ll_price_reduce"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/ll_unit_price"
             android:layout_below="@+id/ll_unit_price"
-            android:gravity="center_horizontal"
             android:orientation="horizontal">
 
             <TextView
@@ -82,6 +82,7 @@
                 android:layout_height="wrap_content"
                 android:hint="0.00"
                 android:inputType="numberDecimal"
+                android:maxLength="4"
                 android:maxLines="1"
                 android:textColor="@color/red"
                 android:textSize="24sp"
@@ -95,10 +96,10 @@
 
         <LinearLayout
             android:id="@+id/ll_price_discount"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/ll_unit_price"
             android:layout_below="@+id/ll_price_reduce"
-            android:gravity="center_horizontal"
             android:orientation="horizontal">
 
             <TextView
@@ -112,6 +113,7 @@
                 android:layout_height="wrap_content"
                 android:hint="0.0"
                 android:inputType="numberDecimal"
+                android:maxLength="3"
                 android:maxLines="1"
                 android:textColor="@color/red"
                 android:textSize="24sp"
@@ -131,10 +133,10 @@
 
         <LinearLayout
             android:id="@+id/ll_fuel_liter"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/ll_unit_price"
             android:layout_below="@+id/tv_fuel_liter"
-            android:gravity="center_horizontal"
             android:orientation="horizontal">
 
             <TextView
@@ -148,6 +150,7 @@
                 android:layout_height="wrap_content"
                 android:hint="0.00"
                 android:inputType="numberDecimal"
+                android:maxLength="4"
                 android:maxLines="1"
                 android:textColor="@color/red"
                 android:textSize="24sp"

@@ -16,7 +16,7 @@ import com.wz.fragment.WBaseFragment;
 import com.wz.fuel.AppConstants;
 import com.wz.fuel.R;
 import com.wz.fuel.activity.MainActivity;
-import com.wz.fuel.mvp.bean.FuelBean;
+import com.wz.fuel.mvp.bean.FuelPriceBean;
 import com.wz.fuel.mvp.presenter.FuelPricePresenter;
 import com.wz.fuel.mvp.view.IView;
 import com.wz.util.ToastMsgUtil;
@@ -32,7 +32,7 @@ import butterknife.Unbinder;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class FuelPriceFragment extends WBaseFragment implements IView<FuelBean> {
+public class FuelPriceFragment extends WBaseFragment implements IView<FuelPriceBean> {
     private static final String TAG = FuelPriceFragment.class.getSimpleName();
     @BindView(R.id.tv_price_gas_89)
     TextView mTvPriceGas89;
@@ -43,6 +43,8 @@ public class FuelPriceFragment extends WBaseFragment implements IView<FuelBean> 
     @BindView(R.id.tv_price_diesel_0)
     TextView mTvPriceDiesel0;
     Unbinder unbinder;
+
+    private FuelPriceBean mFuelPriceBean;
 
     private FuelPricePresenter mPresenter;
 
@@ -97,10 +99,11 @@ public class FuelPriceFragment extends WBaseFragment implements IView<FuelBean> 
     }
 
     @Override
-    public void onSuccess(List<FuelBean> fuelBeenList) {
+    public void onSuccess(List<FuelPriceBean> fuelBeenList) {
         if (!TextUtils.isEmpty(AppConstants.sProvince) && fuelBeenList != null && fuelBeenList.size() > 0) {
-            for (FuelBean fuelBean : fuelBeenList) {
+            for (FuelPriceBean fuelBean : fuelBeenList) {
                 if (AppConstants.sProvince.equals(fuelBean.province)) {
+                    mFuelPriceBean = fuelBean;
                     setPrice(fuelBean);
                 }
             }
@@ -109,7 +112,7 @@ public class FuelPriceFragment extends WBaseFragment implements IView<FuelBean> 
         }
     }
 
-    private void setPrice(FuelBean fuelBean) {
+    private void setPrice(FuelPriceBean fuelBean) {
         if (fuelBean != null) {
             mTvPriceDiesel0.setText(fuelBean.price_diesel_0 + "");
             mTvPriceGas89.setText(fuelBean.price_gas_89 + "");
@@ -132,5 +135,9 @@ public class FuelPriceFragment extends WBaseFragment implements IView<FuelBean> 
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
+    }
+
+    public FuelPriceBean getCurrentFuelPriceBean() {
+        return mFuelPriceBean;
     }
 }

@@ -21,6 +21,7 @@ import com.wz.fuel.R;
 import com.wz.fuel.adapter.MainFragmentAdapter;
 import com.wz.fuel.fragment.FuelPriceFragment;
 import com.wz.fuel.fragment.FuelRecordFragment;
+import com.wz.fuel.mvp.bean.FuelPriceBean;
 import com.wz.util.ToastMsgUtil;
 import com.wz.util.WLog;
 
@@ -149,6 +150,7 @@ public class MainActivity extends WBaseActivity implements View.OnClickListener 
                 }
                 break;
         }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     private BDLocationListener mLocationListener = new BDLocationListener() {
@@ -225,5 +227,17 @@ public class MainActivity extends WBaseActivity implements View.OnClickListener 
             mDialog = null;
         }
         super.onDestroy();
+    }
+
+    /**
+     * 返回当前的油品价格信息
+     *
+     * @return
+     */
+    public FuelPriceBean getCurrentFuelPriceBean() {
+        if (mFuelPriceFragment != null) {
+            return mFuelPriceFragment.getCurrentFuelPriceBean();
+        }
+        return null;
     }
 }
