@@ -5,8 +5,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -14,6 +16,7 @@ import com.wz.activity.WBaseActivity;
 import com.wz.fuel.AppConstants;
 import com.wz.fuel.R;
 import com.wz.fuel.mvp.bean.FuelPriceBean;
+import com.wz.fuel.mvp.bean.FuelRecordBean;
 import com.wz.util.DialogUtil;
 
 import butterknife.BindView;
@@ -24,8 +27,6 @@ public class AddFuelRecordActivity extends WBaseActivity implements View.OnClick
 
     @BindView(R.id.toolbar_title)
     TextView mToolbarTitle;
-    @BindView(R.id.tv_province)
-    TextView mTvProvince;
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
     @BindView(R.id.spinner_fuel_type)
@@ -42,7 +43,13 @@ public class AddFuelRecordActivity extends WBaseActivity implements View.OnClick
     Button mBtnConfirm;
     @BindView(R.id.btn_cancel)
     Button mBtnCancel;
+    @BindView(R.id.et_fuel_other_type)
+    EditText mEtFuelOtherType;
+    @BindView(R.id.ll_other_fuel_type)
+    LinearLayout mLlOtherFuelType;
     private FuelPriceBean mFuelPriceBean;
+
+    private FuelRecordBean.FuelType mFuelType;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +62,7 @@ public class AddFuelRecordActivity extends WBaseActivity implements View.OnClick
 
     private void init() {
         initToolbar();
+        initSpinner();
         initData();
         initPrice();
     }
@@ -67,6 +75,20 @@ public class AddFuelRecordActivity extends WBaseActivity implements View.OnClick
             public void onClick(View v) {
                 setResult(RESULT_CANCELED);
                 finish();
+            }
+        });
+    }
+
+    private void initSpinner() {
+        mSpinnerFuelType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
             }
         });
     }

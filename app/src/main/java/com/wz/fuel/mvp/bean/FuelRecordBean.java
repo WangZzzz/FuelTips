@@ -16,19 +16,19 @@ import java.lang.annotation.RetentionPolicy;
 public class FuelRecordBean {
 
     //89号汽油
-    public static final int TYPE_GAS_89 = 89;
+    public static final int TYPE_GAS_89 = 0;
     //92号汽油
-    public static final int TYPE_GAS_92 = 92;
+    public static final int TYPE_GAS_92 = 1;
     //95号汽油
-    public static final int TYPE_GAS_95 = 95;
+    public static final int TYPE_GAS_95 = 2;
     //0号柴油
-    public static final int TYPE_DIESEL_0 = 0;
+    public static final int TYPE_DIESEL_0 = 3;
     //其他类型
-    public static final int TYPE_OTHERS = -1;
+    public static final int TYPE_OTHERS = 4;
 
     @IntDef({TYPE_DIESEL_0, TYPE_GAS_89, TYPE_GAS_92, TYPE_GAS_95, TYPE_OTHERS})
     @Retention(RetentionPolicy.SOURCE)
-    public @interface FuelTypes {
+    public @interface FuelType {
     }
 
     //@Id注解，标识主键
@@ -42,7 +42,7 @@ public class FuelRecordBean {
     public long fuelDate;
     //加油容积，升
     public float litres;
-    @FuelTypes
+    @FuelType
     public int fuelType;
     //加油类型字符串形式
     public String fuelTypeStr;
@@ -117,5 +117,21 @@ public class FuelRecordBean {
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    public String getFuelTypeString(int fuelType) {
+        switch (fuelType) {
+            case TYPE_GAS_89:
+                break;
+            case TYPE_GAS_92:
+                break;
+            case TYPE_GAS_95:
+                break;
+            case TYPE_DIESEL_0:
+                return "0号柴油";
+            case TYPE_OTHERS:
+                return "其他";
+        }
+        return null;
     }
 }
