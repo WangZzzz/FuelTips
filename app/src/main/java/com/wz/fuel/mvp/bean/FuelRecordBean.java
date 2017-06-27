@@ -119,14 +119,14 @@ public class FuelRecordBean {
         this.id = id;
     }
 
-    public String getFuelTypeString(int fuelType) {
+    public static String getFuelTypeString(int fuelType) {
         switch (fuelType) {
             case TYPE_GAS_89:
-                break;
+                return "89号汽油";
             case TYPE_GAS_92:
-                break;
+                return "92号汽油";
             case TYPE_GAS_95:
-                break;
+                return "95号汽油";
             case TYPE_DIESEL_0:
                 return "0号柴油";
             case TYPE_OTHERS:

@@ -189,11 +189,19 @@
         </LinearLayout>
 
         <TextView
-            android:id="@+id/tv_fuel_date"
+            android:id="@+id/tv_fuel_date_tips"
             style="@style/tv_add_record_style"
             android:layout_below="@+id/ll_fuel_liter"
             android:text="加油时间："
             android:textStyle="italic"/>
+
+        <TextView
+            android:id="@+id/tv_fuel_date"
+            style="@style/tv_add_record_style"
+            android:layout_below="@id/tv_fuel_date_tips"
+            android:layout_centerHorizontal="true"
+            android:text="2017 年 06 月 22 日"
+            android:textColor="#01A2ED"/>
 
         <LinearLayout
             android:layout_width="match_parent"

@@ -25,4 +25,6 @@ public class AppConstants {
     public static final String SP_CONFIG = "global_config";
 
     public static final String DB_NAME = "fuel_tips";
+
+    public static final String DATE_FORMAT = "yyyy 年 MM 月 dd 日";
 }
