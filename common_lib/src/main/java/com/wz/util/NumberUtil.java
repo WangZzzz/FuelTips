@@ -1,5 +1,7 @@
 package com.wz.util;
 
+import java.text.DecimalFormat;
+
 /**
  * <br>
  * FIREFLY
@@ -21,18 +23,10 @@ public class NumberUtil {
 
     /**
      * @param f
-     * @param decimalLength 精度
      * @return
      */
-    public static float format(float f, int decimalLength) {
-        if (decimalLength > 0) {
-            int tmp = 1;
-            for (int i = 0; i < decimalLength; i++) {
-                tmp = tmp * 10;
-            }
-            return (float) (Math.round(f * tmp) / tmp);
-        } else {
-            return f;
-        }
+    public static String format(float f) {
+        DecimalFormat df = new DecimalFormat("0.00");//格式化小数，不足的补0
+        return df.format(f);//返回的是String类型的
     }
 }

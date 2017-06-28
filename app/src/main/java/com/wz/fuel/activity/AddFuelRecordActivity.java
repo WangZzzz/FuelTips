@@ -116,7 +116,8 @@ public class AddFuelRecordActivity extends WBaseActivity implements View.OnClick
                 WLog.d(TAG, "油品类型：" + FuelRecordBean.getFuelTypeString(position));
                 if (position > 3) {
                     mLlOtherFuelType.setVisibility(View.VISIBLE);
-                    mEtUnitPrice.setText("0.00");
+                    mEtUnitPrice.setText("");
+                    mEtUnitPrice.setHint("0.00");
                 } else {
                     mLlOtherFuelType.setVisibility(View.GONE);
                     switch (position) {
@@ -213,7 +214,7 @@ public class AddFuelRecordActivity extends WBaseActivity implements View.OnClick
         }
         if (NumberUtil.isZero(discount)) {
             //无折扣
-            discount = 1.0f;
+            discount = 10.0f;
         }
         float cut = 0.0f;
         if (!"".equals(mEtPriceCut.getText().toString())) {
@@ -241,10 +242,10 @@ public class AddFuelRecordActivity extends WBaseActivity implements View.OnClick
             } else {
                 fuelRecordBean.fuelTypeStr = FuelRecordBean.getFuelTypeString(selectedPosition);
             }
-            WLog.d(TAG, "单价：" + NumberUtil.format(desUnitPrice, 2));
+            WLog.d(TAG, "单价：" + NumberUtil.format(desUnitPrice));
             WLog.d(TAG, "容量：" + fuelLiters);
             WLog.d(TAG, "日期：" + mTvFuelDate.getText());
-            WLog.d(TAG, "总价：" + NumberUtil.format(totalPrice, 2));
+            WLog.d(TAG, "总价：" + NumberUtil.format(totalPrice));
             WLog.d(TAG, "油品类型：" + fuelRecordBean.fuelTypeStr);
         }
     }
