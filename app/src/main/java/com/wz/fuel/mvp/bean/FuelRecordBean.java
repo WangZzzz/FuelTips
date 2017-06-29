@@ -1,5 +1,7 @@
 package com.wz.fuel.mvp.bean;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.support.annotation.IntDef;
 
 import org.greenrobot.greendao.annotation.Entity;
@@ -13,7 +15,7 @@ import java.lang.annotation.RetentionPolicy;
  * 每条加油记录
  */
 @Entity
-public class FuelRecordBean {
+public class FuelRecordBean implements Parcelable {
 
     //89号汽油
     public static final int TYPE_GAS_89 = 0;
@@ -32,8 +34,8 @@ public class FuelRecordBean {
     }
 
     //@Id注解，标识主键
-    @Id
-    public long id;
+    @Id(autoincrement = true)
+    public Long id;
     //加油总价
     public float totalPrice;
     //加油单价
@@ -47,9 +49,9 @@ public class FuelRecordBean {
     //加油类型字符串形式
     public String fuelTypeStr;
 
-    @Generated(hash = 2016722369)
-    public FuelRecordBean(long id, float totalPrice, float unitPrice, long fuelDate,
-                          float litres, int fuelType, String fuelTypeStr) {
+    @Generated(hash = 309144516)
+    public FuelRecordBean(Long id, float totalPrice, float unitPrice, long fuelDate, float litres, int fuelType,
+                          String fuelTypeStr) {
         this.id = id;
         this.totalPrice = totalPrice;
         this.unitPrice = unitPrice;
@@ -111,11 +113,11 @@ public class FuelRecordBean {
         this.fuelTypeStr = fuelTypeStr;
     }
 
-    public long getId() {
+    public Long getId() {
         return this.id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -134,4 +136,42 @@ public class FuelRecordBean {
         }
         return null;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeLong(this.id);
+        dest.writeFloat(this.totalPrice);
+        dest.writeFloat(this.unitPrice);
+        dest.writeLong(this.fuelDate);
+        dest.writeFloat(this.litres);
+        dest.writeInt(this.fuelType);
+        dest.writeString(this.fuelTypeStr);
+    }
+
+    protected FuelRecordBean(Parcel in) {
+        this.id = in.readLong();
+        this.totalPrice = in.readFloat();
+        this.unitPrice = in.readFloat();
+        this.fuelDate = in.readLong();
+        this.litres = in.readFloat();
+        this.fuelType = in.readInt();
+        this.fuelTypeStr = in.readString();
+    }
+
+    public static final Parcelable.Creator<FuelRecordBean> CREATOR = new Parcelable.Creator<FuelRecordBean>() {
+        @Override
+        public FuelRecordBean createFromParcel(Parcel source) {
+            return new FuelRecordBean(source);
+        }
+
+        @Override
+        public FuelRecordBean[] newArray(int size) {
+            return new FuelRecordBean[size];
+        }
+    };
 }

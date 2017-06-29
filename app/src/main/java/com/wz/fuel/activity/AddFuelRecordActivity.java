@@ -2,21 +2,27 @@ package com.wz.fuel.activity;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.wz.activity.WBaseActivity;
 import com.wz.fuel.AppConstants;
 import com.wz.fuel.R;
+import com.wz.fuel.db.GreenDaoManager;
 import com.wz.fuel.mvp.bean.FuelPriceBean;
 import com.wz.fuel.mvp.bean.FuelRecordBean;
+import com.wz.fuel.mvp.bean.FuelRecordBeanDao;
 import com.wz.util.DialogUtil;
 import com.wz.util.NumberUtil;
 import com.wz.util.TimeUtil;
@@ -66,6 +72,8 @@ public class AddFuelRecordActivity extends WBaseActivity implements View.OnClick
     @BindView(R.id.tv_fuel_date)
     TextView mTvFuelDate;
     private FuelPriceBean mFuelPriceBean;
+
+    private PopupWindow mPopupWindow;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -198,7 +206,7 @@ public class AddFuelRecordActivity extends WBaseActivity implements View.OnClick
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btn_confirm:
-                showConfirmDialog();
+                showPopupWindow();
                 break;
             case R.id.btn_cancel:
                 cancel();
@@ -206,7 +214,7 @@ public class AddFuelRecordActivity extends WBaseActivity implements View.OnClick
         }
     }
 
-    private void showConfirmDialog() {
+    private void showPopupWindow() {
         float unitPrice = Float.parseFloat(mEtUnitPrice.getText().toString());
         float discount = 0.0f;
         if (!"".equals(mEtPriceDiscount.getText().toString())) {
@@ -242,16 +250,74 @@ public class AddFuelRecordActivity extends WBaseActivity implements View.OnClick
             } else {
                 fuelRecordBean.fuelTypeStr = FuelRecordBean.getFuelTypeString(selectedPosition);
             }
-            WLog.d(TAG, "单价：" + NumberUtil.format(desUnitPrice));
-            WLog.d(TAG, "容量：" + fuelLiters);
-            WLog.d(TAG, "日期：" + mTvFuelDate.getText());
-            WLog.d(TAG, "总价：" + NumberUtil.format(totalPrice));
-            WLog.d(TAG, "油品类型：" + fuelRecordBean.fuelTypeStr);
+//            WLog.d(TAG, "单价：" + NumberUtil.format(desUnitPrice));
+//            WLog.d(TAG, "容量：" + fuelLiters);
+//            WLog.d(TAG, "日期：" + mTvFuelDate.getText());
+//            WLog.d(TAG, "总价：" + NumberUtil.format(totalPrice));
+//            WLog.d(TAG, "油品类型：" + fuelRecordBean.fuelTypeStr);
+            saveDb(fuelRecordBean);
+            initPopupWindow(fuelRecordBean);
+
         }
     }
+
+    private void initPopupWindow(final FuelRecordBean fuelRecordBean) {
+        View rootView = LayoutInflater.from(this).inflate(R.layout.popup_window_add_record_confirm, null);
+        mPopupWindow = new PopupWindow(rootView, LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        mPopupWindow.setFocusable(true);
+        mPopupWindow.setBackgroundDrawable(new ColorDrawable());
+        mPopupWindow.setOutsideTouchable(true);
+        mPopupWindow.setTouchable(true);
+
+        TextView tvUnitPrice = (TextView) rootView.findViewById(R.id.tv_unit_price);
+        TextView tvFuelType = (TextView) rootView.findViewById(R.id.tv_fuel_type);
+        TextView tvFuelLiters = (TextView) rootView.findViewById(R.id.tv_liters);
+        TextView tvFuelDate = (TextView) rootView.findViewById(R.id.tv_fuel_date);
+        TextView tvTotalPrice = (TextView) rootView.findViewById(R.id.tv_total_price);
+        Button btnConfirm = (Button) rootView.findViewById(R.id.btn_confirm);
+        Button btnCancel = (Button) rootView.findViewById(R.id.btn_cancel);
+        tvUnitPrice.setText(fuelRecordBean.getUnitPrice() + "");
+        tvFuelType.setText(fuelRecordBean.getFuelTypeStr());
+        tvFuelLiters.setText(fuelRecordBean.getLitres() + "");
+        tvFuelDate.setText(TimeUtil.millis2String(fuelRecordBean.getFuelDate(), new SimpleDateFormat(AppConstants.DATE_FORMAT)));
+        tvTotalPrice.setText(fuelRecordBean.getTotalPrice() + "");
+
+        btnConfirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.putExtra(AppConstants.EXTRA_FUEL_RECORD_BEAN, fuelRecordBean);
+                setResult(RESULT_OK, intent);
+                finish();
+                mPopupWindow.dismiss();
+            }
+        });
+
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mPopupWindow.dismiss();
+            }
+        });
+        mPopupWindow.showAtLocation(getWindow().getDecorView(), Gravity.CENTER, 0, 0);
+    }
+
+    /**
+     * 将数据保存数据库
+     *
+     * @param recordBean
+     */
+    private void saveDb(FuelRecordBean recordBean) {
+        FuelRecordBeanDao recordDao = GreenDaoManager.getInstance().getDaoSession().getFuelRecordBeanDao();
+        recordDao.insert(recordBean);
+    }
+
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        if (mPopupWindow != null && mPopupWindow.isShowing()) {
+            mPopupWindow.dismiss();
+        }
     }
 }

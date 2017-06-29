@@ -17,7 +17,9 @@ public class AppConstants {
 
     public static final int REQUEST_ADD_FUEL_RECORD = BASE_REQUEST_CODE + 2;
 
+    //传递数据
     public static final String EXTRA_FUEL_PRICE_BEAN = "extra_fuel_price_bean";
+    public static final String EXTRA_FUEL_RECORD_BEAN = "extra_fuel_record_bean";
 
 
     public static final String SP_PROVINCE = "sp_province";

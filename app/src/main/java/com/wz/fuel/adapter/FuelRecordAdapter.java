@@ -19,58 +19,90 @@ import java.util.List;
 
 public class FuelRecordAdapter extends RecyclerView.Adapter<FuelRecordAdapter.MyViewHolder> {
 
+    private static final String TAG = FuelRecordAdapter.class.getSimpleName();
+
     private Context mContext;
     private List<FuelRecordBean> mRecords;
 
     private OnItemLongClickListener mOnItemLongClickListener;
     private OnItemClickListener mOnItemClickListener;
 
+    private static final int TYPE_NORMAL = 1;
+    private static final int TYPE_FOOTER = 2;
+
+    //尾标
+    private View mFooterView;
+
     public FuelRecordAdapter(Context context, List<FuelRecordBean> records) {
         mContext = context;
         mRecords = records;
     }
 
+    public void setFooterView(View footerView) {
+        mFooterView = footerView;
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        if (position == mRecords.size() && mFooterView != null) {
+            return TYPE_FOOTER;
+        } else {
+            return TYPE_NORMAL;
+        }
+    }
 
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(mContext).inflate(R.layout.item_fuel_record, parent, false);
-        MyViewHolder viewHolder = new MyViewHolder(view);
-        return viewHolder;
+        if (viewType == TYPE_FOOTER && mFooterView != null) {
+            return new MyViewHolder(mFooterView);
+        } else {
+            View view = LayoutInflater.from(mContext).inflate(R.layout.item_fuel_record, parent, false);
+            MyViewHolder viewHolder = new MyViewHolder(view);
+            return viewHolder;
+        }
     }
 
     @Override
     public void onBindViewHolder(final MyViewHolder holder, final int position) {
-        if (mRecords != null) {
-            FuelRecordBean fuelRecord = mRecords.get(position);
-            if (fuelRecord != null) {
-                holder.mTvDate.setText(TimeUtil.millis2String(fuelRecord.fuelDate, new SimpleDateFormat("yyyy-MM-dd HH:mm")));
-                holder.mTvLitres.setText(fuelRecord.litres + "升");
-                holder.mTvTotalPrice.setText(fuelRecord.totalPrice + "元");
-                holder.mTvFuelType.setText(fuelRecord.fuelTypeStr);
-                holder.itemView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if (mOnItemClickListener != null) {
-                            mOnItemClickListener.onItemClick(holder.itemView, position);
+        if (getItemViewType(position) == TYPE_FOOTER) {
+
+        } else {
+            if (mRecords != null) {
+                FuelRecordBean fuelRecord = mRecords.get(position);
+                if (fuelRecord != null) {
+                    holder.mTvDate.setText(TimeUtil.millis2String(fuelRecord.fuelDate, new SimpleDateFormat("yyyy-MM-dd HH:mm")));
+                    holder.mTvLitres.setText(fuelRecord.litres + "升");
+                    holder.mTvTotalPrice.setText(fuelRecord.totalPrice + "元");
+                    holder.mTvFuelType.setText(fuelRecord.fuelTypeStr);
+                    holder.itemView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            if (mOnItemClickListener != null) {
+                                mOnItemClickListener.onItemClick(holder.itemView, position);
+                            }
                         }
-                    }
-                });
-                holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
-                    @Override
-                    public boolean onLongClick(View v) {
-                        if (mOnItemLongClickListener != null) {
-                            return mOnItemLongClickListener.onItemLongClick(holder.itemView, position);
+                    });
+                    holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                        @Override
+                        public boolean onLongClick(View v) {
+                            if (mOnItemLongClickListener != null) {
+                                return mOnItemLongClickListener.onItemLongClick(holder.itemView, position);
+                            }
+                            return false;
                         }
-                        return false;
-                    }
-                });
+                    });
+                }
             }
         }
     }
 
     @Override
     public int getItemCount() {
-        return mRecords == null ? 0 : mRecords.size();
+        if (mFooterView != null) {
+            return mRecords == null ? 1 : mRecords.size() + 1;
+        } else {
+            return mRecords == null ? 0 : mRecords.size();
+        }
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder {
@@ -82,18 +114,20 @@ public class FuelRecordAdapter extends RecyclerView.Adapter<FuelRecordAdapter.My
 
         public MyViewHolder(View itemView) {
             super(itemView);
-            mTvDate = (TextView) itemView.findViewById(R.id.tv_date);
-            mTvFuelType = (TextView) itemView.findViewById(R.id.tv_fuel_type);
-            mTvTotalPrice = (TextView) itemView.findViewById(R.id.tv_total_price);
-            mTvLitres = (TextView) itemView.findViewById(R.id.tv_litres);
+            if (itemView != mFooterView) {
+                mTvDate = (TextView) itemView.findViewById(R.id.tv_date);
+                mTvFuelType = (TextView) itemView.findViewById(R.id.tv_fuel_type);
+                mTvTotalPrice = (TextView) itemView.findViewById(R.id.tv_total_price);
+                mTvLitres = (TextView) itemView.findViewById(R.id.tv_litres);
 
-            itemView.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View v) {
-                    ToastMsgUtil.info(mContext, "删除--->", 0);
-                    return true;
-                }
-            });
+                itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                    @Override
+                    public boolean onLongClick(View v) {
+                        ToastMsgUtil.info(mContext, "删除--->", 0);
+                        return true;
+                    }
+                });
+            }
         }
     }
 

@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:background="@drawable/bg_popup_window"
+              android:orientation="vertical"
+              android:padding="20dp">
+
+
+    <TextView
+        style="@style/tv_add_record_confirm_style"
+        android:layout_marginTop="10dp"
+        android:text="类型："/>
+
+    <TextView
+        android:id="@+id/tv_fuel_type"
+        style="@style/tv_add_record_confirm_style"
+        android:layout_width="match_parent"
+        android:gravity="center_horizontal"
+        android:text="95号汽油"
+        android:textColor="@color/red"
+        android:textStyle="italic"/>
+
+    <TextView
+        style="@style/tv_add_record_confirm_style"
+        android:text="单价："/>
+
+    <TextView
+        android:id="@+id/tv_unit_price"
+        style="@style/tv_add_record_confirm_style"
+        android:layout_gravity="center_horizontal"
+        android:text="6.22"
+        android:textColor="@color/red"
+        android:textStyle="italic"/>
+
+    <TextView
+        style="@style/tv_add_record_confirm_style"
+        android:text="容量："/>
+
+    <TextView
+        android:id="@+id/tv_liters"
+        style="@style/tv_add_record_confirm_style"
+        android:layout_gravity="center_horizontal"
+        android:text="42.2"
+        android:textColor="@color/red"
+        android:textStyle="italic"/>
+
+    <TextView
+        style="@style/tv_add_record_confirm_style"
+        android:text="总价："/>
+
+    <TextView
+        android:id="@+id/tv_total_price"
+        style="@style/tv_add_record_confirm_style"
+        android:layout_gravity="center_horizontal"
+        android:text="252.2"
+        android:textColor="@color/red"
+        android:textStyle="italic"/>
+
+    <TextView
+        style="@style/tv_add_record_confirm_style"
+        android:text="日期："/>
+
+    <TextView
+        android:id="@+id/tv_fuel_date"
+        style="@style/tv_add_record_confirm_style"
+        android:layout_gravity="center_horizontal"
+        android:text="2017年6月29日"
+        android:textColor="@color/red"
+        android:textStyle="italic"/>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btn_confirm"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="20dp"
+            android:text="确认"/>
+
+        <Button
+            android:id="@+id/btn_cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:text="取消"/>
+    </LinearLayout>
+</LinearLayout>
