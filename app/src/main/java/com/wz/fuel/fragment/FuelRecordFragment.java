@@ -1,7 +1,10 @@
 package com.wz.fuel.fragment;
 
 
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -13,6 +16,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.wz.fragment.WBaseFragment;
@@ -24,6 +29,8 @@ import com.wz.fuel.adapter.FuelRecordAdapter;
 import com.wz.fuel.db.GreenDaoManager;
 import com.wz.fuel.mvp.bean.FuelRecordBean;
 import com.wz.fuel.mvp.bean.FuelRecordBeanDao;
+import com.wz.util.DialogUtil;
+import com.wz.util.ScreenUtil;
 import com.wz.util.ToastMsgUtil;
 import com.wz.view.LoadMoreOnScrollListener;
 import com.wz.view.OnItemClickListener;
@@ -50,7 +57,7 @@ public class FuelRecordFragment extends WBaseFragment {
     RecyclerView mRvFuelRecord;
     Unbinder unbinder;
 
-    private MainActivity mActivity;
+    private MainActivity mMainActivity;
 
     private FuelRecordAdapter mAdapter;
     private List<FuelRecordBean> mFuelRecords;
@@ -62,13 +69,16 @@ public class FuelRecordFragment extends WBaseFragment {
     /**
      * 一次取数据的数量
      */
-    private int mLimit = 10;
+    private int mLimit = 5;
 
-    private View mFooterView;
+    /**
+     * 显示加载更多尾标
+     */
+    private View mFooterViewLoadMore;
 
     private static final int MSG_LOAD_MORE_DATA = 1;
 
-    private static final int LOAD_DATA_DELAY = 1000;
+    private static final int LOAD_DATA_DELAY = 2000;
 
     private Handler mHandler = new Handler() {
         @Override
@@ -84,7 +94,7 @@ public class FuelRecordFragment extends WBaseFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mActivity = (MainActivity) getActivity();
+        mMainActivity = (MainActivity) getActivity();
     }
 
     @Override
@@ -109,7 +119,8 @@ public class FuelRecordFragment extends WBaseFragment {
     private void initRecyclerView() {
         mFuelRecords = new ArrayList<>();
         mAdapter = new FuelRecordAdapter(getActivity(), mFuelRecords);
-        initFooterView();
+        initFooterViewLoadMore();
+        mAdapter.setFooterView(mFooterViewLoadMore);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         mRvFuelRecord.setLayoutManager(layoutManager);
         mRvFuelRecord.setAdapter(mAdapter);
@@ -126,14 +137,23 @@ public class FuelRecordFragment extends WBaseFragment {
         mRvFuelRecord.addOnScrollListener(new LoadMoreOnScrollListener(layoutManager) {
             @Override
             public void loadMoreData() {
+                mFooterViewLoadMore.setVisibility(View.VISIBLE);
                 mHandler.sendEmptyMessageDelayed(MSG_LOAD_MORE_DATA, LOAD_DATA_DELAY);
             }
         });
     }
 
-    private void initFooterView() {
-        mFooterView = LayoutInflater.from(getActivity()).inflate(R.layout.footerview_layout, null);
-        mAdapter.setFooterView(mFooterView);
+    private void initFooterViewLoadMore() {
+        mFooterViewLoadMore = LayoutInflater.from(getActivity()).inflate(R.layout.footerview_load_more_layout, null);
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        layoutParams.setMargins(ScreenUtil.dpToPx(mContext, 5), ScreenUtil.dpToPx(mContext, 5), ScreenUtil.dpToPx(mContext, 5), ScreenUtil.dpToPx(mContext, 5));
+        mFooterViewLoadMore.setLayoutParams(layoutParams);
+        ImageView imageView = (ImageView) mFooterViewLoadMore.findViewById(R.id.iv_load_icon);
+        ObjectAnimator animator = ObjectAnimator.ofFloat(imageView, "rotation", 0, 360).setDuration(1000);
+        animator.setRepeatCount(Animation.INFINITE);
+        animator.setRepeatMode(ValueAnimator.RESTART);
+        animator.start();
+        mFooterViewLoadMore.setVisibility(View.GONE);
     }
 
 
@@ -146,7 +166,7 @@ public class FuelRecordFragment extends WBaseFragment {
     private void addFuelRecord() {
         FuelRecordBeanDao recordDao = GreenDaoManager.getInstance().getDaoSession().getFuelRecordBeanDao();
         Intent intent = new Intent(getActivity(), AddFuelRecordActivity.class);
-        intent.putExtra(AppConstants.EXTRA_FUEL_PRICE_BEAN, mActivity.getCurrentFuelPriceBean());
+        intent.putExtra(AppConstants.EXTRA_FUEL_PRICE_BEAN, mMainActivity.getCurrentFuelPriceBean());
         startActivityForResult(intent, AppConstants.REQUEST_ADD_FUEL_RECORD);
     }
 
@@ -171,20 +191,42 @@ public class FuelRecordFragment extends WBaseFragment {
 
     private OnItemLongClickListener mOnItemLongClickListener = new OnItemLongClickListener() {
         @Override
-        public boolean onItemLongClick(View view, int position) {
-            ToastMsgUtil.info(getActivity(), "删除：" + position, 0);
+        public boolean onItemLongClick(View view, final int position) {
+            DialogUtil.showDialog(getActivity(), "是否删除记录？", "确定", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    FuelRecordBean fuelRecordBean = mFuelRecords.get(position);
+                    mFuelRecords.remove(fuelRecordBean);
+                    if (fuelRecordBean != null) {
+                        deleteRecord(fuelRecordBean);
+                    }
+                    mAdapter.notifyItemRemoved(position);
+                }
+            }, "取消", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                }
+            });
             return true;
         }
     };
 
     private void queryDb(int limit, int offset) {
+        mFooterViewLoadMore.setVisibility(View.GONE);
         FuelRecordBeanDao recordDao = GreenDaoManager.getInstance().getDaoSession().getFuelRecordBeanDao();
         List<FuelRecordBean> recordBeans = recordDao.queryBuilder().limit(limit).offset(offset).orderDesc(FuelRecordBeanDao.Properties.Id).list();
-        if (recordBeans != null) {
+        if (recordBeans != null && recordBeans.size() > 0) {
             mFuelRecords.addAll(recordBeans);
-            mOffset = recordBeans.size();
+            mOffset += recordBeans.size();
             mAdapter.notifyDataSetChanged();
+        } else {
+            ToastMsgUtil.info(getActivity(), "没有更多数据了~~~", 0);
         }
+    }
+
+    private void deleteRecord(FuelRecordBean fuelRecordBean) {
+        FuelRecordBeanDao recordDao = GreenDaoManager.getInstance().getDaoSession().getFuelRecordBeanDao();
+        recordDao.delete(fuelRecordBean);
     }
 
     /**

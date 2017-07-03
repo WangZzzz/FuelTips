@@ -35,7 +35,6 @@ public abstract class LoadMoreOnScrollListener extends RecyclerView.OnScrollList
         totalItemCount = mLinearLayoutManager.getItemCount();
         //屏幕中第一个可见的item
         firstVisibleItem = mLinearLayoutManager.findFirstVisibleItemPosition();
-        Log.d(TAG, "visibleItemCount : " + visibleItemCount);
         if (totalItemCount > previousTotal) {
             //说明数据已经加载结束
             isLoading = false;
