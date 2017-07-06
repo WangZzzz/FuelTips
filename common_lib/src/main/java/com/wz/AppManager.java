@@ -1,6 +1,7 @@
 package com.wz;
 
 import android.app.Activity;
+import android.content.Context;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +17,36 @@ import java.util.List;
  * <br>
  */
 public class AppManager {
+
+    private static volatile AppManager sInstance;
+
+    private Context mContext;
+
+    private AppManager(Context context) {
+        mContext = context.getApplicationContext();
+    }
+
+    public static AppManager getInstance(Context context) {
+        if (context == null) {
+            return null;
+        }
+        if (sInstance == null) {
+            synchronized (AppManager.class) {
+                if (sInstance == null) {
+                    sInstance = new AppManager(context);
+                }
+            }
+        }
+        return sInstance;
+    }
+
+    public void init() {
+    }
+
+    public void exitApp() {
+        finishAll();
+    }
+
     private static List<Activity> sActivities = new ArrayList<Activity>();
 
     public static void addActivity(Activity activity) {
@@ -26,9 +57,6 @@ public class AppManager {
         sActivities.remove(activity);
     }
 
-    public static void exitApp() {
-        finishAll();
-    }
 
     public static void finishAll() {
         for (Activity activity : sActivities) {

@@ -22,11 +22,16 @@ public class AppConstants {
     public static final String EXTRA_FUEL_RECORD_BEAN = "extra_fuel_record_bean";
 
 
+    /**
+     * Sp使用
+     */
     public static final String SP_PROVINCE = "sp_province";
-
     public static final String SP_CONFIG = "global_config";
+    public static final String SP_APP_VERSION = "app_version";
+
 
     public static final String DB_NAME = "fuel_tips";
 
     public static final String DATE_FORMAT = "yyyy 年 MM 月 dd 日";
+
 }

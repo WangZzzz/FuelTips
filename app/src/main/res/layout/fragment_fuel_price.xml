@@ -1,108 +1,114 @@
-<LinearLayout
+<android.support.v4.widget.SwipeRefreshLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/swipeRefreshLayout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:gravity="center"
-        android:orientation="horizontal"
-        >
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-        <TextView
-            style="@style/tv_fuel_price_des"
-            android:text="89号汽油"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="horizontal"
+            >
 
-        <TextView
-            android:id="@+id/tv_price_gas_89"
-            style="@style/tv_fuel_price"
-            android:text="0.00"/>
+            <TextView
+                style="@style/tv_fuel_price_des"
+                android:text="89号汽油"/>
 
-        <TextView
-            style="@style/tv_fuel_price_des"
-            android:text="元/升"/>
+            <TextView
+                android:id="@+id/tv_price_gas_89"
+                style="@style/tv_fuel_price"
+                android:text="0.00"/>
+
+            <TextView
+                style="@style/tv_fuel_price_des"
+                android:text="元/升"/>
+
+        </LinearLayout>
+
+        <include layout="@layout/layout_dash_divider"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="horizontal"
+            >
+
+            <TextView
+                style="@style/tv_fuel_price_des"
+                android:text="92号汽油"/>
+
+            <TextView
+                android:id="@+id/tv_price_gas_92"
+                style="@style/tv_fuel_price"
+                android:text="0.00"/>
+
+            <TextView
+                style="@style/tv_fuel_price_des"
+                android:text="元/升"/>
+
+        </LinearLayout>
+
+        <include layout="@layout/layout_dash_divider"/>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="horizontal"
+            >
+
+            <TextView
+                style="@style/tv_fuel_price_des"
+                android:text="95号汽油"/>
+
+            <TextView
+                android:id="@+id/tv_price_gas_95"
+                style="@style/tv_fuel_price"
+                android:text="0.00"/>
+
+            <TextView
+                style="@style/tv_fuel_price_des"
+                android:text="元/升"/>
+
+        </LinearLayout>
+
+
+        <include layout="@layout/layout_dash_divider"/>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="horizontal"
+            >
+
+            <TextView
+                style="@style/tv_fuel_price_des"
+                android:text="0号柴油"/>
+
+            <TextView
+                android:id="@+id/tv_price_diesel_0"
+                style="@style/tv_fuel_price"
+                android:text="0.00"/>
+
+            <TextView
+                style="@style/tv_fuel_price_des"
+                android:text="元/升"/>
+
+        </LinearLayout>
 
     </LinearLayout>
-
-    <include layout="@layout/layout_dash_divider"/>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:gravity="center"
-        android:orientation="horizontal"
-        >
-
-        <TextView
-            style="@style/tv_fuel_price_des"
-            android:text="92号汽油"/>
-
-        <TextView
-            android:id="@+id/tv_price_gas_92"
-            style="@style/tv_fuel_price"
-            android:text="0.00"/>
-
-        <TextView
-            style="@style/tv_fuel_price_des"
-            android:text="元/升"/>
-
-    </LinearLayout>
-
-    <include layout="@layout/layout_dash_divider"/>
-
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:gravity="center"
-        android:orientation="horizontal"
-        >
-
-        <TextView
-            style="@style/tv_fuel_price_des"
-            android:text="95号汽油"/>
-
-        <TextView
-            android:id="@+id/tv_price_gas_95"
-            style="@style/tv_fuel_price"
-            android:text="0.00"/>
-
-        <TextView
-            style="@style/tv_fuel_price_des"
-            android:text="元/升"/>
-
-    </LinearLayout>
-
-
-    <include layout="@layout/layout_dash_divider"/>
-
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:gravity="center"
-        android:orientation="horizontal"
-        >
-
-        <TextView
-            style="@style/tv_fuel_price_des"
-            android:text="0号柴油"/>
-
-        <TextView
-            android:id="@+id/tv_price_diesel_0"
-            style="@style/tv_fuel_price"
-            android:text="0.00"/>
-
-        <TextView
-            style="@style/tv_fuel_price_des"
-            android:text="元/升"/>
-
-    </LinearLayout>
-
-</LinearLayout>
+</android.support.v4.widget.SwipeRefreshLayout>

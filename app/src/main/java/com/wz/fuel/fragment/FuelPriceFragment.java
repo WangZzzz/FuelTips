@@ -2,8 +2,11 @@ package com.wz.fuel.fragment;
 
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,7 +15,6 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.wz.fragment.WBaseFragment;
 import com.wz.fuel.AppConstants;
 import com.wz.fuel.R;
 import com.wz.fuel.activity.MainActivity;
@@ -25,14 +27,12 @@ import com.wz.util.WLog;
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
 
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class FuelPriceFragment extends WBaseFragment implements IView<FuelPriceBean> {
+public class FuelPriceFragment extends BaseFragment implements IView<FuelPriceBean> {
     private static final String TAG = FuelPriceFragment.class.getSimpleName();
     @BindView(R.id.tv_price_gas_89)
     TextView mTvPriceGas89;
@@ -42,11 +42,28 @@ public class FuelPriceFragment extends WBaseFragment implements IView<FuelPriceB
     TextView mTvPriceGas95;
     @BindView(R.id.tv_price_diesel_0)
     TextView mTvPriceDiesel0;
-    Unbinder unbinder;
+    @BindView(R.id.swipeRefreshLayout)
+    SwipeRefreshLayout mSwipeRefreshLayout;
+
+    private static final int MSG_REFRESH_DATA = 1;
+    private static final int REFRESH_DELAY = 2000;
 
     private FuelPriceBean mFuelPriceBean;
 
     private FuelPricePresenter mPresenter;
+
+    private Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case MSG_REFRESH_DATA:
+                    mSwipeRefreshLayout.setRefreshing(false);
+                    refresh();
+                    break;
+            }
+        }
+    };
+
 
     public FuelPriceFragment() {
         // Required empty public constructor
@@ -56,9 +73,21 @@ public class FuelPriceFragment extends WBaseFragment implements IView<FuelPriceB
     @Override
     public View initView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_fuel_price, container, false);
-        unbinder = ButterKnife.bind(this, view);
-        initData();
         return view;
+    }
+
+    public void initData() {
+        mSwipeRefreshLayout.setColorSchemeResources(R.color.lightblue, R.color.orange, R.color.greenyellow);
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                mHandler.sendEmptyMessageDelayed(MSG_REFRESH_DATA, REFRESH_DELAY);
+            }
+        });
+        mPresenter = new FuelPricePresenter(this);
+        if (!TextUtils.isEmpty(AppConstants.sProvince)) {
+            mPresenter.queryPrice(true);
+        }
     }
 
     @Override
@@ -75,14 +104,7 @@ public class FuelPriceFragment extends WBaseFragment implements IView<FuelPriceB
 
     public void refresh() {
         if (!TextUtils.isEmpty(AppConstants.sProvince)) {
-            mPresenter.queryPrice();
-        }
-    }
-
-    private void initData() {
-        mPresenter = new FuelPricePresenter(this);
-        if (!TextUtils.isEmpty(AppConstants.sProvince)) {
-            mPresenter.queryPrice();
+            mPresenter.queryPrice(false);
         }
     }
 
@@ -131,13 +153,15 @@ public class FuelPriceFragment extends WBaseFragment implements IView<FuelPriceB
         ((MainActivity) getActivity()).hideProgressDialog();
     }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        unbinder.unbind();
-    }
 
     public FuelPriceBean getCurrentFuelPriceBean() {
         return mFuelPriceBean;
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        // TODO: inflate a fragment view
+        View rootView = super.onCreateView(inflater, container, savedInstanceState);
+        return rootView;
     }
 }

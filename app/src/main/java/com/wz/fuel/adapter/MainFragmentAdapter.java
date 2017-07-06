@@ -3,6 +3,7 @@ package com.wz.fuel.adapter;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.view.ViewGroup;
 
 import com.viewpagerindicator.IconPagerAdapter;
 
@@ -24,6 +25,11 @@ public class MainFragmentAdapter extends FragmentPagerAdapter implements IconPag
     @Override
     public Fragment getItem(int position) {
         return mFragments == null ? null : mFragments.get(position);
+    }
+
+    @Override
+    public void destroyItem(ViewGroup container, int position, Object object) {
+//        super.destroyItem(container, position, object);
     }
 
     @Override

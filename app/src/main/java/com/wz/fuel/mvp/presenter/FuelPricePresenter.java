@@ -33,8 +33,10 @@ public class FuelPricePresenter extends IPresenter<FuelPriceBean> {
         super(iView);
     }
 
-    public void queryPrice() {
-        mView.showProgressDialog();
+    public void queryPrice(boolean showDialog) {
+        if (showDialog) {
+            mView.showProgressDialog();
+        }
         FuelPriceService fuelPriceService = NetClient.createService(FuelPriceService.class);
         fuelPriceService.getFuelPrice()
                 .subscribeOn(Schedulers.io())

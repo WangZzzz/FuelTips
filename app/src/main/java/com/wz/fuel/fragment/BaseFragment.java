@@ -1,5 +1,4 @@
-package com.wz.fragment;
-
+package com.wz.fuel.fragment;
 
 import android.app.Activity;
 import android.content.Context;
@@ -10,17 +9,29 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
 
 /**
- * Fragment基类
+ * <br>
+ * FIREFLY
+ * <p>
+ * com.wz.fuel.fragment
  *
- * @author wz
+ * @author wangzhe
+ * @version 3.2.0
+ * @date 2017/7/4 15:13
+ * @api 7
+ * <br>
+ * CMBC-版权所有
+ * <br>
  */
-public abstract class WBaseFragment extends Fragment {
-
+public abstract class BaseFragment extends Fragment {
     protected View mRootView = null;
     protected Activity mActivity;
     protected Context mContext;
+
+    protected Unbinder mUnbinder;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -49,6 +60,7 @@ public abstract class WBaseFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        mUnbinder = ButterKnife.bind(this, mRootView);
         initData();
     }
 
@@ -69,5 +81,6 @@ public abstract class WBaseFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        mUnbinder.unbind();
     }
 }

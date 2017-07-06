@@ -20,7 +20,6 @@ import android.view.animation.Animation;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
-import com.wz.fragment.WBaseFragment;
 import com.wz.fuel.AppConstants;
 import com.wz.fuel.R;
 import com.wz.fuel.activity.AddFuelRecordActivity;
@@ -42,20 +41,17 @@ import java.util.Comparator;
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class FuelRecordFragment extends WBaseFragment {
+public class FuelRecordFragment extends BaseFragment {
 
     private static final String TAG = FuelRecordFragment.class.getSimpleName();
     @BindView(R.id.ll_add_fuel_record)
     LinearLayout mLlAddFuelRecord;
     @BindView(R.id.rv_fuel_record)
     RecyclerView mRvFuelRecord;
-    Unbinder unbinder;
 
     private MainActivity mMainActivity;
 
@@ -100,18 +96,16 @@ public class FuelRecordFragment extends WBaseFragment {
     @Override
     public View initView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_fuel_record, container, false);
-        unbinder = ButterKnife.bind(this, view);
-        init();
+        return view;
+    }
+
+    public void initData() {
         mLlAddFuelRecord.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 addFuelRecord();
             }
         });
-        return view;
-    }
-
-    private void init() {
         initRecyclerView();
         queryDb(mLimit, mOffset);
     }
@@ -154,13 +148,6 @@ public class FuelRecordFragment extends WBaseFragment {
         animator.setRepeatMode(ValueAnimator.RESTART);
         animator.start();
         mFooterViewLoadMore.setVisibility(View.GONE);
-    }
-
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        unbinder.unbind();
     }
 
     private void addFuelRecord() {

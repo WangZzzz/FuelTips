@@ -47,7 +47,7 @@ public class WBaseActivity extends FragmentActivity {
         DialogUtil.showDialog(this, "退出应用？", "确定", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                AppManager.exitApp();
+                AppManager.getInstance(WBaseActivity.this).exitApp();
             }
         }, "取消", new DialogInterface.OnClickListener() {
             @Override

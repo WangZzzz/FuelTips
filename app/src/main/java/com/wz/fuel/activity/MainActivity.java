@@ -21,6 +21,7 @@ import com.wz.fuel.R;
 import com.wz.fuel.adapter.MainFragmentAdapter;
 import com.wz.fuel.fragment.FuelPriceFragment;
 import com.wz.fuel.fragment.FuelRecordFragment;
+import com.wz.fuel.fragment.MineFragment;
 import com.wz.fuel.mvp.bean.FuelPriceBean;
 import com.wz.util.ToastMsgUtil;
 import com.wz.util.WLog;
@@ -48,14 +49,15 @@ public class MainActivity extends WBaseActivity implements View.OnClickListener 
 
     private ProgressDialog mDialog;
 
-    private static final String[] TAB_TITLES = {"今日油价", "加油统计"};
-    private static final int[] TAB_ICON_RES_IDS = {R.drawable.ic_fuel_price, R.drawable.ic_add_fuel};
+    private static final String[] TAB_TITLES = {"今日油价", "加油记录", "我"};
+    private static final int[] TAB_ICON_RES_IDS = {R.drawable.ic_fuel_price, R.drawable.ic_add_fuel, R.drawable.ic_mine};
 
     private MainFragmentAdapter mAdapter;
     private List<Fragment> mFragments;
 
     private FuelRecordFragment mFuelRecordFragment;
     private FuelPriceFragment mFuelPriceFragment;
+    private MineFragment mMineFragment;
     private LocationClient mLocationClient;
 
     @Override
@@ -94,8 +96,10 @@ public class MainActivity extends WBaseActivity implements View.OnClickListener 
         mFragments = new ArrayList<>();
         mFuelPriceFragment = new FuelPriceFragment();
         mFuelRecordFragment = new FuelRecordFragment();
+        mMineFragment = new MineFragment();
         mFragments.add(mFuelPriceFragment);
         mFragments.add(mFuelRecordFragment);
+        mFragments.add(mMineFragment);
         mAdapter = new MainFragmentAdapter(getSupportFragmentManager(), mFragments, TAB_TITLES, TAB_ICON_RES_IDS);
         mViewPager.setAdapter(mAdapter);
         mTabIndicator.setViewPager(mViewPager);
