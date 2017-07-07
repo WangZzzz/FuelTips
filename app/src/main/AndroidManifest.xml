@@ -37,6 +37,12 @@
 
         <activity android:name=".activity.AddFuelRecordActivity">
         </activity>
+        <activity android:name=".activity.SettingsActivity">
+        </activity>
+        <activity android:name=".activity.DonationActivity">
+        </activity>
+        <activity android:name=".activity.AboutActivity">
+        </activity>
     </application>
 
 </manifest>

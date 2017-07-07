@@ -99,6 +99,7 @@ public class FuelRecordFragment extends BaseFragment {
         return view;
     }
 
+    @Override
     public void initData() {
         mLlAddFuelRecord.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -163,12 +164,15 @@ public class FuelRecordFragment extends BaseFragment {
             case AppConstants.REQUEST_ADD_FUEL_RECORD:
                 if (resultCode == Activity.RESULT_OK) {
                     //添加成功
-                    if (data != null) {
-                        FuelRecordBean fuelRecordBean = data.getParcelableExtra(AppConstants.EXTRA_FUEL_RECORD_BEAN);
-                        mFuelRecords.add(fuelRecordBean);
-                        sortRecordList();
-                        mAdapter.notifyDataSetChanged();
-                    }
+//                    if (data != null) {
+//                        FuelRecordBean fuelRecordBean = data.getParcelableExtra(AppConstants.EXTRA_FUEL_RECORD_BEAN);
+//                        mFuelRecords.add(fuelRecordBean);
+//                        sortRecordList();
+//                        mAdapter.notifyDataSetChanged();
+//                    }
+                    mFuelRecords.clear();
+                    mOffset = 0;
+                    queryDb(mLimit, mOffset);
                 } else if (resultCode == Activity.RESULT_CANCELED) {
                     ToastMsgUtil.info(getActivity(), "取消添加", 0);
                 }
@@ -207,7 +211,7 @@ public class FuelRecordFragment extends BaseFragment {
             mOffset += recordBeans.size();
             mAdapter.notifyDataSetChanged();
         } else {
-            ToastMsgUtil.info(getActivity(), "没有更多数据了~~~", 0);
+            //没有更多数据了
         }
     }
 

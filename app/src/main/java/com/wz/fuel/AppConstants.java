@@ -21,6 +21,9 @@ public class AppConstants {
     public static final String EXTRA_FUEL_PRICE_BEAN = "extra_fuel_price_bean";
     public static final String EXTRA_FUEL_RECORD_BEAN = "extra_fuel_record_bean";
 
+    //传递MenuDataBean
+    public static final String EXTRA_MENU_DATA = "extra_menu_data";
+
 
     /**
      * Sp使用

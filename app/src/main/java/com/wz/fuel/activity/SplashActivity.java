@@ -8,8 +8,6 @@ import android.os.Handler;
 import android.os.Message;
 import android.widget.ImageView;
 
-import com.wz.AppManager;
-import com.wz.activity.WBaseActivity;
 import com.wz.fuel.AppConstants;
 import com.wz.fuel.R;
 import com.wz.util.SpUtil;
@@ -17,7 +15,7 @@ import com.wz.util.SpUtil;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class SplashActivity extends WBaseActivity {
+public class SplashActivity extends BaseActivity {
 
     private static final String TAG = SplashActivity.class.getSimpleName();
 
@@ -42,7 +40,6 @@ public class SplashActivity extends WBaseActivity {
     }
 
     private void init() {
-        AppManager.getInstance(this).init();
         startAnimation();
         SpUtil spUtil = new SpUtil(this, AppConstants.SP_CONFIG);
         AppConstants.sProvince = spUtil.getString(AppConstants.SP_PROVINCE, "");

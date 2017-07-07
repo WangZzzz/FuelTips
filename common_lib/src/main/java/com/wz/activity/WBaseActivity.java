@@ -56,4 +56,9 @@ public class WBaseActivity extends FragmentActivity {
             }
         });
     }
+
+    @Override
+    public void finish() {
+        super.finish();
+    }
 }

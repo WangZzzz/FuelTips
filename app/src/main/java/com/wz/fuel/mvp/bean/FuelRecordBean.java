@@ -48,21 +48,52 @@ public class FuelRecordBean implements Parcelable {
     public int fuelType;
     //加油类型字符串形式
     public String fuelTypeStr;
+    //加油的月份
+    public int fuelMonth;
+    //当前加油时里程
+    public int curentMileage;
 
-    @Generated(hash = 309144516)
-    public FuelRecordBean(Long id, float totalPrice, float unitPrice, long fuelDate, float litres, int fuelType,
-                          String fuelTypeStr) {
-        this.id = id;
-        this.totalPrice = totalPrice;
-        this.unitPrice = unitPrice;
-        this.fuelDate = fuelDate;
-        this.litres = litres;
-        this.fuelType = fuelType;
-        this.fuelTypeStr = fuelTypeStr;
+
+    public static String getFuelTypeString(int fuelType) {
+        switch (fuelType) {
+            case TYPE_GAS_89:
+                return "89号汽油";
+            case TYPE_GAS_92:
+                return "92号汽油";
+            case TYPE_GAS_95:
+                return "95号汽油";
+            case TYPE_DIESEL_0:
+                return "0号柴油";
+            case TYPE_OTHERS:
+                return "其他";
+        }
+        return null;
     }
 
-    @Generated(hash = 64443763)
-    public FuelRecordBean() {
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeLong(this.id);
+        dest.writeFloat(this.totalPrice);
+        dest.writeFloat(this.unitPrice);
+        dest.writeLong(this.fuelDate);
+        dest.writeFloat(this.litres);
+        dest.writeInt(this.fuelType);
+        dest.writeString(this.fuelTypeStr);
+        dest.writeInt(this.fuelMonth);
+        dest.writeInt(this.curentMileage);
+    }
+
+    public Long getId() {
+        return this.id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public float getTotalPrice() {
@@ -113,44 +144,20 @@ public class FuelRecordBean implements Parcelable {
         this.fuelTypeStr = fuelTypeStr;
     }
 
-    public Long getId() {
-        return this.id;
+    public int getFuelMonth() {
+        return this.fuelMonth;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setFuelMonth(int fuelMonth) {
+        this.fuelMonth = fuelMonth;
     }
 
-    public static String getFuelTypeString(int fuelType) {
-        switch (fuelType) {
-            case TYPE_GAS_89:
-                return "89号汽油";
-            case TYPE_GAS_92:
-                return "92号汽油";
-            case TYPE_GAS_95:
-                return "95号汽油";
-            case TYPE_DIESEL_0:
-                return "0号柴油";
-            case TYPE_OTHERS:
-                return "其他";
-        }
-        return null;
+    public int getCurentMileage() {
+        return this.curentMileage;
     }
 
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeLong(this.id);
-        dest.writeFloat(this.totalPrice);
-        dest.writeFloat(this.unitPrice);
-        dest.writeLong(this.fuelDate);
-        dest.writeFloat(this.litres);
-        dest.writeInt(this.fuelType);
-        dest.writeString(this.fuelTypeStr);
+    public void setCurentMileage(int curentMileage) {
+        this.curentMileage = curentMileage;
     }
 
     protected FuelRecordBean(Parcel in) {
@@ -161,6 +168,26 @@ public class FuelRecordBean implements Parcelable {
         this.litres = in.readFloat();
         this.fuelType = in.readInt();
         this.fuelTypeStr = in.readString();
+        this.fuelMonth = in.readInt();
+        this.curentMileage = in.readInt();
+    }
+
+    @Generated(hash = 1930190276)
+    public FuelRecordBean(Long id, float totalPrice, float unitPrice, long fuelDate, float litres, int fuelType,
+                          String fuelTypeStr, int fuelMonth, int curentMileage) {
+        this.id = id;
+        this.totalPrice = totalPrice;
+        this.unitPrice = unitPrice;
+        this.fuelDate = fuelDate;
+        this.litres = litres;
+        this.fuelType = fuelType;
+        this.fuelTypeStr = fuelTypeStr;
+        this.fuelMonth = fuelMonth;
+        this.curentMileage = curentMileage;
+    }
+
+    @Generated(hash = 64443763)
+    public FuelRecordBean() {
     }
 
     public static final Parcelable.Creator<FuelRecordBean> CREATOR = new Parcelable.Creator<FuelRecordBean>() {

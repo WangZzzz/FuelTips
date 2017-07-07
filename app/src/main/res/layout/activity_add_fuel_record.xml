@@ -189,9 +189,47 @@
         </LinearLayout>
 
         <TextView
-            android:id="@+id/tv_fuel_date_tips"
+            android:id="@+id/tv_current_mileage"
             style="@style/tv_add_record_style"
             android:layout_below="@+id/ll_fuel_liter"
+            android:text="当前里程："
+            android:textStyle="italic"/>
+
+        <LinearLayout
+            android:id="@+id/ll_current_mileage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/ll_unit_price"
+            android:layout_below="@+id/tv_current_mileage"
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/tv_add_record_style"
+                android:text="里程："
+                android:textSize="18sp"/>
+
+            <EditText
+                android:id="@+id/et_current_mileage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="0000000"
+                android:inputType="number"
+                android:maxLength="7"
+                android:maxLines="1"
+                android:textColor="@color/red"
+                android:textSize="24sp"
+                android:textStyle="italic"/>
+
+            <TextView
+                style="@style/tv_add_record_style"
+                android:text="公里"
+                android:textSize="18sp"/>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_fuel_date_tips"
+            style="@style/tv_add_record_style"
+            android:layout_below="@+id/ll_current_mileage"
             android:text="加油时间："
             android:textStyle="italic"/>
 

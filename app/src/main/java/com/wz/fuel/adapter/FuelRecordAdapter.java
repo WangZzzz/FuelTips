@@ -70,7 +70,7 @@ public class FuelRecordAdapter extends RecyclerView.Adapter<FuelRecordAdapter.My
             if (mRecords != null) {
                 FuelRecordBean fuelRecord = mRecords.get(position);
                 if (fuelRecord != null) {
-                    holder.mTvDate.setText(TimeUtil.millis2String(fuelRecord.fuelDate, new SimpleDateFormat("yyyy-MM-dd HH:mm")));
+                    holder.mTvDate.setText(TimeUtil.millis2String(fuelRecord.fuelDate, new SimpleDateFormat("yyyy-MM-dd")));
                     holder.mTvLitres.setText(fuelRecord.litres + "升");
                     holder.mTvTotalPrice.setText(fuelRecord.totalPrice + "元");
                     holder.mTvFuelType.setText(fuelRecord.fuelTypeStr);

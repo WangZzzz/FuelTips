@@ -15,13 +15,13 @@ import com.baidu.location.BDLocationListener;
 import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
 import com.viewpagerindicator.TabPageIndicator;
-import com.wz.activity.WBaseActivity;
 import com.wz.fuel.AppConstants;
 import com.wz.fuel.R;
 import com.wz.fuel.adapter.MainFragmentAdapter;
 import com.wz.fuel.fragment.FuelPriceFragment;
 import com.wz.fuel.fragment.FuelRecordFragment;
 import com.wz.fuel.fragment.MineFragment;
+import com.wz.fuel.fragment.StatisticsFragment;
 import com.wz.fuel.mvp.bean.FuelPriceBean;
 import com.wz.util.ToastMsgUtil;
 import com.wz.util.WLog;
@@ -33,7 +33,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import es.dmoral.toasty.Toasty;
 
-public class MainActivity extends WBaseActivity implements View.OnClickListener {
+public class MainActivity extends BaseActivity implements View.OnClickListener {
 
     private static final String TAG = MainActivity.class.getSimpleName();
     @BindView(R.id.toolbar_title)
@@ -49,16 +49,20 @@ public class MainActivity extends WBaseActivity implements View.OnClickListener 
 
     private ProgressDialog mDialog;
 
-    private static final String[] TAB_TITLES = {"今日油价", "加油记录", "我"};
-    private static final int[] TAB_ICON_RES_IDS = {R.drawable.ic_fuel_price, R.drawable.ic_add_fuel, R.drawable.ic_mine};
+    private static final String[] TAB_TITLES = {"今日油价", "加油记录", "加油统计", "我"};
+    private static final int[] TAB_ICON_RES_IDS = {R.drawable.ic_fuel_price, R.drawable.ic_add_fuel, R.drawable.ic_statistics, R.drawable.ic_mine};
 
     private MainFragmentAdapter mAdapter;
     private List<Fragment> mFragments;
 
     private FuelRecordFragment mFuelRecordFragment;
     private FuelPriceFragment mFuelPriceFragment;
+    private StatisticsFragment mStatisticsFragment;
     private MineFragment mMineFragment;
     private LocationClient mLocationClient;
+
+
+    private int mCurrentTab = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,9 +100,11 @@ public class MainActivity extends WBaseActivity implements View.OnClickListener 
         mFragments = new ArrayList<>();
         mFuelPriceFragment = new FuelPriceFragment();
         mFuelRecordFragment = new FuelRecordFragment();
+        mStatisticsFragment = new StatisticsFragment();
         mMineFragment = new MineFragment();
         mFragments.add(mFuelPriceFragment);
         mFragments.add(mFuelRecordFragment);
+        mFragments.add(mStatisticsFragment);
         mFragments.add(mMineFragment);
         mAdapter = new MainFragmentAdapter(getSupportFragmentManager(), mFragments, TAB_TITLES, TAB_ICON_RES_IDS);
         mViewPager.setAdapter(mAdapter);
@@ -112,6 +118,7 @@ public class MainActivity extends WBaseActivity implements View.OnClickListener 
             @Override
             public void onPageSelected(int position) {
                 mToolbarTitle.setText(TAB_TITLES[position]);
+                mCurrentTab = position;
             }
 
             @Override
@@ -243,5 +250,14 @@ public class MainActivity extends WBaseActivity implements View.OnClickListener 
             return mFuelPriceFragment.getCurrentFuelPriceBean();
         }
         return null;
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (mCurrentTab != 0) {
+            mTabIndicator.setCurrentItem(0);
+        } else {
+            super.onBackPressed();
+        }
     }
 }

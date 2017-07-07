@@ -63,7 +63,9 @@ public class TaskService extends Service {
         Intent intent = new Intent(context, TaskService.class);
         intent.putExtra(EXTRA_ACTION, ACTION_EXEC_TASK);
         intent.putExtra(EXTRA_TASK_NAME, taskName);
-        intent.putExtras(bundle);
+        if (bundle != null) {
+            intent.putExtras(bundle);
+        }
         context.startService(intent);
     }
 
@@ -75,7 +77,9 @@ public class TaskService extends Service {
         Intent intent = new Intent(context, TaskService.class);
         intent.putExtra(EXTRA_ACTION, ACTION_SEND_MESSAGE);
         intent.putExtra(EXTRA_TASK_NAME, taskName);
-        intent.putExtras(bundle);
+        if (bundle != null) {
+            intent.putExtras(bundle);
+        }
         context.startService(intent);
     }
 

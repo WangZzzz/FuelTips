@@ -16,7 +16,7 @@ import com.wz.util.SpUtil;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class ChooseProvinceActivity extends WBaseActivity {
+public class ChooseProvinceActivity extends BaseActivity {
 
     @BindView(R.id.toolbar_title)
     TextView mToolbarTitle;

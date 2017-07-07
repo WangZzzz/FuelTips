@@ -23,13 +23,14 @@ dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     releaseCompile project(path: ':common_lib', configuration: 'release')
     debugCompile project(path: ':common_lib', configuration: 'debug')
+    compile('com.github.gzu-liyujiang.AndroidPicker:WheelPicker:1.5.2') {
+        exclude group: 'com.android.support'
+    }
     compile 'com.android.support.constraint:constraint-layout:1.0.0-alpha7'
     compile 'com.android.support:appcompat-v7:25.1.1'
     compile 'com.jakewharton:butterknife:8.4.0'
     compile 'com.android.support:support-v4:25.1.1'
     compile 'org.greenrobot:greendao:3.2.2'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.4.0'
-    compile('com.github.gzu-liyujiang.AndroidPicker:WheelPicker:1.5.2') {
-        exclude group: 'com.android.support'
-    }
+    compile 'com.github.PhilJay:MPAndroidChart:v3.0.2'
 }

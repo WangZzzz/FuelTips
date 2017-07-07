@@ -59,6 +59,19 @@
 
     <TextView
         style="@style/tv_add_record_confirm_style"
+        android:text="当前里程："/>
+
+    <TextView
+        android:id="@+id/tv_current_mileage"
+        style="@style/tv_add_record_confirm_style"
+        android:layout_gravity="center_horizontal"
+        android:text="8888"
+        android:textColor="@color/red"
+        android:textStyle="italic"/>
+
+
+    <TextView
+        style="@style/tv_add_record_confirm_style"
         android:text="日期："/>
 
     <TextView

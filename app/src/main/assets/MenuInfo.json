@@ -1,0 +1,48 @@
+{
+  "menus": [
+    {
+      "id": "W000000",
+      "imgName": "ic_default",
+      "isActive": "0",
+      "jumpType": 2,
+      "menuDesc": "所有menu的父菜单",
+      "menuName": "根菜单",
+      "menuParent": "",
+      "sort": 1,
+      "template": ""
+    },
+    {
+      "id": "W000001",
+      "imgName": "ic_about",
+      "isActive": "1",
+      "jumpType": 3,
+      "menuDesc": "关于",
+      "menuName": "关于",
+      "menuParent": "W000000",
+      "sort": 3,
+      "template": "about"
+    },
+    {
+      "id": "W000002",
+      "imgName": "ic_donation",
+      "isActive": "1",
+      "jumpType": 3,
+      "menuDesc": "打赏",
+      "menuName": "打赏",
+      "menuParent": "W000000",
+      "sort": 2,
+      "template": "donation"
+    },
+    {
+      "id": "W000003",
+      "imgName": "ic_settings",
+      "isActive": "1",
+      "jumpType": 3,
+      "menuDesc": "设置",
+      "menuName": "设置",
+      "menuParent": "W000000",
+      "sort": 1,
+      "template": "settings"
+    }
+  ]
+}

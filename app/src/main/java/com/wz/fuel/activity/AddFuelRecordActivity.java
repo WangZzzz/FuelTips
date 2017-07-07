@@ -4,6 +4,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.support.annotation.IntegerRes;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -43,7 +44,7 @@ import static com.wz.fuel.mvp.bean.FuelRecordBean.TYPE_GAS_92;
 import static com.wz.fuel.mvp.bean.FuelRecordBean.TYPE_GAS_95;
 import static com.wz.fuel.mvp.bean.FuelRecordBean.TYPE_OTHERS;
 
-public class AddFuelRecordActivity extends WBaseActivity implements View.OnClickListener {
+public class AddFuelRecordActivity extends BaseActivity implements View.OnClickListener {
 
     private static final String TAG = AddFuelRecordActivity.class.getSimpleName();
 
@@ -61,6 +62,8 @@ public class AddFuelRecordActivity extends WBaseActivity implements View.OnClick
     EditText mEtPriceDiscount;
     @BindView(R.id.et_fuel_liter)
     EditText mEtFuelLiter;
+    @BindView(R.id.et_current_mileage)
+    EditText mEtCurrentMileage;
     @BindView(R.id.btn_confirm)
     Button mBtnConfirm;
     @BindView(R.id.btn_cancel)
@@ -74,6 +77,8 @@ public class AddFuelRecordActivity extends WBaseActivity implements View.OnClick
     private FuelPriceBean mFuelPriceBean;
 
     private PopupWindow mPopupWindow;
+
+    private int mFuelMonth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -172,6 +177,7 @@ public class AddFuelRecordActivity extends WBaseActivity implements View.OnClick
                     @Override
                     public void onDatePicked(String year, String month, String day) {
                         mTvFuelDate.setText(year + " 年 " + month + " 月 " + day + " 日");
+                        mFuelMonth = Integer.parseInt(month);
                     }
                 });
                 picker.show();
@@ -234,6 +240,10 @@ public class AddFuelRecordActivity extends WBaseActivity implements View.OnClick
             fuelLiters = Float.parseFloat(mEtFuelLiter.getText().toString());
         }
         float totalPrice = fuelLiters * desUnitPrice;
+        int currentMileage = 0;
+        if (!"".equals(mEtCurrentMileage.getText().toString())) {
+            currentMileage = Integer.parseInt(mEtCurrentMileage.getText().toString());
+        }
         if (desUnitPrice < 0 || NumberUtil.isZero(desUnitPrice) || NumberUtil.isZero(fuelLiters) || NumberUtil.isZero(totalPrice)) {
             ToastMsgUtil.error(AddFuelRecordActivity.this, "数据输入有误，请重新输入!", 1);
         } else {
@@ -245,6 +255,8 @@ public class AddFuelRecordActivity extends WBaseActivity implements View.OnClick
             fuelRecordBean.fuelDate = fuelDate;
             int selectedPosition = mSpinnerFuelType.getSelectedItemPosition();
             fuelRecordBean.fuelType = selectedPosition;
+            fuelRecordBean.fuelMonth = mFuelMonth;
+            fuelRecordBean.curentMileage = currentMileage;
             if (selectedPosition >= TYPE_OTHERS) {
                 fuelRecordBean.fuelTypeStr = mEtFuelOtherType.getText().toString();
             } else {
@@ -274,11 +286,13 @@ public class AddFuelRecordActivity extends WBaseActivity implements View.OnClick
         TextView tvFuelLiters = (TextView) rootView.findViewById(R.id.tv_liters);
         TextView tvFuelDate = (TextView) rootView.findViewById(R.id.tv_fuel_date);
         TextView tvTotalPrice = (TextView) rootView.findViewById(R.id.tv_total_price);
+        TextView tvCurrentMileage = (TextView) rootView.findViewById(R.id.tv_current_mileage);
         Button btnConfirm = (Button) rootView.findViewById(R.id.btn_confirm);
         Button btnCancel = (Button) rootView.findViewById(R.id.btn_cancel);
         tvUnitPrice.setText(fuelRecordBean.getUnitPrice() + "");
         tvFuelType.setText(fuelRecordBean.getFuelTypeStr());
         tvFuelLiters.setText(fuelRecordBean.getLitres() + "");
+        tvCurrentMileage.setText(fuelRecordBean.getCurentMileage() + "");
         tvFuelDate.setText(TimeUtil.millis2String(fuelRecordBean.getFuelDate(), new SimpleDateFormat(AppConstants.DATE_FORMAT)));
         tvTotalPrice.setText(fuelRecordBean.getTotalPrice() + "");
 
