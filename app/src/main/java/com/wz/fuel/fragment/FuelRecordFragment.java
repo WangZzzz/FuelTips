@@ -154,7 +154,7 @@ public class FuelRecordFragment extends BaseFragment {
     private void addFuelRecord() {
         FuelRecordBeanDao recordDao = GreenDaoManager.getInstance().getDaoSession().getFuelRecordBeanDao();
         Intent intent = new Intent(getActivity(), AddFuelRecordActivity.class);
-        intent.putExtra(AppConstants.EXTRA_FUEL_PRICE_BEAN, mMainActivity.getCurrentFuelPriceBean());
+        intent.putExtra(AppConstants.EXTRA_FUEL_PRICE_BEAN, AppConstants.sFuelPriceBean);
         startActivityForResult(intent, AppConstants.REQUEST_ADD_FUEL_RECORD);
     }
 

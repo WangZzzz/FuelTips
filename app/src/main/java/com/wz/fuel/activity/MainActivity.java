@@ -22,7 +22,6 @@ import com.wz.fuel.fragment.FuelPriceFragment;
 import com.wz.fuel.fragment.FuelRecordFragment;
 import com.wz.fuel.fragment.MineFragment;
 import com.wz.fuel.fragment.StatisticsFragment;
-import com.wz.fuel.mvp.bean.FuelPriceBean;
 import com.wz.util.ToastMsgUtil;
 import com.wz.util.WLog;
 
@@ -238,18 +237,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             mDialog = null;
         }
         super.onDestroy();
-    }
-
-    /**
-     * 返回当前的油品价格信息
-     *
-     * @return
-     */
-    public FuelPriceBean getCurrentFuelPriceBean() {
-        if (mFuelPriceFragment != null) {
-            return mFuelPriceFragment.getCurrentFuelPriceBean();
-        }
-        return null;
     }
 
     @Override

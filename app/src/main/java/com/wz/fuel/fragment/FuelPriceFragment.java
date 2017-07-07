@@ -48,8 +48,6 @@ public class FuelPriceFragment extends BaseFragment implements IView<FuelPriceBe
     private static final int MSG_REFRESH_DATA = 1;
     private static final int REFRESH_DELAY = 2000;
 
-    private FuelPriceBean mFuelPriceBean;
-
     private FuelPricePresenter mPresenter;
 
     private Handler mHandler = new Handler() {
@@ -125,7 +123,7 @@ public class FuelPriceFragment extends BaseFragment implements IView<FuelPriceBe
         if (!TextUtils.isEmpty(AppConstants.sProvince) && fuelBeenList != null && fuelBeenList.size() > 0) {
             for (FuelPriceBean fuelBean : fuelBeenList) {
                 if (AppConstants.sProvince.equals(fuelBean.province)) {
-                    mFuelPriceBean = fuelBean;
+                    AppConstants.sFuelPriceBean = fuelBean;
                     setPrice(fuelBean);
                 }
             }
@@ -151,11 +149,6 @@ public class FuelPriceFragment extends BaseFragment implements IView<FuelPriceBe
     @Override
     public void hideProgressDialog() {
         ((MainActivity) getActivity()).hideProgressDialog();
-    }
-
-
-    public FuelPriceBean getCurrentFuelPriceBean() {
-        return mFuelPriceBean;
     }
 
     @Override

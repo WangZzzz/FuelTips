@@ -1,5 +1,7 @@
 package com.wz.fuel;
 
+import com.wz.fuel.mvp.bean.FuelPriceBean;
+
 /**
  * 常量类型
  */
@@ -23,6 +25,8 @@ public class AppConstants {
 
     //传递MenuDataBean
     public static final String EXTRA_MENU_DATA = "extra_menu_data";
+
+    public static FuelPriceBean sFuelPriceBean;
 
 
     /**
