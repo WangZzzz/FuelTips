@@ -45,6 +45,7 @@ public abstract class BaseFragment extends Fragment {
         mContext = getContext();
         if (mRootView == null) {
             mRootView = initView(inflater, container, savedInstanceState);
+            initData();
         }
 
         //缓存的rootView，需要判断是否已经被加过parent
@@ -61,7 +62,7 @@ public abstract class BaseFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mUnbinder = ButterKnife.bind(this, mRootView);
-        initData();
+//        initData();
     }
 
     public abstract View initView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState);

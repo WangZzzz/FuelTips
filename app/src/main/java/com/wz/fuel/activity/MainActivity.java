@@ -3,30 +3,28 @@ package com.wz.fuel.activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.view.ViewPager;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTabHost;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.TabHost;
 import android.widget.TextView;
 
 import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
 import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
-import com.viewpagerindicator.TabPageIndicator;
 import com.wz.fuel.AppConstants;
 import com.wz.fuel.R;
-import com.wz.fuel.adapter.MainFragmentAdapter;
 import com.wz.fuel.fragment.FuelPriceFragment;
 import com.wz.fuel.fragment.FuelRecordFragment;
 import com.wz.fuel.fragment.MineFragment;
 import com.wz.fuel.fragment.StatisticsFragment;
 import com.wz.util.ToastMsgUtil;
 import com.wz.util.WLog;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -39,25 +37,19 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     TextView mToolbarTitle;
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
-    @BindView(R.id.viewPager)
-    ViewPager mViewPager;
     @BindView(R.id.tv_province)
     TextView mTvProvince;
-    @BindView(R.id.tabIndicator)
-    TabPageIndicator mTabIndicator;
+    @BindView(android.R.id.tabhost)
+    FragmentTabHost mTabHost;
+
+    private FragmentManager mFragmentManager;
 
     private ProgressDialog mDialog;
 
     private static final String[] TAB_TITLES = {"今日油价", "加油记录", "加油统计", "我"};
     private static final int[] TAB_ICON_RES_IDS = {R.drawable.ic_fuel_price, R.drawable.ic_add_fuel, R.drawable.ic_statistics, R.drawable.ic_mine};
+    private Class[] mFragmentClasses = {FuelPriceFragment.class, FuelRecordFragment.class, StatisticsFragment.class, MineFragment.class};
 
-    private MainFragmentAdapter mAdapter;
-    private List<Fragment> mFragments;
-
-    private FuelRecordFragment mFuelRecordFragment;
-    private FuelPriceFragment mFuelPriceFragment;
-    private StatisticsFragment mStatisticsFragment;
-    private MineFragment mMineFragment;
     private LocationClient mLocationClient;
 
 
@@ -72,6 +64,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     }
 
     private void init() {
+        mFragmentManager = getSupportFragmentManager();
         mLocationClient = new LocationClient(this);
         mLocationClient.registerLocationListener(mLocationListener);
         LocationClientOption option = new LocationClientOption();
@@ -96,35 +89,28 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     }
 
     private void initTabHost() {
-        mFragments = new ArrayList<>();
-        mFuelPriceFragment = new FuelPriceFragment();
-        mFuelRecordFragment = new FuelRecordFragment();
-        mStatisticsFragment = new StatisticsFragment();
-        mMineFragment = new MineFragment();
-        mFragments.add(mFuelPriceFragment);
-        mFragments.add(mFuelRecordFragment);
-        mFragments.add(mStatisticsFragment);
-        mFragments.add(mMineFragment);
-        mAdapter = new MainFragmentAdapter(getSupportFragmentManager(), mFragments, TAB_TITLES, TAB_ICON_RES_IDS);
-        mViewPager.setAdapter(mAdapter);
-        mTabIndicator.setViewPager(mViewPager);
-        mTabIndicator.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+        mTabHost.setup(this, mFragmentManager, R.id.fl_fragment);
+        // 得到fragment的个数
+        int count = mFragmentClasses.length;
+        for (int i = 0; i < count; i++) {
+            // 给每个Tab按钮设置图标、文字和内容
+            TabHost.TabSpec tabSpec = mTabHost.newTabSpec(TAB_TITLES[i])
+                    .setIndicator(getIndicatorView(i));
+            // 将Tab按钮添加进Tab选项卡中
+            mTabHost.addTab(tabSpec, mFragmentClasses[i], null);
+            // 设置Tab按钮的背景
+//            mTabHost.getTabWidget().getChildAt(i)
+//                    .setBackgroundResource(R.drawable.selector_tab_background);
+        }
+    }
 
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-                mToolbarTitle.setText(TAB_TITLES[position]);
-                mCurrentTab = position;
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
-            }
-        });
+    private View getIndicatorView(int index) {
+        View rootView = LayoutInflater.from(this).inflate(R.layout.tab_indicator_layout, null);
+        TextView tvTitle = (TextView) rootView.findViewById(R.id.tv_tab_title);
+        ImageView ivIcon = (ImageView) rootView.findViewById(R.id.iv_tab_icon);
+        tvTitle.setText(TAB_TITLES[index]);
+        ivIcon.setImageResource(TAB_ICON_RES_IDS[index]);
+        return rootView;
     }
 
     @Override
@@ -156,7 +142,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                         mLocationClient.stop();
                     }
                     mTvProvince.setText(AppConstants.sProvince);
-                    mFuelPriceFragment.refresh();
+//                    mFuelPriceFragment.refresh();
                 }
                 break;
         }
@@ -169,7 +155,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             if (bdLocation != null && bdLocation.getProvince() != null) {
                 AppConstants.sProvince = processProvinceStr(bdLocation.getProvince());
                 //重新获取当前价格
-                mFuelPriceFragment.refresh();
+//                mFuelPriceFragment.refresh();
                 WLog.d(TAG, "addr : " + bdLocation.getAddrStr());
                 runOnUiThread(new Runnable() {
                     @Override
@@ -242,7 +228,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     @Override
     public void onBackPressed() {
         if (mCurrentTab != 0) {
-            mTabIndicator.setCurrentItem(0);
         } else {
             super.onBackPressed();
         }
