@@ -1,6 +1,7 @@
 package com.wz.fuel.fragment;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -22,7 +23,6 @@ import com.wz.fuel.mvp.bean.FuelPriceBean;
 import com.wz.fuel.mvp.presenter.FuelPricePresenter;
 import com.wz.fuel.mvp.view.IView;
 import com.wz.util.ToastMsgUtil;
-import com.wz.util.WLog;
 
 import java.util.List;
 
@@ -56,7 +56,7 @@ public class FuelPriceFragment extends BaseFragment implements IView<FuelPriceBe
             switch (msg.what) {
                 case MSG_REFRESH_DATA:
                     mSwipeRefreshLayout.setRefreshing(false);
-                    refresh();
+                    refresh(null);
                     break;
             }
         }
@@ -89,18 +89,7 @@ public class FuelPriceFragment extends BaseFragment implements IView<FuelPriceBe
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
-        WLog.d(TAG, "onStart");
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        WLog.d(TAG, "onResume");
-    }
-
-    public void refresh() {
+    protected void refresh(Intent intent) {
         if (!TextUtils.isEmpty(AppConstants.sProvince)) {
             mPresenter.queryPrice(false);
         }

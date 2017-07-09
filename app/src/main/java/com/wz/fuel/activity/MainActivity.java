@@ -53,7 +53,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private LocationClient mLocationClient;
 
 
-    private int mCurrentTab = 0;
+    private String mCurrentTab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,6 +102,13 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 //            mTabHost.getTabWidget().getChildAt(i)
 //                    .setBackgroundResource(R.drawable.selector_tab_background);
         }
+        mTabHost.setOnTabChangedListener(new TabHost.OnTabChangeListener() {
+            @Override
+            public void onTabChanged(String tabId) {
+                WLog.d(TAG, "tabId : " + tabId);
+                mCurrentTab = tabId;
+            }
+        });
     }
 
     private View getIndicatorView(int index) {
@@ -227,7 +234,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
     @Override
     public void onBackPressed() {
-        if (mCurrentTab != 0) {
+        if (!TAB_TITLES[0].endsWith(mCurrentTab)) {
+            mTabHost.setCurrentTab(0);
         } else {
             super.onBackPressed();
         }
