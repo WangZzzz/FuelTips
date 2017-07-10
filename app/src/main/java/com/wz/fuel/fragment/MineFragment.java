@@ -13,6 +13,7 @@ import com.wz.fuel.adapter.MenuManager;
 import com.wz.fuel.adapter.MineListAdapter;
 import com.wz.fuel.menu.MenuDataBean;
 import com.wz.fuel.menu.MenuJump;
+import com.wz.util.WLog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +21,8 @@ import java.util.List;
 import butterknife.BindView;
 
 public class MineFragment extends BaseFragment {
+    private static final String TAG = MineFragment.class.getSimpleName();
+
     @BindView(R.id.lv_settings)
     ListView mLvSettings;
 
@@ -46,6 +49,11 @@ public class MineFragment extends BaseFragment {
         mAdapter = new MineListAdapter(mContext, mMenuList, R.layout.mine_list_item_layout);
         mLvSettings.setAdapter(mAdapter);
         mLvSettings.setOnItemClickListener(mOnItemClickListener);
+    }
+
+    @Override
+    protected void refresh(Bundle data) {
+        WLog.d(TAG, "refresh mine");
     }
 
     private AdapterView.OnItemClickListener mOnItemClickListener = new AdapterView.OnItemClickListener() {

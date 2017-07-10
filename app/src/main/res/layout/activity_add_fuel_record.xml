@@ -212,7 +212,7 @@
                 android:id="@+id/et_current_mileage"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:hint="0000000"
+                android:hint="00000"
                 android:inputType="number"
                 android:maxLength="7"
                 android:maxLines="1"

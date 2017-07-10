@@ -6,6 +6,10 @@ import com.wz.fuel.mvp.bean.FuelPriceBean;
  * 常量类型
  */
 public class AppConstants {
+
+    //tab标题 tag
+    public static final String[] TAB_TITLES = {"今日油价", "加油记录", "加油统计", "我"};
+
     //油价更新时间
     public static long sFuelPriceUpdateTime = 0;
 

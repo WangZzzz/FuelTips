@@ -159,6 +159,12 @@
 
 -keep class cn.qqtheme.framework.entity.** { *;}
 
+#EventBus
+-keepclassmembers class ** {
+    @org.greenrobot.eventbus.Subscribe <methods>;
+}
+-keep enum org.greenrobot.eventbus.ThreadMode { *; }
+
 #-------------------------------------------------------------------------
 
 #---------------------------------3.与js互相调用的类------------------------

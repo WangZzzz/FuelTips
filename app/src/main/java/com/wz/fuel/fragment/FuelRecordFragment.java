@@ -31,6 +31,7 @@ import com.wz.fuel.mvp.bean.FuelRecordBeanDao;
 import com.wz.util.DialogUtil;
 import com.wz.util.ScreenUtil;
 import com.wz.util.ToastMsgUtil;
+import com.wz.util.WLog;
 import com.wz.view.LoadMoreOnScrollListener;
 import com.wz.view.OnItemClickListener;
 import com.wz.view.OnItemLongClickListener;
@@ -74,7 +75,7 @@ public class FuelRecordFragment extends BaseFragment {
 
     private static final int MSG_LOAD_MORE_DATA = 1;
 
-    private static final int LOAD_DATA_DELAY = 2000;
+    private static final int LOAD_DATA_DELAY = 500;
 
     private Handler mHandler = new Handler() {
         @Override
@@ -101,6 +102,7 @@ public class FuelRecordFragment extends BaseFragment {
 
     @Override
     public void initData() {
+        WLog.d(TAG, "tag: " + getTag());
         mLlAddFuelRecord.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -109,6 +111,11 @@ public class FuelRecordFragment extends BaseFragment {
         });
         initRecyclerView();
         queryDb(mLimit, mOffset);
+    }
+
+    @Override
+    protected void refresh(Bundle data) {
+
     }
 
     private void initRecyclerView() {
@@ -152,7 +159,6 @@ public class FuelRecordFragment extends BaseFragment {
     }
 
     private void addFuelRecord() {
-        FuelRecordBeanDao recordDao = GreenDaoManager.getInstance().getDaoSession().getFuelRecordBeanDao();
         Intent intent = new Intent(getActivity(), AddFuelRecordActivity.class);
         intent.putExtra(AppConstants.EXTRA_FUEL_PRICE_BEAN, AppConstants.sFuelPriceBean);
         startActivityForResult(intent, AppConstants.REQUEST_ADD_FUEL_RECORD);

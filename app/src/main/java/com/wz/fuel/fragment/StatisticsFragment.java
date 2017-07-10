@@ -3,16 +3,19 @@ package com.wz.fuel.fragment;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.TabLayout;
+import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.wz.fuel.R;
-import com.wz.fuel.db.GreenDaoManager;
-import com.wz.fuel.mvp.bean.FuelRecordBean;
-import com.wz.fuel.mvp.bean.FuelRecordBeanDao;
+import com.wz.fuel.adapter.ViewPagerFragmentAdapter;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import butterknife.BindView;
 
 /**
  * 费用统计
@@ -25,12 +28,18 @@ import java.util.List;
  */
 public class StatisticsFragment extends BaseFragment {
 
-    private List<FuelRecordBean> mRecords;
 
-    public StatisticsFragment() {
-        // Required empty public constructor
-    }
+    @BindView(R.id.tabLayout)
+    TabLayout mTabLayout;
+    @BindView(R.id.viewPager)
+    ViewPager mViewPager;
 
+    private List<BaseFragment> mFragments;
+    private FuelConsumptionFragment mConsumptionFragment;
+    private CostFragment mCostFragment;
+
+    private ViewPagerFragmentAdapter mAdapter;
+    private List<String> mTitles;
 
     @Override
     public View initView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -40,12 +49,23 @@ public class StatisticsFragment extends BaseFragment {
 
     @Override
     public void initData() {
+        mTitles = new ArrayList<String>();
+        mFragments = new ArrayList<>();
+        mConsumptionFragment = new FuelConsumptionFragment();
+        mCostFragment = new CostFragment();
+        mFragments.add(mConsumptionFragment);
+        mFragments.add(mCostFragment);
 
+        mTitles.add("油耗统计");
+        mTitles.add("花费统计");
+
+        mAdapter = new ViewPagerFragmentAdapter(getChildFragmentManager(), mFragments, mTitles);
+        mViewPager.setAdapter(mAdapter);
+        mTabLayout.setupWithViewPager(mViewPager);
     }
 
-    private void queryDb() {
-        FuelRecordBeanDao recordDao = GreenDaoManager.getInstance().getDaoSession().getFuelRecordBeanDao();
+    @Override
+    protected void refresh(Bundle data) {
+
     }
-
-
 }

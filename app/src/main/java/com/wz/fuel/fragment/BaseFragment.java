@@ -1,9 +1,7 @@
 package com.wz.fuel.fragment;
 
 import android.app.Activity;
-import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -11,7 +9,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.wz.fuel.AppConstants;
+import com.wz.fuel.message.MessageEvent;
 import com.wz.util.WLog;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
@@ -33,7 +37,7 @@ public abstract class BaseFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        WLog.d(TAG, "onCreate");
+        EventBus.getDefault().register(this);
     }
 
     @Nullable
@@ -73,7 +77,7 @@ public abstract class BaseFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        WLog.d(TAG, "onDestroy");
+        EventBus.getDefault().unregister(this);
     }
 
     @Override
@@ -87,14 +91,48 @@ public abstract class BaseFragment extends Fragment {
         mUnbinder.unbind();
     }
 
-    protected void refresh(Intent intent) {
+    protected abstract void refresh(Bundle data);
 
+    @Override
+    public void onStart() {
+        super.onStart();
     }
 
-    protected BroadcastReceiver mReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
+    @Override
+    public void onStop() {
+        super.onStop();
+    }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(MessageEvent event) {
+        WLog.d(TAG, "onMessageEvent : " + getTag());
+        if (event != null) {
+            int type = event.messageType;
+            switch (type) {
+                case MessageEvent.TYPE_REFRESH_ALL_FRAGMENT:
+                    refresh(event.data);
+                    break;
+                case MessageEvent.TYPE_REFRESH_FUEL_PRICE_FRAGMENT:
+                    if (AppConstants.TAB_TITLES[0].equals(getTag())) {
+                        refresh(event.data);
+                    }
+                    break;
+                case MessageEvent.TYPE_REFRESH_FUEL_RECORD_FRAGMENT:
+                    if (AppConstants.TAB_TITLES[1].equals(getTag())) {
+                        refresh(event.data);
+                    }
+                    break;
+                case MessageEvent.TYPE_REFRESH_FUEL_STATISTICS_FRAGMENT:
+                    if (AppConstants.TAB_TITLES[2].equals(getTag())) {
+                        refresh(event.data);
+                    }
+                    break;
+                case MessageEvent.TYPE_REFRESH_MINE_FRAGMENT:
+                    if (AppConstants.TAB_TITLES[3].equals(getTag())) {
+                        refresh(event.data);
+                    }
+                    break;
+            }
         }
-    };
+    }
 }

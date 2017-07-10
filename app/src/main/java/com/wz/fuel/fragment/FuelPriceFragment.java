@@ -1,7 +1,6 @@
 package com.wz.fuel.fragment;
 
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -89,7 +88,7 @@ public class FuelPriceFragment extends BaseFragment implements IView<FuelPriceBe
     }
 
     @Override
-    protected void refresh(Intent intent) {
+    protected void refresh(Bundle data) {
         if (!TextUtils.isEmpty(AppConstants.sProvince)) {
             mPresenter.queryPrice(false);
         }

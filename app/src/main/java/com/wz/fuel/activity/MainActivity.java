@@ -23,12 +23,18 @@ import com.wz.fuel.fragment.FuelPriceFragment;
 import com.wz.fuel.fragment.FuelRecordFragment;
 import com.wz.fuel.fragment.MineFragment;
 import com.wz.fuel.fragment.StatisticsFragment;
+import com.wz.fuel.message.MessageEvent;
 import com.wz.util.ToastMsgUtil;
 import com.wz.util.WLog;
+
+import org.greenrobot.eventbus.EventBus;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import es.dmoral.toasty.Toasty;
+
+import static com.wz.fuel.AppConstants.TAB_TITLES;
+
 
 public class MainActivity extends BaseActivity implements View.OnClickListener {
 
@@ -46,14 +52,13 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
     private ProgressDialog mDialog;
 
-    private static final String[] TAB_TITLES = {"今日油价", "加油记录", "加油统计", "我"};
     private static final int[] TAB_ICON_RES_IDS = {R.drawable.ic_fuel_price, R.drawable.ic_add_fuel, R.drawable.ic_statistics, R.drawable.ic_mine};
     private Class[] mFragmentClasses = {FuelPriceFragment.class, FuelRecordFragment.class, StatisticsFragment.class, MineFragment.class};
 
     private LocationClient mLocationClient;
 
 
-    private String mCurrentTab;
+    private String mCurrentTab = TAB_TITLES[0];
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,7 +99,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         int count = mFragmentClasses.length;
         for (int i = 0; i < count; i++) {
             // 给每个Tab按钮设置图标、文字和内容
-            TabHost.TabSpec tabSpec = mTabHost.newTabSpec(TAB_TITLES[i])
+            TabHost.TabSpec tabSpec = mTabHost.newTabSpec(AppConstants.TAB_TITLES[i])
                     .setIndicator(getIndicatorView(i));
             // 将Tab按钮添加进Tab选项卡中
             mTabHost.addTab(tabSpec, mFragmentClasses[i], null);
@@ -105,7 +110,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         mTabHost.setOnTabChangedListener(new TabHost.OnTabChangeListener() {
             @Override
             public void onTabChanged(String tabId) {
-                WLog.d(TAG, "tabId : " + tabId);
                 mCurrentTab = tabId;
             }
         });
@@ -115,7 +119,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         View rootView = LayoutInflater.from(this).inflate(R.layout.tab_indicator_layout, null);
         TextView tvTitle = (TextView) rootView.findViewById(R.id.tv_tab_title);
         ImageView ivIcon = (ImageView) rootView.findViewById(R.id.iv_tab_icon);
-        tvTitle.setText(TAB_TITLES[index]);
+        tvTitle.setText(AppConstants.TAB_TITLES[index]);
         ivIcon.setImageResource(TAB_ICON_RES_IDS[index]);
         return rootView;
     }
@@ -149,7 +153,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                         mLocationClient.stop();
                     }
                     mTvProvince.setText(AppConstants.sProvince);
-//                    mFuelPriceFragment.refresh();
+                    refreshFuelPriceFragment();
                 }
                 break;
         }
@@ -162,7 +166,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             if (bdLocation != null && bdLocation.getProvince() != null) {
                 AppConstants.sProvince = processProvinceStr(bdLocation.getProvince());
                 //重新获取当前价格
-//                mFuelPriceFragment.refresh();
+                refreshFuelPriceFragment();
                 WLog.d(TAG, "addr : " + bdLocation.getAddrStr());
                 runOnUiThread(new Runnable() {
                     @Override
@@ -234,10 +238,19 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
     @Override
     public void onBackPressed() {
-        if (!TAB_TITLES[0].endsWith(mCurrentTab)) {
+        if (!TAB_TITLES[0].equals(mCurrentTab)) {
             mTabHost.setCurrentTab(0);
         } else {
             super.onBackPressed();
         }
+    }
+
+    /**
+     * 得到位置后刷新价格
+     */
+    private void refreshFuelPriceFragment() {
+        MessageEvent messageEvent = new MessageEvent();
+        messageEvent.messageType = MessageEvent.TYPE_REFRESH_FUEL_PRICE_FRAGMENT;
+        EventBus.getDefault().post(messageEvent);
     }
 }

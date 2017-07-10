@@ -5,21 +5,19 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.view.ViewGroup;
 
-import com.viewpagerindicator.IconPagerAdapter;
+import com.wz.fuel.fragment.BaseFragment;
 
 import java.util.List;
 
-public class MainFragmentAdapter extends FragmentPagerAdapter implements IconPagerAdapter {
+public class ViewPagerFragmentAdapter extends FragmentPagerAdapter {
 
-    private List<Fragment> mFragments;
-    private String[] mTitles;
-    private int[] mResIds;
+    private List<BaseFragment> mFragments;
+    private List<String> mTitles;
 
-    public MainFragmentAdapter(FragmentManager fm, List<Fragment> fragments, String[] titles, int[] resIds) {
+    public ViewPagerFragmentAdapter(FragmentManager fm, List<BaseFragment> fragments, List<String> titles) {
         super(fm);
         this.mFragments = fragments;
         mTitles = titles;
-        mResIds = resIds;
     }
 
     @Override
@@ -33,17 +31,12 @@ public class MainFragmentAdapter extends FragmentPagerAdapter implements IconPag
     }
 
     @Override
-    public int getIconResId(int index) {
-        return mResIds[index];
-    }
-
-    @Override
     public int getCount() {
         return mFragments == null ? 0 : mFragments.size();
     }
 
     @Override
     public CharSequence getPageTitle(int position) {
-        return mTitles[position];
+        return mTitles.get(position);
     }
 }
