@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="PointIndicatorView">
+        <attr name="selectedPointDrawable" format="reference"/>
+        <attr name="normalPointDrawable" format="reference"/>
+        <attr name="pointSize" format="dimension"/>
+        <attr name="defaultIndex" format="integer"/>
+        <attr name="pointNum" format="integer"/>
+    </declare-styleable>
+</resources>
