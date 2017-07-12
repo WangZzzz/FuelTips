@@ -10,7 +10,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.wz.R;
-import com.wz.util.WLog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,17 +22,25 @@ public class PointIndicatorView extends LinearLayout {
     private static final String TAG = PointIndicatorView.class.getSimpleName();
 
     private Context mContext;
-    //默认位置
-    private int mDefaultIndex;
-
-    private int mSelectedPoinResId = R.drawable.w_ic_point_selected;
-    private int mNormalPointResId = R.drawable.w_ic_point_normal;
+    //选中和未选中时的图片
+    private int mSelectedPoinResId;
+    private int mNormalPointResId;
+    //圆点大小
     private int mPointSize;
 
     private List<ImageView> mPointViews;
+    //圆点数量
     private int mPointNum;
 
+    //当前索引
     private int mCurrentIndex;
+
+    //圆点间的间隔
+    private int mMargin;
+    private int mMarginTop;
+    private int mMarginLeft;
+    private int mMarginRight;
+    private int mMarginBottom;
 
     public PointIndicatorView(Context context) {
         this(context, null);
@@ -47,25 +54,28 @@ public class PointIndicatorView extends LinearLayout {
 
     private void init(AttributeSet attrs) {
         mPointViews = new ArrayList<>();
-//        setPadding(10, 5, 10, 5);
         setLayoutParams(new LinearLayoutCompat.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         TypedArray array = mContext.obtainStyledAttributes(attrs, R.styleable.PointIndicatorView);
         mNormalPointResId = array.getResourceId(R.styleable.PointIndicatorView_normalPointDrawable, R.drawable.w_ic_point_normal);
         mSelectedPoinResId = array.getResourceId(R.styleable.PointIndicatorView_selectedPointDrawable, R.drawable.w_ic_point_selected);
         mPointSize = array.getDimensionPixelOffset(R.styleable.PointIndicatorView_pointSize, 35);
         mPointNum = array.getInt(R.styleable.PointIndicatorView_pointNum, 0);
-        mDefaultIndex = array.getInt(R.styleable.PointIndicatorView_defaultIndex, 0);
-        mCurrentIndex = mDefaultIndex;
-        WLog.d(TAG, "size : " + mPointSize);
+        mMargin = array.getDimensionPixelOffset(R.styleable.PointIndicatorView_pointMargin, 0);
+        mMarginTop = array.getDimensionPixelOffset(R.styleable.PointIndicatorView_pointMarginTop, 0);
+        mMarginBottom = array.getDimensionPixelOffset(R.styleable.PointIndicatorView_pointMarginBottom, 0);
+        mMarginLeft = array.getDimensionPixelOffset(R.styleable.PointIndicatorView_pointMarginLeft, 0);
+        mMarginRight = array.getDimensionPixelOffset(R.styleable.PointIndicatorView_pointMarginRight, 0);
+
+        mCurrentIndex = array.getInt(R.styleable.PointIndicatorView_defaultIndex, 0);
         if (mPointNum < 0) {
             throw new RuntimeException("point number : " + mPointNum);
         }
-        if (mDefaultIndex < 0 || mDefaultIndex >= mPointNum) {
+        if (mCurrentIndex < 0 || mCurrentIndex >= mPointNum) {
             throw new RuntimeException("out of bounds!");
         }
 
         for (int i = 0; i < mPointNum; i++) {
-            if (i == mDefaultIndex) {
+            if (i == mCurrentIndex) {
                 addPoint(true);
             } else {
                 addPoint(false);
@@ -84,10 +94,62 @@ public class PointIndicatorView extends LinearLayout {
         imageView.setScaleType(ImageView.ScaleType.FIT_XY);
         imageView.setImageResource(pointResId);
         LinearLayout.LayoutParams layoutParams = new LayoutParams(mPointSize, mPointSize);
-        layoutParams.setMargins(5, 5, 5, 5);
+        if (mMargin != 0) {
+            layoutParams.setMargins(mMargin, mMargin, mMargin, mMargin);
+        } else {
+            layoutParams.setMargins(mMarginLeft, mMarginTop, mMarginRight, mMarginBottom);
+        }
         imageView.setLayoutParams(layoutParams);
         addView(imageView);
         mPointViews.add(imageView);
     }
 
+
+    /**
+     * 向右移动一位
+     */
+    public void moveRight() {
+        move(1);
+    }
+
+    /**
+     * 向左移动一位
+     */
+    public void moveLeft() {
+        move(-1);
+    }
+
+    /**
+     * 移动到最头上
+     */
+    public void moveStart() {
+        if (mCurrentIndex == 0) {
+            return;
+        }
+        move(mCurrentIndex);
+    }
+
+    /**
+     * 移动到尾端
+     */
+    public void moveEnd() {
+        if (mCurrentIndex == mPointViews.size() - 1) {
+            //已经在最后一个
+            return;
+        }
+        move(mPointViews.size() - (mCurrentIndex + 1));
+    }
+
+    private void move(int offset) {
+        ImageView ivOld = mPointViews.get(mCurrentIndex);
+        ivOld.setImageResource(mNormalPointResId);
+        mCurrentIndex = mCurrentIndex + offset;
+        if (mCurrentIndex >= mPointViews.size()) {
+            mCurrentIndex = 0;
+        } else if (mCurrentIndex < 0) {
+            mCurrentIndex = mPointViews.size() - 1;
+        }
+        ImageView ivNew = mPointViews.get(mCurrentIndex);
+        ivNew.setImageResource(mSelectedPoinResId);
+    }
 }
