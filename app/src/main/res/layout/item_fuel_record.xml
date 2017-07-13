@@ -22,7 +22,6 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
             android:layout_marginLeft="10dp"
-
             android:scaleType="fitXY"
             android:src="@drawable/icon_record_tag"/>
 
@@ -36,7 +35,7 @@
             android:layout_toLeftOf="@+id/tv_litres"
             android:text="92号汽油"
             android:textColor="@color/red"
-            android:textSize="24sp"
+            android:textSize="16sp"
             android:textStyle="italic"/>
 
         <TextView
@@ -67,7 +66,6 @@
             android:id="@+id/tv_date"
             style="@style/tv_record_style1"
             android:layout_alignParentRight="true"
-            android:text="2017-06-06 08:50"
-            android:textSize="18sp"/>
+            android:text="2017-06-06 08:50"/>
     </RelativeLayout>
 </LinearLayout>

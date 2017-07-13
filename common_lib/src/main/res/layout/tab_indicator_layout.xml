@@ -8,8 +8,8 @@
 
     <ImageView
         android:id="@+id/iv_tab_icon"
-        android:layout_width="25dp"
-        android:layout_height="25dp"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
         android:layout_marginTop="10dp"
         />
 
@@ -24,5 +24,5 @@
         android:maxLines="1"
         android:text="加油统计"
         android:textColor="@color/tab_title_color"
-        android:textSize="12sp"/>
+        android:textSize="10sp"/>
 </LinearLayout>

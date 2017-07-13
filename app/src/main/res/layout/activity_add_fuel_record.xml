@@ -39,7 +39,7 @@
             <TextView
                 style="@style/tv_add_record_style"
                 android:text="请输入类型："
-                android:textSize="18sp"/>
+                android:textSize="14sp"/>
 
             <EditText
                 android:id="@+id/et_fuel_other_type"
@@ -68,7 +68,7 @@
             <TextView
                 style="@style/tv_add_record_style"
                 android:text="单价"
-                android:textSize="18sp"/>
+                android:textSize="14sp"/>
 
             <EditText
                 android:id="@+id/et_unit_price"
@@ -85,7 +85,7 @@
             <TextView
                 style="@style/tv_add_record_style"
                 android:text="元/升"
-                android:textSize="18sp"/>
+                android:textSize="14sp"/>
         </LinearLayout>
 
         <LinearLayout
@@ -99,7 +99,7 @@
             <TextView
                 style="@style/tv_add_record_style"
                 android:text="直降"
-                android:textSize="18sp"/>
+                android:textSize="14sp"/>
 
             <EditText
                 android:id="@+id/et_price_cut"
@@ -116,7 +116,7 @@
             <TextView
                 style="@style/tv_add_record_style"
                 android:text="元/升"
-                android:textSize="18sp"/>
+                android:textSize="14sp"/>
         </LinearLayout>
 
         <LinearLayout
@@ -130,7 +130,7 @@
             <TextView
                 style="@style/tv_add_record_style"
                 android:text="折扣"
-                android:textSize="18sp"/>
+                android:textSize="14sp"/>
 
             <EditText
                 android:id="@+id/et_price_discount"
@@ -147,7 +147,7 @@
             <TextView
                 style="@style/tv_add_record_style"
                 android:text="折"
-                android:textSize="18sp"/>
+                android:textSize="14sp"/>
         </LinearLayout>
 
         <TextView
@@ -168,7 +168,7 @@
             <TextView
                 style="@style/tv_add_record_style"
                 android:text="加油量"
-                android:textSize="18sp"/>
+                android:textSize="14sp"/>
 
             <EditText
                 android:id="@+id/et_fuel_liter"
@@ -185,7 +185,7 @@
             <TextView
                 style="@style/tv_add_record_style"
                 android:text="升"
-                android:textSize="18sp"/>
+                android:textSize="14sp"/>
         </LinearLayout>
 
         <TextView
@@ -206,7 +206,7 @@
             <TextView
                 style="@style/tv_add_record_style"
                 android:text="里程："
-                android:textSize="18sp"/>
+                android:textSize="14sp"/>
 
             <EditText
                 android:id="@+id/et_current_mileage"
@@ -223,7 +223,7 @@
             <TextView
                 style="@style/tv_add_record_style"
                 android:text="公里"
-                android:textSize="18sp"/>
+                android:textSize="14sp"/>
         </LinearLayout>
 
         <TextView
