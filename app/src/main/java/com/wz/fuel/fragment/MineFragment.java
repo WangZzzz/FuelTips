@@ -18,13 +18,10 @@ import com.wz.util.WLog;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.BindView;
-
 public class MineFragment extends BaseFragment {
     private static final String TAG = MineFragment.class.getSimpleName();
 
-    @BindView(R.id.lv_settings)
-    ListView mLvSettings;
+    private ListView mLvSettings;
 
     private List<MenuDataBean> mMenuList;
     private MineListAdapter mAdapter;
@@ -33,6 +30,11 @@ public class MineFragment extends BaseFragment {
     public View initView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_mine, container, false);
         return view;
+    }
+
+    @Override
+    public void findViewById(View view) {
+        mLvSettings = (ListView) view.findViewById(R.id.lv_settings);
     }
 
     @Override

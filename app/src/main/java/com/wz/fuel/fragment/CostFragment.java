@@ -19,6 +19,11 @@ public class CostFragment extends BaseFragment {
     }
 
     @Override
+    public void findViewById(View view) {
+
+    }
+
+    @Override
     public void initData() {
 
     }

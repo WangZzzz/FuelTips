@@ -15,8 +15,6 @@ import com.wz.fuel.adapter.ViewPagerFragmentAdapter;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.BindView;
-
 /**
  * 费用统计
  * 费用总计：元
@@ -29,10 +27,8 @@ import butterknife.BindView;
 public class StatisticsFragment extends BaseFragment {
 
 
-    @BindView(R.id.tabLayout)
-    TabLayout mTabLayout;
-    @BindView(R.id.viewPager)
-    ViewPager mViewPager;
+    private TabLayout mTabLayout;
+    private ViewPager mViewPager;
 
     private List<BaseFragment> mFragments;
     private FuelConsumptionFragment mConsumptionFragment;
@@ -45,6 +41,12 @@ public class StatisticsFragment extends BaseFragment {
     public View initView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_statistics, container, false);
         return view;
+    }
+
+    @Override
+    public void findViewById(View view) {
+        mTabLayout = (TabLayout) view.findViewById(R.id.tabLayout);
+        mViewPager = (ViewPager) view.findViewById(R.id.viewPager);
     }
 
     @Override

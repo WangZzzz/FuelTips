@@ -23,7 +23,6 @@ import android.widget.LinearLayout;
 import com.wz.fuel.AppConstants;
 import com.wz.fuel.R;
 import com.wz.fuel.activity.AddFuelRecordActivity;
-import com.wz.fuel.activity.MainActivity;
 import com.wz.fuel.adapter.FuelRecordAdapter;
 import com.wz.fuel.db.GreenDaoManager;
 import com.wz.fuel.mvp.bean.FuelRecordBean;
@@ -41,20 +40,16 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import butterknife.BindView;
-
 /**
  * A simple {@link Fragment} subclass.
  */
 public class FuelRecordFragment extends BaseFragment {
 
     private static final String TAG = FuelRecordFragment.class.getSimpleName();
-    @BindView(R.id.ll_add_fuel_record)
-    LinearLayout mLlAddFuelRecord;
-    @BindView(R.id.rv_fuel_record)
-    RecyclerView mRvFuelRecord;
 
-    private MainActivity mMainActivity;
+    private LinearLayout mLlAddFuelRecord;
+    private RecyclerView mRvFuelRecord;
+
 
     private FuelRecordAdapter mAdapter;
     private List<FuelRecordBean> mFuelRecords;
@@ -89,15 +84,15 @@ public class FuelRecordFragment extends BaseFragment {
     };
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        mMainActivity = (MainActivity) getActivity();
-    }
-
-    @Override
     public View initView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_fuel_record, container, false);
         return view;
+    }
+
+    @Override
+    public void findViewById(View view) {
+        mLlAddFuelRecord = (LinearLayout) view.findViewById(R.id.ll_add_fuel_record);
+        mRvFuelRecord = (RecyclerView) view.findViewById(R.id.rv_fuel_record);
     }
 
     @Override

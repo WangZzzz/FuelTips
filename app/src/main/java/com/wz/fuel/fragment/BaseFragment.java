@@ -17,9 +17,6 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
-
 public abstract class BaseFragment extends Fragment {
 
     private static final String TAG = BaseFragment.class.getSimpleName();
@@ -27,12 +24,6 @@ public abstract class BaseFragment extends Fragment {
     protected View mRootView = null;
     protected Activity mActivity;
     protected Context mContext;
-
-    protected Unbinder mUnbinder;
-    /**
-     * 使用此flag，防止频繁加载数据
-     */
-    protected boolean isNeedInit = false;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -46,8 +37,9 @@ public abstract class BaseFragment extends Fragment {
         mActivity = getActivity();
         mContext = getContext();
         if (mRootView == null) {
-            isNeedInit = true;
             mRootView = initView(inflater, container, savedInstanceState);
+            findViewById(mRootView);
+            initData();
         }
 
         //缓存的rootView，需要判断是否已经被加过parent
@@ -60,17 +52,10 @@ public abstract class BaseFragment extends Fragment {
         return mRootView;
     }
 
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        mUnbinder = ButterKnife.bind(this, mRootView);
-        if (isNeedInit) {
-            initData();
-            isNeedInit = false;
-        }
-    }
 
     public abstract View initView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState);
+
+    public abstract void findViewById(View view);
 
     public abstract void initData();
 
@@ -85,11 +70,6 @@ public abstract class BaseFragment extends Fragment {
         super.onDetach();
     }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        mUnbinder.unbind();
-    }
 
     protected abstract void refresh(Bundle data);
 

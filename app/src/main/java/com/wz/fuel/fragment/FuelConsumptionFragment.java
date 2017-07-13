@@ -12,21 +12,15 @@ import android.widget.ImageView;
 import com.wz.fuel.R;
 import com.wz.view.PointIndicatorView;
 
-import butterknife.BindView;
-import butterknife.OnClick;
-
 /**
  * A simple {@link Fragment} subclass.
  */
 public class FuelConsumptionFragment extends BaseFragment {
 
 
-    @BindView(R.id.pointIndicator)
-    PointIndicatorView pointIndicator;
-    @BindView(R.id.iv_left)
-    ImageView mIvLeft;
-    @BindView(R.id.iv_right)
-    ImageView mIvRight;
+    private ImageView mIvLeft;
+    private PointIndicatorView mPointIndicator;
+    private ImageView mIvRight;
 
     public FuelConsumptionFragment() {
         // Required empty public constructor
@@ -40,6 +34,13 @@ public class FuelConsumptionFragment extends BaseFragment {
     }
 
     @Override
+    public void findViewById(View view) {
+        mIvLeft = (ImageView) view.findViewById(R.id.iv_left);
+        mIvRight = (ImageView) view.findViewById(R.id.iv_right);
+        mPointIndicator = (PointIndicatorView) view.findViewById(R.id.pointIndicator);
+    }
+
+    @Override
     public void initData() {
 
     }
@@ -49,15 +50,4 @@ public class FuelConsumptionFragment extends BaseFragment {
 
     }
 
-    @OnClick({R.id.iv_left, R.id.iv_right})
-    public void onViewClicked(View view) {
-        switch (view.getId()) {
-            case R.id.iv_left:
-                pointIndicator.moveLeft();
-                break;
-            case R.id.iv_right:
-                pointIndicator.moveRight();
-                break;
-        }
-    }
 }

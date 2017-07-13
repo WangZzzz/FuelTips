@@ -25,29 +25,23 @@ import com.wz.util.ToastMsgUtil;
 
 import java.util.List;
 
-import butterknife.BindView;
-
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class FuelPriceFragment extends BaseFragment implements IView<FuelPriceBean> {
     private static final String TAG = FuelPriceFragment.class.getSimpleName();
-    @BindView(R.id.tv_price_gas_89)
-    TextView mTvPriceGas89;
-    @BindView(R.id.tv_price_gas_92)
-    TextView mTvPriceGas92;
-    @BindView(R.id.tv_price_gas_95)
-    TextView mTvPriceGas95;
-    @BindView(R.id.tv_price_diesel_0)
-    TextView mTvPriceDiesel0;
-    @BindView(R.id.swipeRefreshLayout)
-    SwipeRefreshLayout mSwipeRefreshLayout;
 
     private static final int MSG_REFRESH_DATA = 1;
     private static final int REFRESH_DELAY = 2000;
 
     private FuelPricePresenter mPresenter;
+
+    private TextView mTvPriceGas89;
+    private TextView mTvPriceGas92;
+    private TextView mTvPriceGas95;
+    private TextView mTvPriceDiesel0;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
 
     private Handler mHandler = new Handler() {
         @Override
@@ -61,7 +55,6 @@ public class FuelPriceFragment extends BaseFragment implements IView<FuelPriceBe
         }
     };
 
-
     public FuelPriceFragment() {
         // Required empty public constructor
     }
@@ -71,6 +64,15 @@ public class FuelPriceFragment extends BaseFragment implements IView<FuelPriceBe
     public View initView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_fuel_price, container, false);
         return view;
+    }
+
+    @Override
+    public void findViewById(View view) {
+        mTvPriceGas89 = (TextView) view.findViewById(R.id.tv_price_gas_89);
+        mTvPriceGas92 = (TextView) view.findViewById(R.id.tv_price_gas_92);
+        mTvPriceGas95 = (TextView) view.findViewById(R.id.tv_price_gas_95);
+        mTvPriceDiesel0 = (TextView) view.findViewById(R.id.tv_price_diesel_0);
+        mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipeRefreshLayout);
     }
 
     public void initData() {
@@ -137,12 +139,5 @@ public class FuelPriceFragment extends BaseFragment implements IView<FuelPriceBe
     @Override
     public void hideProgressDialog() {
         ((MainActivity) getActivity()).hideProgressDialog();
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // TODO: inflate a fragment view
-        View rootView = super.onCreateView(inflater, container, savedInstanceState);
-        return rootView;
     }
 }
