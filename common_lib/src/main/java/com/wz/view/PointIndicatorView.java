@@ -152,4 +152,13 @@ public class PointIndicatorView extends LinearLayout {
         ImageView ivNew = mPointViews.get(mCurrentIndex);
         ivNew.setImageResource(mSelectedPoinResId);
     }
+
+    /**
+     * 获取当前索引位置
+     *
+     * @return
+     */
+    public int getCurrentIndex() {
+        return mCurrentIndex;
+    }
 }

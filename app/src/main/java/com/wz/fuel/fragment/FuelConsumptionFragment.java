@@ -10,13 +10,27 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.wz.fuel.R;
+import com.wz.fuel.mvp.bean.FuelRecordBean;
 import com.wz.view.PointIndicatorView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class FuelConsumptionFragment extends BaseFragment {
+    //最近三个月数据
+    private static final int TYPE_LAST_THREE_MONTH = 1;
+    //最近半年数据
+    private static final int TYPE_LAST_HALF_YEAR = 2;
+    //最近一年数据
+    private static final int TYPE_LAST_YEAR = 3;
+    //所有数据
+    private static final int TYPE_ALL = 4;
 
+
+    private List<FuelRecordBean> mRecordList;
 
     private ImageView mIvLeft;
     private PointIndicatorView mPointIndicator;
@@ -42,6 +56,10 @@ public class FuelConsumptionFragment extends BaseFragment {
 
     @Override
     public void initData() {
+        mRecordList = new ArrayList<>();
+    }
+
+    private void initData(int type) {
 
     }
 
@@ -49,5 +67,4 @@ public class FuelConsumptionFragment extends BaseFragment {
     protected void refresh(Bundle data) {
 
     }
-
 }

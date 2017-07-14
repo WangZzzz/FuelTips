@@ -9,4 +9,9 @@
         <item>0号柴油</item>
         <item>其他</item>
     </string-array>
+
+    <string name="title_fuel_consumption_last_three_month">最近三个月油耗统计曲线</string>
+    <string name="title_fuel_consumption_last_half_year">最近半年油耗统计曲线</string>
+    <string name="title_fuel_consumption_last_year">最近一年油耗统计曲线</string>
+    <string name="title_fuel_consumption">油耗统计曲线</string>
 </resources>
