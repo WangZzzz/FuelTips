@@ -104,8 +104,7 @@ public class FuelConsumptionFragment extends BaseFragment implements View.OnClic
         mTitles[2] = getString(R.string.title_fuel_consumption_last_year);
         mTitles[3] = getString(R.string.title_fuel_consumption);
         mTvTitle.setText(mTitles[0]);
-        mLineChart.setNoDataText(getString(R.string.tips_no_data));
-        mLineChart.setNoDataTextColor(getResources().getColor(R.color.orangered));
+        initChart();
         queryData();
     }
 
@@ -135,7 +134,8 @@ public class FuelConsumptionFragment extends BaseFragment implements View.OnClic
                         if (fuelRecordBeanList != null && fuelRecordBeanList.size() > 0) {
                             mRecordList.clear();
                             mRecordList.addAll(fuelRecordBeanList);
-                            if (mRecordList.size() == 1) {
+                            if (mRecordList.size() > 1) {
+                                setData(TYPE_LAST_THREE_MONTH);
                             }
                         }
                     }
@@ -152,8 +152,30 @@ public class FuelConsumptionFragment extends BaseFragment implements View.OnClic
                 });
     }
 
-    private void initChart(int type) {
+    /**
+     * 初始化设置图表
+     */
+    private void initChart() {
+        mLineChart.setNoDataText(getString(R.string.tips_no_data));
+        mLineChart.setNoDataTextColor(getResources().getColor(R.color.orangered));
+    }
 
+    /**
+     * 根据不同的图表类型初始化数据
+     *
+     * @param type
+     */
+    private void setData(int type) {
+        switch (type) {
+            case TYPE_LAST_THREE_MONTH:
+                break;
+            case TYPE_LAST_HALF_YEAR:
+                break;
+            case TYPE_LAST_YEAR:
+                break;
+            case TYPE_ALL:
+                break;
+        }
     }
 
     @Override
