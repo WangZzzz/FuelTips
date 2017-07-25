@@ -40,6 +40,13 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
+
 /**
  * A simple {@link Fragment} subclass.
  */
@@ -165,12 +172,6 @@ public class FuelRecordFragment extends BaseFragment {
             case AppConstants.REQUEST_ADD_FUEL_RECORD:
                 if (resultCode == Activity.RESULT_OK) {
                     //添加成功
-//                    if (data != null) {
-//                        FuelRecordBean fuelRecordBean = data.getParcelableExtra(AppConstants.EXTRA_FUEL_RECORD_BEAN);
-//                        mFuelRecords.add(fuelRecordBean);
-//                        sortRecordList();
-//                        mAdapter.notifyDataSetChanged();
-//                    }
                     mFuelRecords.clear();
                     mOffset = 0;
                     queryDb(mLimit, mOffset);
@@ -203,17 +204,33 @@ public class FuelRecordFragment extends BaseFragment {
         }
     };
 
-    private void queryDb(int limit, int offset) {
+    private void queryDb(final int limit, final int offset) {
         mFooterViewLoadMore.setVisibility(View.GONE);
-        FuelRecordBeanDao recordDao = GreenDaoManager.getInstance().getDaoSession().getFuelRecordBeanDao();
-        List<FuelRecordBean> recordBeans = recordDao.queryBuilder().limit(limit).offset(offset).orderDesc(FuelRecordBeanDao.Properties.Id).list();
-        if (recordBeans != null && recordBeans.size() > 0) {
-            mFuelRecords.addAll(recordBeans);
-            mOffset += recordBeans.size();
-            mAdapter.notifyDataSetChanged();
-        } else {
-            //没有更多数据了
-        }
+        Observable.create(new ObservableOnSubscribe<List<FuelRecordBean>>() {
+
+            @Override
+            public void subscribe(ObservableEmitter<List<FuelRecordBean>> e) throws Exception {
+                FuelRecordBeanDao recordDao = GreenDaoManager.getInstance().getDaoSession().getFuelRecordBeanDao();
+                if (recordDao != null) {
+                    List<FuelRecordBean> recordBeans = recordDao.queryBuilder().limit(limit).offset(offset).orderDesc(FuelRecordBeanDao.Properties.Id).list();
+                    e.onNext(recordBeans);
+                }
+            }
+        })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<List<FuelRecordBean>>() {
+                    @Override
+                    public void accept(List<FuelRecordBean> fuelRecordBeanList) throws Exception {
+                        if (fuelRecordBeanList != null && fuelRecordBeanList.size() > 0) {
+                            mFuelRecords.addAll(fuelRecordBeanList);
+                            mOffset += fuelRecordBeanList.size();
+                            mAdapter.notifyDataSetChanged();
+                        } else {
+                            //没有更多数据了
+                        }
+                    }
+                });
     }
 
     private void deleteRecord(FuelRecordBean fuelRecordBean) {

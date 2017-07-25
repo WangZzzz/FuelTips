@@ -108,39 +108,39 @@ public class PointIndicatorView extends LinearLayout {
     /**
      * 向右移动一位
      */
-    public void moveRight() {
-        move(1);
+    public int moveRight() {
+        return move(1);
     }
 
     /**
      * 向左移动一位
      */
-    public void moveLeft() {
-        move(-1);
+    public int moveLeft() {
+        return move(-1);
     }
 
     /**
      * 移动到最头上
      */
-    public void moveStart() {
+    public int moveStart() {
         if (mCurrentIndex == 0) {
-            return;
+            return mCurrentIndex;
         }
-        move(mCurrentIndex);
+        return move(mCurrentIndex);
     }
 
     /**
      * 移动到尾端
      */
-    public void moveEnd() {
+    public int moveEnd() {
         if (mCurrentIndex == mPointViews.size() - 1) {
             //已经在最后一个
-            return;
+            return mCurrentIndex;
         }
-        move(mPointViews.size() - (mCurrentIndex + 1));
+        return move(mPointViews.size() - (mCurrentIndex + 1));
     }
 
-    private void move(int offset) {
+    private int move(int offset) {
         ImageView ivOld = mPointViews.get(mCurrentIndex);
         ivOld.setImageResource(mNormalPointResId);
         mCurrentIndex = mCurrentIndex + offset;
@@ -151,6 +151,7 @@ public class PointIndicatorView extends LinearLayout {
         }
         ImageView ivNew = mPointViews.get(mCurrentIndex);
         ivNew.setImageResource(mSelectedPoinResId);
+        return mCurrentIndex;
     }
 
     /**

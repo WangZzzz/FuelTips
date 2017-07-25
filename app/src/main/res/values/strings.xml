@@ -14,4 +14,6 @@
     <string name="title_fuel_consumption_last_half_year">最近半年油耗统计曲线</string>
     <string name="title_fuel_consumption_last_year">最近一年油耗统计曲线</string>
     <string name="title_fuel_consumption">油耗统计曲线</string>
+    <string name="fuel_consumption_unit">升/百公里</string>
+    <string name="tips_no_data">暂时无法计算油耗，需要加油两次，才能算出一次油耗。</string>
 </resources>
