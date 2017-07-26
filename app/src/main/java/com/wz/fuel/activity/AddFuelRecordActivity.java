@@ -1,14 +1,16 @@
 package com.wz.fuel.activity;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.support.annotation.IntegerRes;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
@@ -17,7 +19,6 @@ import android.widget.PopupWindow;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.wz.activity.WBaseActivity;
 import com.wz.fuel.AppConstants;
 import com.wz.fuel.R;
 import com.wz.fuel.db.GreenDaoManager;
@@ -62,6 +63,8 @@ public class AddFuelRecordActivity extends BaseActivity implements View.OnClickL
     EditText mEtPriceDiscount;
     @BindView(R.id.et_fuel_liter)
     EditText mEtFuelLiter;
+    @BindView(R.id.et_total_price)
+    EditText mEtTotalPrice;
     @BindView(R.id.et_current_mileage)
     EditText mEtCurrentMileage;
     @BindView(R.id.btn_confirm)
@@ -75,6 +78,9 @@ public class AddFuelRecordActivity extends BaseActivity implements View.OnClickL
     @BindView(R.id.tv_fuel_date)
     TextView mTvFuelDate;
     private FuelPriceBean mFuelPriceBean;
+
+    //前一条记录
+    private FuelRecordBean mPreRecordBean;
 
     private PopupWindow mPopupWindow;
 
@@ -100,6 +106,7 @@ public class AddFuelRecordActivity extends BaseActivity implements View.OnClickL
         Intent intent = getIntent();
         if (intent != null) {
             mFuelPriceBean = intent.getParcelableExtra(AppConstants.EXTRA_FUEL_PRICE_BEAN);
+            mPreRecordBean = intent.getParcelableExtra(AppConstants.EXTRA_FUEL_RECORD_BEAN);
         }
 
         Calendar calendar = Calendar.getInstance();
@@ -212,6 +219,7 @@ public class AddFuelRecordActivity extends BaseActivity implements View.OnClickL
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btn_confirm:
+                hideKeyBoard();
                 showPopupWindow();
                 break;
             case R.id.btn_cancel:
@@ -221,25 +229,24 @@ public class AddFuelRecordActivity extends BaseActivity implements View.OnClickL
     }
 
     private void showPopupWindow() {
-        float unitPrice = Float.parseFloat(mEtUnitPrice.getText().toString());
-        float discount = 0.0f;
-        if (!"".equals(mEtPriceDiscount.getText().toString())) {
-            discount = Float.parseFloat(mEtPriceDiscount.getText().toString());
-        }
-        if (NumberUtil.isZero(discount)) {
-            //无折扣
-            discount = 10.0f;
-        }
-        float cut = 0.0f;
-        if (!"".equals(mEtPriceCut.getText().toString())) {
-            cut = Float.parseFloat(mEtPriceCut.getText().toString());
-        }
-        float desUnitPrice = unitPrice * (discount / 10) - cut;
+        float desUnitPrice = getUnitPrice();
+        float totalPrice = 0f;
         float fuelLiters = 0.0f;
-        if (!"".equals(mEtFuelLiter.getText().toString())) {
+        if (!TextUtils.isEmpty(mEtTotalPrice.getText().toString())) {
+            totalPrice = Float.parseFloat(mEtTotalPrice.getText().toString());
+            if (!NumberUtil.isZero(totalPrice)) {
+                fuelLiters = totalPrice / desUnitPrice;
+                fuelLiters = NumberUtil.format(fuelLiters);
+                mEtFuelLiter.setText(fuelLiters + "");
+            }
+        } else if (!"".equals(mEtFuelLiter.getText().toString())) {
             fuelLiters = Float.parseFloat(mEtFuelLiter.getText().toString());
+            if (!NumberUtil.isZero(fuelLiters)) {
+                totalPrice = fuelLiters * desUnitPrice;
+                totalPrice = NumberUtil.format(totalPrice);
+                mEtTotalPrice.setText(totalPrice + "");
+            }
         }
-        float totalPrice = fuelLiters * desUnitPrice;
         int currentMileage = 0;
         if (!"".equals(mEtCurrentMileage.getText().toString())) {
             currentMileage = Integer.parseInt(mEtCurrentMileage.getText().toString());
@@ -267,10 +274,28 @@ public class AddFuelRecordActivity extends BaseActivity implements View.OnClickL
 //            WLog.d(TAG, "日期：" + mTvFuelDate.getText());
 //            WLog.d(TAG, "总价：" + NumberUtil.format(totalPrice));
 //            WLog.d(TAG, "油品类型：" + fuelRecordBean.fuelTypeStr);
-            saveDb(fuelRecordBean);
-            initPopupWindow(fuelRecordBean);
+            if(checkData(fuelRecordBean)) {
+                initPopupWindow(fuelRecordBean);
+            }else{
+            }
 
         }
+    }
+
+    private boolean checkData(FuelRecordBean fuelRecordBean) {
+        if (fuelRecordBean == null) {
+            return false;
+        }
+        if (mPreRecordBean != null) {
+            //里程必须是增加的
+            if (fuelRecordBean.curentMileage <= mPreRecordBean.curentMileage) {
+                return false;
+            }
+        }
+        if (fuelRecordBean.unitPrice <= 0 || fuelRecordBean.litres <= 0 || fuelRecordBean.totalPrice <= 0) {
+            return false;
+        }
+        return true;
     }
 
     private void initPopupWindow(final FuelRecordBean fuelRecordBean) {
@@ -299,6 +324,7 @@ public class AddFuelRecordActivity extends BaseActivity implements View.OnClickL
         btnConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                saveDb(fuelRecordBean);
                 Intent intent = new Intent();
                 intent.putExtra(AppConstants.EXTRA_FUEL_RECORD_BEAN, fuelRecordBean);
                 setResult(RESULT_OK, intent);
@@ -332,6 +358,36 @@ public class AddFuelRecordActivity extends BaseActivity implements View.OnClickL
         super.onDestroy();
         if (mPopupWindow != null && mPopupWindow.isShowing()) {
             mPopupWindow.dismiss();
+        }
+    }
+
+    /**
+     * 获取折扣后的最终单价
+     *
+     * @return
+     */
+    private float getUnitPrice() {
+        float unitPrice = Float.parseFloat(mEtUnitPrice.getText().toString());
+        float discount = 0.0f;
+        if (!"".equals(mEtPriceDiscount.getText().toString())) {
+            discount = Float.parseFloat(mEtPriceDiscount.getText().toString());
+        }
+        if (NumberUtil.isZero(discount)) {
+            //无折扣
+            discount = 10.0f;
+        }
+        float cut = 0.0f;
+        if (!"".equals(mEtPriceCut.getText().toString())) {
+            cut = Float.parseFloat(mEtPriceCut.getText().toString());
+        }
+        float desUnitPrice = unitPrice * (discount / 10) - cut;
+        return desUnitPrice;
+    }
+
+    public void hideKeyBoard() {
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (imm != null && imm.isActive()) {
+            imm.hideSoftInputFromWindow(getWindow().getDecorView().getWindowToken(), 0);
         }
     }
 }

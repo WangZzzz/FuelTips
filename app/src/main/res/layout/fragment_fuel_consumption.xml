@@ -55,14 +55,40 @@
             android:src="@drawable/ic_narrow_right"/>
     </RelativeLayout>
 
-
-    <com.github.mikephil.charting.charts.LineChart
-        android:id="@+id/lineChart"
+    <FrameLayout
+        android:id="@+id/fl_chart"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/ll_divider"
-        android:layout_below="@+id/rl_navigator"
-        android:layout_margin="5dp"/>
+        android:layout_below="@+id/rl_navigator">
+
+        <com.github.mikephil.charting.charts.LineChart
+            android:id="@+id/lineChart1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="5dp"/>
+
+        <com.github.mikephil.charting.charts.LineChart
+            android:id="@+id/lineChart2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="5dp"
+            android:visibility="gone"/>
+
+        <com.github.mikephil.charting.charts.LineChart
+            android:id="@+id/lineChart3"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="5dp"
+            android:visibility="gone"/>
+
+        <com.github.mikephil.charting.charts.LineChart
+            android:id="@+id/lineChart4"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="5dp"
+            android:visibility="gone"/>
+    </FrameLayout>
 
 
     <LinearLayout

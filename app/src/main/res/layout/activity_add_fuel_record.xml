@@ -1,268 +1,297 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
 
-    <include layout="@layout/toolbar_layout"/>
-
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="10dp">/>
+        android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/tv_fuel_type"
-            style="@style/tv_add_record_style"
-            android:text="油品类型："
-            android:textStyle="italic"
-            />
+        <include layout="@layout/toolbar_layout"/>
 
-        <Spinner
-            android:id="@+id/spinner_fuel_type"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/tv_fuel_type"
-            android:layout_centerHorizontal="true"
-            android:entries="@array/fuel_type_str"/>
-
-        <LinearLayout
-            android:id="@+id/ll_other_fuel_type"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/spinner_fuel_type"
-            android:gravity="center_horizontal"
-            android:orientation="horizontal"
-            android:visibility="gone">
+            android:layout_height="match_parent"
+            android:padding="10dp">/>
 
             <TextView
+                android:id="@+id/tv_fuel_type"
                 style="@style/tv_add_record_style"
-                android:text="请输入类型："
-                android:textSize="14sp"/>
-
-            <EditText
-                android:id="@+id/et_fuel_other_type"
-                style="@style/tv_add_record_style"
-                android:maxLength="10"
-                android:maxLines="1"
-                android:minEms="8"
+                android:text="油品类型："
+                android:textStyle="italic"
                 />
-        </LinearLayout>
 
-        <TextView
-            android:id="@+id/tv_price_info"
-            style="@style/tv_add_record_style"
-            android:layout_below="@+id/ll_other_fuel_type"
-            android:text="价格信息："
-            android:textStyle="italic"/>
-
-        <LinearLayout
-            android:id="@+id/ll_unit_price"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/tv_price_info"
-            android:layout_centerHorizontal="true"
-            android:orientation="horizontal">
-
-            <TextView
-                style="@style/tv_add_record_style"
-                android:text="单价"
-                android:textSize="14sp"/>
-
-            <EditText
-                android:id="@+id/et_unit_price"
+            <Spinner
+                android:id="@+id/spinner_fuel_type"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:hint="0.00"
-                android:inputType="numberDecimal"
-                android:maxLength="4"
-                android:maxLines="1"
-                android:textColor="@color/red"
-                android:textSize="22sp"
-                android:textStyle="italic"/>
-
-            <TextView
-                style="@style/tv_add_record_style"
-                android:text="元/升"
-                android:textSize="14sp"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/ll_price_reduce"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/ll_unit_price"
-            android:layout_below="@+id/ll_unit_price"
-            android:orientation="horizontal">
-
-            <TextView
-                style="@style/tv_add_record_style"
-                android:text="直降"
-                android:textSize="14sp"/>
-
-            <EditText
-                android:id="@+id/et_price_cut"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:hint="0.00"
-                android:inputType="numberDecimal"
-                android:maxLength="4"
-                android:maxLines="1"
-                android:textColor="@color/red"
-                android:textSize="24sp"
-                android:textStyle="italic"/>
-
-            <TextView
-                style="@style/tv_add_record_style"
-                android:text="元/升"
-                android:textSize="14sp"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/ll_price_discount"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/ll_unit_price"
-            android:layout_below="@+id/ll_price_reduce"
-            android:orientation="horizontal">
-
-            <TextView
-                style="@style/tv_add_record_style"
-                android:text="折扣"
-                android:textSize="14sp"/>
-
-            <EditText
-                android:id="@+id/et_price_discount"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:hint="0.0"
-                android:inputType="numberDecimal"
-                android:maxLength="3"
-                android:maxLines="1"
-                android:textColor="@color/red"
-                android:textSize="24sp"
-                android:textStyle="italic"/>
-
-            <TextView
-                style="@style/tv_add_record_style"
-                android:text="折"
-                android:textSize="14sp"/>
-        </LinearLayout>
-
-        <TextView
-            android:id="@+id/tv_fuel_liter"
-            style="@style/tv_add_record_style"
-            android:layout_below="@+id/ll_price_discount"
-            android:text="加油容量："
-            android:textStyle="italic"/>
-
-        <LinearLayout
-            android:id="@+id/ll_fuel_liter"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/ll_unit_price"
-            android:layout_below="@+id/tv_fuel_liter"
-            android:orientation="horizontal">
-
-            <TextView
-                style="@style/tv_add_record_style"
-                android:text="加油量"
-                android:textSize="14sp"/>
-
-            <EditText
-                android:id="@+id/et_fuel_liter"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:hint="0.00"
-                android:inputType="numberDecimal"
-                android:maxLength="4"
-                android:maxLines="1"
-                android:textColor="@color/red"
-                android:textSize="24sp"
-                android:textStyle="italic"/>
-
-            <TextView
-                style="@style/tv_add_record_style"
-                android:text="升"
-                android:textSize="14sp"/>
-        </LinearLayout>
-
-        <TextView
-            android:id="@+id/tv_current_mileage"
-            style="@style/tv_add_record_style"
-            android:layout_below="@+id/ll_fuel_liter"
-            android:text="当前里程："
-            android:textStyle="italic"/>
-
-        <LinearLayout
-            android:id="@+id/ll_current_mileage"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/ll_unit_price"
-            android:layout_below="@+id/tv_current_mileage"
-            android:orientation="horizontal">
-
-            <TextView
-                style="@style/tv_add_record_style"
-                android:text="里程："
-                android:textSize="14sp"/>
-
-            <EditText
-                android:id="@+id/et_current_mileage"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:hint="00000"
-                android:inputType="number"
-                android:maxLength="7"
-                android:maxLines="1"
-                android:textColor="@color/red"
-                android:textSize="24sp"
-                android:textStyle="italic"/>
-
-            <TextView
-                style="@style/tv_add_record_style"
-                android:text="公里"
-                android:textSize="14sp"/>
-        </LinearLayout>
-
-        <TextView
-            android:id="@+id/tv_fuel_date_tips"
-            style="@style/tv_add_record_style"
-            android:layout_below="@+id/ll_current_mileage"
-            android:text="加油时间："
-            android:textStyle="italic"/>
-
-        <TextView
-            android:id="@+id/tv_fuel_date"
-            style="@style/tv_add_record_style"
-            android:layout_below="@id/tv_fuel_date_tips"
-            android:layout_centerHorizontal="true"
-            android:text="2017 年 06 月 22 日"
-            android:textColor="#01A2ED"/>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/tv_fuel_date"
-            android:gravity="center_horizontal"
-            android:orientation="horizontal">
-
-            <Button
-                android:id="@+id/btn_confirm"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_below="@+id/tv_fuel_type"
                 android:layout_centerHorizontal="true"
-                android:layout_margin="10dp"
-                android:text="确认"/>
+                android:entries="@array/fuel_type_str"/>
 
-            <Button
-                android:id="@+id/btn_cancel"
+            <LinearLayout
+                android:id="@+id/ll_other_fuel_type"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/spinner_fuel_type"
+                android:gravity="center_horizontal"
+                android:orientation="horizontal"
+                android:visibility="gone">
+
+                <TextView
+                    style="@style/tv_add_record_style"
+                    android:text="请输入类型："
+                    android:textSize="14sp"/>
+
+                <EditText
+                    android:id="@+id/et_fuel_other_type"
+                    style="@style/tv_add_record_style"
+                    android:maxLength="10"
+                    android:maxLines="1"
+                    android:minEms="8"
+                    />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tv_price_info"
+                style="@style/tv_add_record_style"
+                android:layout_below="@+id/ll_other_fuel_type"
+                android:text="加油信息："
+                android:textStyle="italic"/>
+
+            <LinearLayout
+                android:id="@+id/ll_unit_price"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_below="@+id/tv_price_info"
                 android:layout_centerHorizontal="true"
-                android:layout_margin="10dp"
-                android:text="取消 "/>
-        </LinearLayout>
-    </RelativeLayout>
-</LinearLayout>
+                android:orientation="horizontal">
+
+                <TextView
+                    style="@style/tv_add_record_style"
+                    android:text="单价"
+                    android:textSize="14sp"/>
+
+                <EditText
+                    android:id="@+id/et_unit_price"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:hint="0.00"
+                    android:inputType="numberDecimal"
+                    android:maxLength="4"
+                    android:maxLines="1"
+                    android:textColor="@color/red"
+                    android:textSize="22sp"
+                    android:textStyle="italic"/>
+
+                <TextView
+                    style="@style/tv_add_record_style"
+                    android:text="元/升"
+                    android:textSize="14sp"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ll_price_reduce"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/ll_unit_price"
+                android:layout_below="@+id/ll_unit_price"
+                android:orientation="horizontal">
+
+                <TextView
+                    style="@style/tv_add_record_style"
+                    android:text="直降"
+                    android:textSize="14sp"/>
+
+                <EditText
+                    android:id="@+id/et_price_cut"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:hint="0.00"
+                    android:inputType="numberDecimal"
+                    android:maxLength="4"
+                    android:maxLines="1"
+                    android:textColor="@color/red"
+                    android:textSize="24sp"
+                    android:textStyle="italic"/>
+
+                <TextView
+                    style="@style/tv_add_record_style"
+                    android:text="元/升"
+                    android:textSize="14sp"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ll_price_discount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/ll_unit_price"
+                android:layout_below="@+id/ll_price_reduce"
+                android:orientation="horizontal">
+
+                <TextView
+                    style="@style/tv_add_record_style"
+                    android:text="折扣"
+                    android:textSize="14sp"/>
+
+                <EditText
+                    android:id="@+id/et_price_discount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:hint="0.0"
+                    android:inputType="numberDecimal"
+                    android:maxLength="3"
+                    android:maxLines="1"
+                    android:textColor="@color/red"
+                    android:textSize="24sp"
+                    android:textStyle="italic"/>
+
+                <TextView
+                    style="@style/tv_add_record_style"
+                    android:text="折"
+                    android:textSize="14sp"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ll_fuel_liter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/ll_unit_price"
+                android:layout_below="@+id/ll_price_discount"
+                android:orientation="horizontal">
+
+                <TextView
+                    style="@style/tv_add_record_style"
+                    android:text="加油量"
+                    android:textSize="14sp"/>
+
+                <EditText
+                    android:id="@+id/et_fuel_liter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:hint="0.00"
+                    android:inputType="numberDecimal"
+                    android:maxLength="6"
+                    android:maxLines="1"
+                    android:textColor="@color/red"
+                    android:textSize="24sp"
+                    android:textStyle="italic"/>
+
+                <TextView
+                    style="@style/tv_add_record_style"
+                    android:text="升"
+                    android:textSize="14sp"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ll_total_price"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/ll_unit_price"
+                android:layout_below="@+id/ll_fuel_liter"
+                android:orientation="horizontal">
+
+                <TextView
+                    style="@style/tv_add_record_style"
+                    android:text="总价"
+                    android:textSize="14sp"/>
+
+                <EditText
+                    android:id="@+id/et_total_price"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:hint="0.00"
+                    android:inputType="numberDecimal"
+                    android:maxLength="6"
+                    android:maxLines="1"
+                    android:textColor="@color/red"
+                    android:textSize="24sp"
+                    android:textStyle="italic"/>
+
+                <TextView
+                    style="@style/tv_add_record_style"
+                    android:text="元"
+                    android:textSize="14sp"/>
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tv_current_mileage"
+                style="@style/tv_add_record_style"
+                android:layout_below="@+id/ll_total_price"
+                android:text="当前里程："
+                android:textStyle="italic"/>
+
+            <LinearLayout
+                android:id="@+id/ll_current_mileage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/ll_unit_price"
+                android:layout_below="@+id/tv_current_mileage"
+                android:orientation="horizontal">
+
+                <TextView
+                    style="@style/tv_add_record_style"
+                    android:text="里程："
+                    android:textSize="14sp"/>
+
+                <EditText
+                    android:id="@+id/et_current_mileage"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:hint="00000"
+                    android:inputType="number"
+                    android:maxLength="7"
+                    android:maxLines="1"
+                    android:textColor="@color/red"
+                    android:textSize="24sp"
+                    android:textStyle="italic"/>
+
+                <TextView
+                    style="@style/tv_add_record_style"
+                    android:text="公里"
+                    android:textSize="14sp"/>
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tv_fuel_date_tips"
+                style="@style/tv_add_record_style"
+                android:layout_below="@+id/ll_current_mileage"
+                android:text="加油时间："
+                android:textStyle="italic"/>
+
+            <TextView
+                android:id="@+id/tv_fuel_date"
+                style="@style/tv_add_record_style"
+                android:layout_below="@id/tv_fuel_date_tips"
+                android:layout_centerHorizontal="true"
+                android:text="2017 年 06 月 22 日"
+                android:textColor="#01A2ED"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tv_fuel_date"
+                android:gravity="center_horizontal"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btn_confirm"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_margin="10dp"
+                    android:text="确认"/>
+
+                <Button
+                    android:id="@+id/btn_cancel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_margin="10dp"
+                    android:text="取消 "/>
+            </LinearLayout>
+        </RelativeLayout>
+    </LinearLayout>
+</ScrollView>

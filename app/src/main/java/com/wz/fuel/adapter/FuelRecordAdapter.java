@@ -74,6 +74,7 @@ public class FuelRecordAdapter extends RecyclerView.Adapter<FuelRecordAdapter.My
                     holder.mTvLitres.setText(fuelRecord.litres + "升");
                     holder.mTvTotalPrice.setText(fuelRecord.totalPrice + "元");
                     holder.mTvFuelType.setText(fuelRecord.fuelTypeStr);
+                    holder.mTvCurrentMileage.setText(fuelRecord.curentMileage + "公里");
                     holder.itemView.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -108,6 +109,7 @@ public class FuelRecordAdapter extends RecyclerView.Adapter<FuelRecordAdapter.My
     class MyViewHolder extends RecyclerView.ViewHolder {
 
         TextView mTvDate;
+        TextView mTvCurrentMileage;
         TextView mTvFuelType;
         TextView mTvTotalPrice;
         TextView mTvLitres;
@@ -119,6 +121,7 @@ public class FuelRecordAdapter extends RecyclerView.Adapter<FuelRecordAdapter.My
                 mTvFuelType = (TextView) itemView.findViewById(R.id.tv_fuel_type);
                 mTvTotalPrice = (TextView) itemView.findViewById(R.id.tv_total_price);
                 mTvLitres = (TextView) itemView.findViewById(R.id.tv_litres);
+                mTvCurrentMileage = (TextView) itemView.findViewById(R.id.tv_current_mileage);
 
                 itemView.setOnLongClickListener(new View.OnLongClickListener() {
                     @Override

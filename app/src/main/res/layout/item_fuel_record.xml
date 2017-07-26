@@ -63,6 +63,15 @@
             android:text="325.3元"/>
 
         <TextView
+            android:id="@+id/tv_current_mileage"
+            style="@style/tv_record_style1"
+            android:layout_marginRight="20dp"
+            android:layout_toLeftOf="@+id/tv_date"
+            android:ellipsize="end"
+            android:maxLength="10"
+            android:text="51200999公里"/>
+
+        <TextView
             android:id="@+id/tv_date"
             style="@style/tv_record_style1"
             android:layout_alignParentRight="true"

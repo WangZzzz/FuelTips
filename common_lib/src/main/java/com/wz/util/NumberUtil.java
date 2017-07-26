@@ -1,6 +1,6 @@
 package com.wz.util;
 
-import java.text.DecimalFormat;
+import java.math.BigDecimal;
 
 /**
  * <br>
@@ -22,11 +22,13 @@ public class NumberUtil {
     }
 
     /**
+     * 保留两位小数
+     *
      * @param f
      * @return
      */
-    public static String format(float f) {
-        DecimalFormat df = new DecimalFormat("0.00");//格式化小数，不足的补0
-        return df.format(f);//返回的是String类型的
+    public static float format(float f) {
+        BigDecimal b = new BigDecimal(f);
+        return b.setScale(2, BigDecimal.ROUND_HALF_UP).floatValue();
     }
 }

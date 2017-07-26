@@ -56,7 +56,14 @@ public class FuelConsumptionFragment extends BaseFragment implements View.OnClic
     private PointIndicatorView mPointIndicator;
     private ImageView mIvRight;
     private TextView mTvTitle;
-    private LineChart mLineChart;
+    //近3个月统计曲线
+    private LineChart mLineChart1;
+    //近半年
+    private LineChart mLineChart2;
+    //近一年
+    private LineChart mLineChart3;
+    //全部数据
+    private LineChart mLineChart4;
     private TextView mTvAverageConsumption;
     private TextView mTvMileage;
     private TextView mTvMaximumConsumption;
@@ -82,7 +89,10 @@ public class FuelConsumptionFragment extends BaseFragment implements View.OnClic
         mIvRight = (ImageView) view.findViewById(R.id.iv_right);
         mPointIndicator = (PointIndicatorView) view.findViewById(R.id.pointIndicator);
         mTvTitle = (TextView) view.findViewById(R.id.tv_title);
-        mLineChart = (LineChart) view.findViewById(R.id.lineChart);
+        mLineChart1 = (LineChart) view.findViewById(R.id.lineChart1);
+        mLineChart2 = (LineChart) view.findViewById(R.id.lineChart2);
+        mLineChart3 = (LineChart) view.findViewById(R.id.lineChart3);
+        mLineChart4 = (LineChart) view.findViewById(R.id.lineChart4);
         mTvAverageConsumption = (TextView) view.findViewById(R.id.tv_average_consumption);
         mTvMileage = (TextView) view.findViewById(R.id.tv_mileage);
         mTvMaximumConsumption = (TextView) view.findViewById(R.id.tv_maximum_consumption);
@@ -156,8 +166,20 @@ public class FuelConsumptionFragment extends BaseFragment implements View.OnClic
      * 初始化设置图表
      */
     private void initChart() {
-        mLineChart.setNoDataText(getString(R.string.tips_no_data));
-        mLineChart.setNoDataTextColor(getResources().getColor(R.color.orangered));
+        mLineChart1.setNoDataText(getString(R.string.tips_no_data));
+        mLineChart1.setNoDataTextColor(getResources().getColor(R.color.orangered));
+        mLineChart1.setDrawGridBackground(false);
+        // no description text
+        mLineChart1.getDescription().setEnabled(false);
+        // disable touch gestures
+        mLineChart1.setTouchEnabled(false);
+        // disable scaling and dragging
+        mLineChart1.setDragEnabled(false);
+        mLineChart1.setScaleEnabled(false);
+        // mChart.setScaleXEnabled(true);
+        // mChart.setScaleYEnabled(true);
+        // if disabled, scaling can be done on x- and y-axis separately
+        mLineChart1.setPinchZoom(false);
     }
 
     /**

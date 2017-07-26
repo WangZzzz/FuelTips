@@ -30,7 +30,6 @@ import com.wz.fuel.mvp.bean.FuelRecordBeanDao;
 import com.wz.util.DialogUtil;
 import com.wz.util.ScreenUtil;
 import com.wz.util.ToastMsgUtil;
-import com.wz.util.WLog;
 import com.wz.view.LoadMoreOnScrollListener;
 import com.wz.view.OnItemClickListener;
 import com.wz.view.OnItemLongClickListener;
@@ -104,7 +103,6 @@ public class FuelRecordFragment extends BaseFragment {
 
     @Override
     public void initData() {
-        WLog.d(TAG, "tag: " + getTag());
         mLlAddFuelRecord.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -163,6 +161,10 @@ public class FuelRecordFragment extends BaseFragment {
     private void addFuelRecord() {
         Intent intent = new Intent(getActivity(), AddFuelRecordActivity.class);
         intent.putExtra(AppConstants.EXTRA_FUEL_PRICE_BEAN, AppConstants.sFuelPriceBean);
+        FuelRecordBean recordBean = mFuelRecords.get(0);
+        if (recordBean != null) {
+            intent.putExtra(AppConstants.EXTRA_FUEL_RECORD_BEAN, recordBean);
+        }
         startActivityForResult(intent, AppConstants.REQUEST_ADD_FUEL_RECORD);
     }
 
@@ -172,9 +174,12 @@ public class FuelRecordFragment extends BaseFragment {
             case AppConstants.REQUEST_ADD_FUEL_RECORD:
                 if (resultCode == Activity.RESULT_OK) {
                     //添加成功
-                    mFuelRecords.clear();
-                    mOffset = 0;
-                    queryDb(mLimit, mOffset);
+                    if (data != null) {
+                        FuelRecordBean recordBean = data.getParcelableExtra(AppConstants.EXTRA_FUEL_RECORD_BEAN);
+                        mFuelRecords.add(recordBean);
+                        sortRecordList();
+                        mAdapter.notifyDataSetChanged();
+                    }
                 } else if (resultCode == Activity.RESULT_CANCELED) {
                     ToastMsgUtil.info(getActivity(), "取消添加", 0);
                 }
