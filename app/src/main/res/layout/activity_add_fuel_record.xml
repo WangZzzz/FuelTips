@@ -195,7 +195,7 @@
 
                 <TextView
                     style="@style/tv_add_record_style"
-                    android:text="总价"
+                    android:text="金额"
                     android:textSize="14sp"/>
 
                 <EditText

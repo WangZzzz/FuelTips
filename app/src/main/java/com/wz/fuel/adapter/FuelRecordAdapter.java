@@ -74,7 +74,7 @@ public class FuelRecordAdapter extends RecyclerView.Adapter<FuelRecordAdapter.My
                     holder.mTvLitres.setText(fuelRecord.litres + "升");
                     holder.mTvTotalPrice.setText(fuelRecord.totalPrice + "元");
                     holder.mTvFuelType.setText(fuelRecord.fuelTypeStr);
-                    holder.mTvCurrentMileage.setText(fuelRecord.curentMileage + "公里");
+                    holder.mTvCurrentMileage.setText(fuelRecord.currentMileage + "公里");
                     holder.itemView.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {

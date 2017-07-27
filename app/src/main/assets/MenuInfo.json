@@ -1,4 +1,18 @@
 {
+  "containers": [
+    {
+      "id": "mine",
+      "menus": [
+        "W000003",
+        "W000002",
+        "W000001"
+      ]
+    },
+    {
+      "id": "settings",
+      "menus": []
+    }
+  ],
   "menus": [
     {
       "id": "W000000",

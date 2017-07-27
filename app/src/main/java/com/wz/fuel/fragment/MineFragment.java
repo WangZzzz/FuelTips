@@ -11,6 +11,7 @@ import android.widget.ListView;
 import com.wz.fuel.R;
 import com.wz.fuel.adapter.MenuManager;
 import com.wz.fuel.adapter.MineListAdapter;
+import com.wz.fuel.menu.ContainerBean;
 import com.wz.fuel.menu.MenuDataBean;
 import com.wz.fuel.menu.MenuJump;
 import com.wz.util.WLog;
@@ -20,6 +21,8 @@ import java.util.List;
 
 public class MineFragment extends BaseFragment {
     private static final String TAG = MineFragment.class.getSimpleName();
+
+    private static final String ID = "mine";
 
     private ListView mLvSettings;
 
@@ -40,11 +43,14 @@ public class MineFragment extends BaseFragment {
     @Override
     public void initData() {
         mMenuList = new ArrayList<>();
-        List<MenuDataBean> tmpMenus = MenuManager.getInstance(mContext).getMenuList();
-        if (tmpMenus != null && tmpMenus.size() > 0) {
-            for (MenuDataBean menuDataBean : tmpMenus) {
-                if ("1".equals(menuDataBean.getIsActive())) {
-                    mMenuList.add(menuDataBean);
+        ContainerBean container = MenuManager.getInstance(mContext).getContainer(ID);
+        if (container != null) {
+            List<MenuDataBean> tmpMenus = MenuManager.getInstance(mContext).getMenuList(container.menuIdList);
+            if (tmpMenus != null && tmpMenus.size() > 0) {
+                for (MenuDataBean menuDataBean : tmpMenus) {
+                    if ("1".equals(menuDataBean.getIsActive())) {
+                        mMenuList.add(menuDataBean);
+                    }
                 }
             }
         }

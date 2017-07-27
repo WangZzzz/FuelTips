@@ -85,6 +85,8 @@ public class AddFuelRecordActivity extends BaseActivity implements View.OnClickL
     private PopupWindow mPopupWindow;
 
     private int mFuelMonth;
+    private int mFuelDay;
+    private int mFuelYear;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -185,6 +187,8 @@ public class AddFuelRecordActivity extends BaseActivity implements View.OnClickL
                     public void onDatePicked(String year, String month, String day) {
                         mTvFuelDate.setText(year + " 年 " + month + " 月 " + day + " 日");
                         mFuelMonth = Integer.parseInt(month);
+                        mFuelYear = Integer.parseInt(year);
+                        mFuelDay = Integer.parseInt(day);
                     }
                 });
                 picker.show();
@@ -252,7 +256,7 @@ public class AddFuelRecordActivity extends BaseActivity implements View.OnClickL
             currentMileage = Integer.parseInt(mEtCurrentMileage.getText().toString());
         }
         if (desUnitPrice < 0 || NumberUtil.isZero(desUnitPrice) || NumberUtil.isZero(fuelLiters) || NumberUtil.isZero(totalPrice)) {
-            ToastMsgUtil.error(AddFuelRecordActivity.this, "数据输入有误，请重新输入!", 1);
+            ToastMsgUtil.error(AddFuelRecordActivity.this, getString(R.string.tips_error_input), 1);
         } else {
             FuelRecordBean fuelRecordBean = new FuelRecordBean();
             fuelRecordBean.unitPrice = desUnitPrice;
@@ -263,7 +267,9 @@ public class AddFuelRecordActivity extends BaseActivity implements View.OnClickL
             int selectedPosition = mSpinnerFuelType.getSelectedItemPosition();
             fuelRecordBean.fuelType = selectedPosition;
             fuelRecordBean.fuelMonth = mFuelMonth;
-            fuelRecordBean.curentMileage = currentMileage;
+            fuelRecordBean.fuelYear = mFuelYear;
+            fuelRecordBean.fuelDay = mFuelDay;
+            fuelRecordBean.currentMileage = currentMileage;
             if (selectedPosition >= TYPE_OTHERS) {
                 fuelRecordBean.fuelTypeStr = mEtFuelOtherType.getText().toString();
             } else {
@@ -274,9 +280,10 @@ public class AddFuelRecordActivity extends BaseActivity implements View.OnClickL
 //            WLog.d(TAG, "日期：" + mTvFuelDate.getText());
 //            WLog.d(TAG, "总价：" + NumberUtil.format(totalPrice));
 //            WLog.d(TAG, "油品类型：" + fuelRecordBean.fuelTypeStr);
-            if(checkData(fuelRecordBean)) {
+            if (checkData(fuelRecordBean)) {
                 initPopupWindow(fuelRecordBean);
-            }else{
+            } else {
+                ToastMsgUtil.error(AddFuelRecordActivity.this, getString(R.string.tips_error_input), 1);
             }
 
         }
@@ -288,11 +295,11 @@ public class AddFuelRecordActivity extends BaseActivity implements View.OnClickL
         }
         if (mPreRecordBean != null) {
             //里程必须是增加的
-            if (fuelRecordBean.curentMileage <= mPreRecordBean.curentMileage) {
+            if (fuelRecordBean.currentMileage <= mPreRecordBean.currentMileage) {
                 return false;
             }
         }
-        if (fuelRecordBean.unitPrice <= 0 || fuelRecordBean.litres <= 0 || fuelRecordBean.totalPrice <= 0) {
+        if (fuelRecordBean.unitPrice <= 0 || fuelRecordBean.litres <= 0 || fuelRecordBean.totalPrice <= 0 || fuelRecordBean.currentMileage <= 0) {
             return false;
         }
         return true;
@@ -317,7 +324,7 @@ public class AddFuelRecordActivity extends BaseActivity implements View.OnClickL
         tvUnitPrice.setText(fuelRecordBean.getUnitPrice() + "");
         tvFuelType.setText(fuelRecordBean.getFuelTypeStr());
         tvFuelLiters.setText(fuelRecordBean.getLitres() + "");
-        tvCurrentMileage.setText(fuelRecordBean.getCurentMileage() + "");
+        tvCurrentMileage.setText(fuelRecordBean.getCurrentMileage() + "");
         tvFuelDate.setText(TimeUtil.millis2String(fuelRecordBean.getFuelDate(), new SimpleDateFormat(AppConstants.DATE_FORMAT)));
         tvTotalPrice.setText(fuelRecordBean.getTotalPrice() + "");
 

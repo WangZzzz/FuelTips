@@ -31,6 +31,7 @@ public class MenuInitThread extends Thread {
     private String mResDirName;
 
     private ArrayList<MenuDataBean> mMenus;
+    private ArrayList<ContainerBean> mContainers;
 
     public MenuInitThread(Context context, String url, String menuInfoFileName, String resDirName) {
         mContext = context;
@@ -58,6 +59,7 @@ public class MenuInitThread extends Thread {
 
     private void init() {
         mMenus = new ArrayList<>();
+        mContainers = new ArrayList<>();
     }
 
     /**
@@ -73,11 +75,17 @@ public class MenuInitThread extends Thread {
             Gson gson = new Gson();
             if (!TextUtils.isEmpty(menuInfoStr)) {
                 MenusBean menusBean = gson.fromJson(menuInfoStr, MenusBean.class);
-                if (menusBean != null && menusBean.menus != null && menusBean.menus.size() > 0) {
-                    insertDb(menusBean.menus);
-                    mMenus.addAll(menusBean.menus);
+                if (menusBean != null) {
+                    if (menusBean.menus != null) {
+                        mMenus.addAll(menusBean.menus);
+                    }
+                    if (menusBean.containers != null) {
+                        mContainers.addAll(menusBean.containers);
+                    }
+                    insertDb();
                     sendSucMessage();
                     WLog.d(TAG, "menus_assets : " + Arrays.toString(mMenus.toArray()));
+                    WLog.d(TAG, "containers_assets : " + mContainers.size());
                 } else {
                     WLog.d(TAG, "menus_assets : null");
                 }
@@ -92,11 +100,19 @@ public class MenuInitThread extends Thread {
         List<MenuDataBean> menus = menuDao.queryBuilder().orderAsc(MenuDataBeanDao.Properties.Sort).list();
         if (menus != null && menus.size() > 0) {
             mMenus.addAll(menus);
-            sendSucMessage();
             WLog.d(TAG, "menus_db : " + Arrays.toString(mMenus.toArray()));
         } else {
             WLog.d(TAG, "menus_db : null");
         }
+        ContainerBeanDao containerDao = GreenDaoManager.getInstance().getDaoSession().getContainerBeanDao();
+        List<ContainerBean> containers = containerDao.queryBuilder().list();
+        if (containers != null) {
+            mContainers.addAll(containers);
+            WLog.d(TAG, "containers_db : " + mContainers.size());
+        } else {
+            WLog.d(TAG, "containers_db : null");
+        }
+        sendSucMessage();
     }
 
     private void loadFromServer() {
@@ -110,6 +126,7 @@ public class MenuInitThread extends Thread {
     private void sendSucMessage() {
         Bundle bundle = new Bundle();
         bundle.putParcelableArrayList(MenuManager.EXTRA_MENUS, mMenus);
+        bundle.putParcelableArrayList(MenuManager.EXTRA_CONTAINERS, mContainers);
         TaskService.sendMessage(mContext, MenuManager.TASK_INIT_MENUS, bundle);
     }
 
@@ -119,13 +136,17 @@ public class MenuInitThread extends Thread {
         TaskService.sendMessage(mContext, MenuManager.TASK_INIT_MENUS, bundle);
     }
 
-    private void insertDb(List<MenuDataBean> menus) {
+    private void insertDb() {
         MenuDataBeanDao menuDao = GreenDaoManager.getInstance().getDaoSession().getMenuDataBeanDao();
-        menuDao.insertInTx(menus);
+        menuDao.insertInTx(mMenus);
+        ContainerBeanDao containerDao = GreenDaoManager.getInstance().getDaoSession().getContainerBeanDao();
+        containerDao.insertInTx(mContainers);
     }
 
     private void clearDb() {
         MenuDataBeanDao menuDao = GreenDaoManager.getInstance().getDaoSession().getMenuDataBeanDao();
         menuDao.deleteAll();
+        ContainerBeanDao containerDao = GreenDaoManager.getInstance().getDaoSession().getContainerBeanDao();
+        containerDao.deleteAll();
     }
 }

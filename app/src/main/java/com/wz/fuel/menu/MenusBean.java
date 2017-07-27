@@ -10,6 +10,8 @@ import java.util.List;
 public class MenusBean implements Parcelable {
     @SerializedName("menus")
     List<MenuDataBean> menus;
+    @SerializedName("containers")
+    List<ContainerBean> containers;
 
     @Override
     public int describeContents() {
@@ -19,6 +21,7 @@ public class MenusBean implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeTypedList(this.menus);
+        dest.writeTypedList(this.containers);
     }
 
     public MenusBean() {
@@ -26,9 +29,10 @@ public class MenusBean implements Parcelable {
 
     protected MenusBean(Parcel in) {
         this.menus = in.createTypedArrayList(MenuDataBean.CREATOR);
+        this.containers = in.createTypedArrayList(ContainerBean.CREATOR);
     }
 
-    public static final Parcelable.Creator<MenusBean> CREATOR = new Parcelable.Creator<MenusBean>() {
+    public static final Creator<MenusBean> CREATOR = new Creator<MenusBean>() {
         @Override
         public MenusBean createFromParcel(Parcel source) {
             return new MenusBean(source);

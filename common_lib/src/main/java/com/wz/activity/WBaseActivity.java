@@ -1,8 +1,8 @@
 package com.wz.activity;
 
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.view.View;
 import android.view.Window;
 
 import com.wz.AppManager;
@@ -44,17 +44,17 @@ public class WBaseActivity extends FragmentActivity {
 
     @Override
     public void onBackPressed() {
-        DialogUtil.showDialog(this, "退出应用？", "确定", new DialogInterface.OnClickListener() {
+        DialogUtil.showWaitingDialog(this, "提示", "退出应用？", "确定", new View.OnClickListener() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
+            public void onClick(View v) {
                 AppManager.getInstance(WBaseActivity.this).exitApp();
             }
-        }, "取消", new DialogInterface.OnClickListener() {
+        }, "取消", new View.OnClickListener() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
+            public void onClick(View v) {
+
             }
-        });
+        }, "正在退出，请稍候...");
     }
 
     @Override

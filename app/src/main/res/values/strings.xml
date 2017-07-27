@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">FuelTips</string>
+    <string name="app_name">加油助手</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string-array name="fuel_type_str">
@@ -16,4 +16,6 @@
     <string name="title_fuel_consumption">油耗统计曲线</string>
     <string name="fuel_consumption_unit">升/百公里</string>
     <string name="tips_no_data">暂时无法计算油耗，需要加油两次，才能算出一次油耗。</string>
+    <string name="tips_error_input">请您检查输入的里程、金额、加油量是否有误？\n请修改后请重新确认！</string>
+    <string name="email_address">wztc_001@163.com</string>
 </resources>

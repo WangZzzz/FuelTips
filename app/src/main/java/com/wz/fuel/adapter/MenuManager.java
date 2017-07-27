@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.text.TextUtils;
 
 import com.wz.ThreadPoolManager;
+import com.wz.fuel.menu.ContainerBean;
 import com.wz.fuel.menu.MenuDataBean;
 import com.wz.fuel.menu.MenuInitThread;
 import com.wz.service.ITaskListener;
@@ -31,8 +32,10 @@ public class MenuManager {
     private String mResCacheDir;
 
     private List<MenuDataBean> mMenuList;
+    private List<ContainerBean> mContainerList;
 
     public static final String EXTRA_MENUS = "extra_menus";
+    public static final String EXTRA_CONTAINERS = "extra_containers";
     public static final String EXTRA_ERROR_MSG = "extra_error_msg";
 
     public static final String TASK_INIT_MENUS = "task_init_menus";
@@ -63,6 +66,14 @@ public class MenuManager {
                 } else {
                     WLog.d(TAG, "menu_onMessage : null");
                 }
+                List<ContainerBean> containerList = intent.getParcelableArrayListExtra(EXTRA_CONTAINERS);
+                if (containerList != null) {
+                    mContainerList.clear();
+                    mContainerList.addAll(containerList);
+                    WLog.d(TAG, "container_onMessage : " + mContainerList.size());
+                } else {
+                    WLog.d(TAG, "container_onMessage : null");
+                }
             }
         }
     };
@@ -89,6 +100,7 @@ public class MenuManager {
 
     public void init(String serverUrl, String menuInfoName, String resDirName, Map<String, Class> templateMap) {
         mMenuList = new ArrayList<MenuDataBean>();
+        mContainerList = new ArrayList<>();
         mResCacheDir = mContext.getFilesDir().getAbsolutePath() + "/imageRes";
         mServerUrl = serverUrl;
         mMenuInfoName = menuInfoName;
@@ -134,6 +146,46 @@ public class MenuManager {
     public List<MenuDataBean> getMenuList() {
         return mMenuList;
     }
+
+    /**
+     * 通过menu的id列表获取menus
+     *
+     * @param menuIdList
+     * @return
+     */
+    public List<MenuDataBean> getMenuList(List<String> menuIdList) {
+        List<MenuDataBean> menus = new ArrayList<>();
+        if (menuIdList != null && menuIdList.size() > 0 && mMenuList != null) {
+            for (MenuDataBean menu : mMenuList) {
+                if (menuIdList.contains(menu.id)) {
+                    menus.add(menu);
+                }
+            }
+        }
+        return menus;
+    }
+
+    public List<ContainerBean> getContainerList() {
+        return mContainerList;
+    }
+
+    /**
+     * 根据container的id获取container
+     *
+     * @param id
+     * @return
+     */
+    public ContainerBean getContainer(String id) {
+        if (!TextUtils.isEmpty(id) && mContainerList != null && mContainerList.size() > 0) {
+            for (ContainerBean containerBean : mContainerList) {
+                if (id.equals(containerBean.id)) {
+                    return containerBean;
+                }
+            }
+        }
+        return null;
+    }
+
 
     /**
      *

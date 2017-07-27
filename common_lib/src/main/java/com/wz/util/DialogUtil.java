@@ -1,9 +1,13 @@
 package com.wz.util;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.text.TextUtils;
+import android.view.View;
+
+import com.wz.view.WaitingDialog;
 
 
 /**
@@ -33,9 +37,9 @@ public class DialogUtil {
             , String positiveMsg, DialogInterface.OnClickListener positiveClickListener
             , String negativeMsg, DialogInterface.OnClickListener negativeClickListener) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setTitle(title);
-        builder.setMessage(message);
-        builder.setCancelable(cancelable);
+        builder.setTitle(title)
+                .setMessage(message)
+                .setCancelable(cancelable);
         if (onCancelListener != null) {
             builder.setOnCancelListener(onCancelListener);
         }
@@ -48,5 +52,21 @@ public class DialogUtil {
         }
         AlertDialog dialog = builder.create();
         dialog.show();
+    }
+
+    public static void showWaitingDialog(Activity activity, String title, String message, String positiveMsg, View.OnClickListener positiveClickListener
+            , String negativeMsg, View.OnClickListener negativeClickListener, String waitingMessage) {
+        WaitingDialog.Builder builder = new WaitingDialog.Builder(activity);
+        WaitingDialog dialog = builder
+                .setTitle(title)
+                .setMessage(message)
+                .setPositiveMsg(positiveMsg)
+                .setOnConfirmClickListener(positiveClickListener)
+                .setNegativeMsg(negativeMsg)
+                .setOnCancelClickListener(negativeClickListener)
+                .setWaitingMessage(waitingMessage)
+                .create();
+        dialog.show();
+
     }
 }

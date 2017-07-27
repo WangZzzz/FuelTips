@@ -161,9 +161,11 @@ public class FuelRecordFragment extends BaseFragment {
     private void addFuelRecord() {
         Intent intent = new Intent(getActivity(), AddFuelRecordActivity.class);
         intent.putExtra(AppConstants.EXTRA_FUEL_PRICE_BEAN, AppConstants.sFuelPriceBean);
-        FuelRecordBean recordBean = mFuelRecords.get(0);
-        if (recordBean != null) {
-            intent.putExtra(AppConstants.EXTRA_FUEL_RECORD_BEAN, recordBean);
+        if (mFuelRecords.size() > 0) {
+            FuelRecordBean recordBean = mFuelRecords.get(0);
+            if (recordBean != null) {
+                intent.putExtra(AppConstants.EXTRA_FUEL_RECORD_BEAN, recordBean);
+            }
         }
         startActivityForResult(intent, AppConstants.REQUEST_ADD_FUEL_RECORD);
     }
