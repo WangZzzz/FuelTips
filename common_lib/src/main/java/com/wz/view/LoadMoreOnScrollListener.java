@@ -2,7 +2,6 @@ package com.wz.view;
 
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 
 public abstract class LoadMoreOnScrollListener extends RecyclerView.OnScrollListener {
 
@@ -47,4 +46,14 @@ public abstract class LoadMoreOnScrollListener extends RecyclerView.OnScrollList
     }
 
     public abstract void loadMoreData();
+
+    /**
+     * 初始化，在添加新的数据时，刷新
+     */
+    public void init() {
+        totalItemCount = 0;
+        visibleItemCount = 0;
+        previousTotal = 0;
+        isLoading = false;
+    }
 }

@@ -25,8 +25,10 @@ import com.wz.fuel.db.GreenDaoManager;
 import com.wz.fuel.mvp.bean.FuelPriceBean;
 import com.wz.fuel.mvp.bean.FuelRecordBean;
 import com.wz.fuel.mvp.bean.FuelRecordBeanDao;
+import com.wz.util.AndroidUtil;
 import com.wz.util.DialogUtil;
 import com.wz.util.NumberUtil;
+import com.wz.util.ScreenUtil;
 import com.wz.util.TimeUtil;
 import com.wz.util.ToastMsgUtil;
 import com.wz.util.WLog;
@@ -39,6 +41,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.qqtheme.framework.picker.DatePicker;
 
+import static android.R.attr.width;
 import static com.wz.fuel.mvp.bean.FuelRecordBean.TYPE_DIESEL_0;
 import static com.wz.fuel.mvp.bean.FuelRecordBean.TYPE_GAS_89;
 import static com.wz.fuel.mvp.bean.FuelRecordBean.TYPE_GAS_92;
@@ -307,7 +310,11 @@ public class AddFuelRecordActivity extends BaseActivity implements View.OnClickL
 
     private void initPopupWindow(final FuelRecordBean fuelRecordBean) {
         View rootView = LayoutInflater.from(this).inflate(R.layout.popup_window_add_record_confirm, null);
-        mPopupWindow = new PopupWindow(rootView, LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+
+        int screenWidth = ScreenUtil.getScreenWidth(this);
+        int measuredWidth = rootView.getMeasuredWidth();
+        int width = (int) (0.8 * screenWidth) > measuredWidth ? (int) (0.8 * screenWidth) : measuredWidth;
+        mPopupWindow = new PopupWindow(rootView, width, LinearLayout.LayoutParams.WRAP_CONTENT);
         mPopupWindow.setFocusable(true);
         mPopupWindow.setBackgroundDrawable(new ColorDrawable());
         mPopupWindow.setOutsideTouchable(true);
@@ -319,8 +326,8 @@ public class AddFuelRecordActivity extends BaseActivity implements View.OnClickL
         TextView tvFuelDate = (TextView) rootView.findViewById(R.id.tv_fuel_date);
         TextView tvTotalPrice = (TextView) rootView.findViewById(R.id.tv_total_price);
         TextView tvCurrentMileage = (TextView) rootView.findViewById(R.id.tv_current_mileage);
-        Button btnConfirm = (Button) rootView.findViewById(R.id.btn_confirm);
-        Button btnCancel = (Button) rootView.findViewById(R.id.btn_cancel);
+        TextView btnConfirm = (TextView) rootView.findViewById(R.id.btn_confirm);
+        TextView btnCancel = (TextView) rootView.findViewById(R.id.btn_cancel);
         tvUnitPrice.setText(fuelRecordBean.getUnitPrice() + "");
         tvFuelType.setText(fuelRecordBean.getFuelTypeStr());
         tvFuelLiters.setText(fuelRecordBean.getLitres() + "");

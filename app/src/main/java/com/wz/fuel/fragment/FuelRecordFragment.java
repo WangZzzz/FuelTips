@@ -59,6 +59,7 @@ public class FuelRecordFragment extends BaseFragment {
 
     private FuelRecordAdapter mAdapter;
     private List<FuelRecordBean> mFuelRecords;
+    private LinearLayoutManager mLayoutManager;
 
     /**
      * 起始位置
@@ -77,6 +78,8 @@ public class FuelRecordFragment extends BaseFragment {
     private static final int MSG_LOAD_MORE_DATA = 1;
 
     private static final int LOAD_DATA_DELAY = 500;
+
+    private LoadMoreOnScrollListener mLoadMoreOnScrollListener;
 
     private Handler mHandler = new Handler() {
         @Override
@@ -123,8 +126,8 @@ public class FuelRecordFragment extends BaseFragment {
         mAdapter = new FuelRecordAdapter(getActivity(), mFuelRecords);
         initFooterViewLoadMore();
         mAdapter.setFooterView(mFooterViewLoadMore);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
-        mRvFuelRecord.setLayoutManager(layoutManager);
+        mLayoutManager = new LinearLayoutManager(getActivity());
+        mRvFuelRecord.setLayoutManager(mLayoutManager);
         mRvFuelRecord.setAdapter(mAdapter);
 
         mAdapter.setOnItemLongClickListener(mOnItemLongClickListener);
@@ -136,14 +139,16 @@ public class FuelRecordFragment extends BaseFragment {
             }
         });
 
-        mRvFuelRecord.addOnScrollListener(new LoadMoreOnScrollListener(layoutManager) {
+        mLoadMoreOnScrollListener = new LoadMoreOnScrollListener(mLayoutManager) {
             @Override
             public void loadMoreData() {
                 mFooterViewLoadMore.setVisibility(View.VISIBLE);
                 mHandler.sendEmptyMessageDelayed(MSG_LOAD_MORE_DATA, LOAD_DATA_DELAY);
             }
-        });
+        };
+        mRvFuelRecord.addOnScrollListener(mLoadMoreOnScrollListener);
     }
+
 
     private void initFooterViewLoadMore() {
         mFooterViewLoadMore = LayoutInflater.from(getActivity()).inflate(R.layout.footerview_load_more_layout, null);
@@ -177,10 +182,11 @@ public class FuelRecordFragment extends BaseFragment {
                 if (resultCode == Activity.RESULT_OK) {
                     //添加成功
                     if (data != null) {
-                        FuelRecordBean recordBean = data.getParcelableExtra(AppConstants.EXTRA_FUEL_RECORD_BEAN);
-                        mFuelRecords.add(recordBean);
-                        sortRecordList();
+                        mFuelRecords.clear();
                         mAdapter.notifyDataSetChanged();
+                        mLoadMoreOnScrollListener.init();
+                        mOffset = 0;
+                        queryDb(mLimit, mOffset);
                     }
                 } else if (resultCode == Activity.RESULT_CANCELED) {
                     ToastMsgUtil.info(getActivity(), "取消添加", 0);
