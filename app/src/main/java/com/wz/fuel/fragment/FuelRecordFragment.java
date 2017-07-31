@@ -30,6 +30,7 @@ import com.wz.fuel.mvp.bean.FuelRecordBeanDao;
 import com.wz.util.DialogUtil;
 import com.wz.util.ScreenUtil;
 import com.wz.util.ToastMsgUtil;
+import com.wz.util.WLog;
 import com.wz.view.LoadMoreOnScrollListener;
 import com.wz.view.OnItemClickListener;
 import com.wz.view.OnItemLongClickListener;
@@ -166,12 +167,12 @@ public class FuelRecordFragment extends BaseFragment {
     private void addFuelRecord() {
         Intent intent = new Intent(getActivity(), AddFuelRecordActivity.class);
         intent.putExtra(AppConstants.EXTRA_FUEL_PRICE_BEAN, AppConstants.sFuelPriceBean);
-        if (mFuelRecords.size() > 0) {
-            FuelRecordBean recordBean = mFuelRecords.get(0);
-            if (recordBean != null) {
-                intent.putExtra(AppConstants.EXTRA_FUEL_RECORD_BEAN, recordBean);
-            }
-        }
+//        if (mFuelRecords.size() > 0) {
+//            FuelRecordBean recordBean = mFuelRecords.get(0);
+//            if (recordBean != null) {
+//                intent.putExtra(AppConstants.EXTRA_FUEL_RECORD_BEAN, recordBean);
+//            }
+//        }
         startActivityForResult(intent, AppConstants.REQUEST_ADD_FUEL_RECORD);
     }
 
@@ -201,12 +202,16 @@ public class FuelRecordFragment extends BaseFragment {
             DialogUtil.showDialog(getActivity(), "是否删除记录？", "确定", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    FuelRecordBean fuelRecordBean = mFuelRecords.get(position);
-                    mFuelRecords.remove(fuelRecordBean);
-                    if (fuelRecordBean != null) {
-                        deleteRecord(fuelRecordBean);
+                    try {
+                        FuelRecordBean fuelRecordBean = mFuelRecords.get(position);
+                        mFuelRecords.remove(fuelRecordBean);
+                        if (fuelRecordBean != null) {
+                            deleteRecord(fuelRecordBean);
+                        }
+                        mAdapter.notifyItemRemoved(position);
+                    } catch (IndexOutOfBoundsException e) {
+                        WLog.e(TAG, e.getMessage(), e);
                     }
-                    mAdapter.notifyItemRemoved(position);
                 }
             }, "取消", new DialogInterface.OnClickListener() {
                 @Override
@@ -225,7 +230,7 @@ public class FuelRecordFragment extends BaseFragment {
             public void subscribe(ObservableEmitter<List<FuelRecordBean>> e) throws Exception {
                 FuelRecordBeanDao recordDao = GreenDaoManager.getInstance().getDaoSession().getFuelRecordBeanDao();
                 if (recordDao != null) {
-                    List<FuelRecordBean> recordBeans = recordDao.queryBuilder().limit(limit).offset(offset).orderDesc(FuelRecordBeanDao.Properties.Id).list();
+                    List<FuelRecordBean> recordBeans = recordDao.queryBuilder().limit(limit).offset(offset).orderDesc(FuelRecordBeanDao.Properties.FuelDate).list();
                     e.onNext(recordBeans);
                 }
             }

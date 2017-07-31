@@ -11,6 +11,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.LineDataSet;
 import com.wz.fuel.R;
 import com.wz.fuel.db.GreenDaoManager;
 import com.wz.fuel.mvp.bean.FuelRecordBean;
@@ -19,6 +22,7 @@ import com.wz.util.WLog;
 import com.wz.view.PointIndicatorView;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import io.reactivex.Observable;
@@ -72,6 +76,8 @@ public class FuelConsumptionFragment extends BaseFragment implements View.OnClic
     private TextView mTvAverageMileage;
     private TextView mTvRecentConsumption;
 
+    private int mCurrentMonth;
+
     public FuelConsumptionFragment() {
         // Required empty public constructor
     }
@@ -108,13 +114,15 @@ public class FuelConsumptionFragment extends BaseFragment implements View.OnClic
     @Override
     public void initData() {
         mRecordList = new ArrayList<>();
+        mCurrentMonth = Calendar.getInstance().get(Calendar.MONTH) + 1;
+        WLog.d(TAG, "当前月份是：" + mCurrentMonth);
         mTitles = new String[4];
         mTitles[0] = getString(R.string.title_fuel_consumption_last_three_month);
         mTitles[1] = getString(R.string.title_fuel_consumption_last_half_year);
         mTitles[2] = getString(R.string.title_fuel_consumption_last_year);
         mTitles[3] = getString(R.string.title_fuel_consumption);
         mTvTitle.setText(mTitles[0]);
-        initChart();
+        initChart(mLineChart1, TYPE_LAST_THREE_MONTH);
         queryData();
     }
 
@@ -124,7 +132,7 @@ public class FuelConsumptionFragment extends BaseFragment implements View.OnClic
             public void subscribe(ObservableEmitter<List<FuelRecordBean>> e) throws Exception {
                 FuelRecordBeanDao recordDao = GreenDaoManager.getInstance().getDaoSession().getFuelRecordBeanDao();
                 if (recordDao != null) {
-                    List<FuelRecordBean> recordBeenList = recordDao.queryBuilder().orderAsc(FuelRecordBeanDao.Properties.FuelDate).list();
+                    List<FuelRecordBean> recordBeenList = recordDao.queryBuilder().orderDesc(FuelRecordBeanDao.Properties.FuelDate).list();
                     e.onNext(recordBeenList);
                 } else {
                     e.onError(new Exception("can not get FuelRecordBeanDao!"));
@@ -165,21 +173,25 @@ public class FuelConsumptionFragment extends BaseFragment implements View.OnClic
     /**
      * 初始化设置图表
      */
-    private void initChart() {
-        mLineChart1.setNoDataText(getString(R.string.tips_no_data));
-        mLineChart1.setNoDataTextColor(getResources().getColor(R.color.orangered));
-        mLineChart1.setDrawGridBackground(false);
+    private void initChart(LineChart lineChart, int type) {
+        lineChart.setNoDataText(getString(R.string.tips_no_data));
+        lineChart.setNoDataTextColor(getResources().getColor(R.color.orangered));
+        lineChart.setDrawGridBackground(false);
         // no description text
-        mLineChart1.getDescription().setEnabled(false);
+        lineChart.getDescription().setEnabled(false);
         // disable touch gestures
-        mLineChart1.setTouchEnabled(false);
+        lineChart.setTouchEnabled(false);
         // disable scaling and dragging
-        mLineChart1.setDragEnabled(false);
-        mLineChart1.setScaleEnabled(false);
+        lineChart.setDragEnabled(false);
+        lineChart.setScaleEnabled(false);
         // mChart.setScaleXEnabled(true);
         // mChart.setScaleYEnabled(true);
         // if disabled, scaling can be done on x- and y-axis separately
-        mLineChart1.setPinchZoom(false);
+        lineChart.setPinchZoom(false);
+
+        XAxis xAxis = lineChart.getXAxis();
+
+        setData(type);
     }
 
     /**
@@ -190,15 +202,74 @@ public class FuelConsumptionFragment extends BaseFragment implements View.OnClic
     private void setData(int type) {
         switch (type) {
             case TYPE_LAST_THREE_MONTH:
+                List<FuelRecordBean> recordList1 = processData(3);
                 break;
             case TYPE_LAST_HALF_YEAR:
+                List<FuelRecordBean> recordList2 = processData(6);
                 break;
             case TYPE_LAST_YEAR:
+                List<FuelRecordBean> recordList3 = processData(12);
                 break;
             case TYPE_ALL:
                 break;
         }
     }
+
+    private List<FuelRecordBean> processData(int offset) {
+        List<FuelRecordBean> recordList = new ArrayList<>();
+        if (mRecordList != null && mRecordList.size() > 0) {
+            for (FuelRecordBean record : mRecordList) {
+                if (record.fuelMonth > mCurrentMonth - offset) {
+                    //最近三月数据
+                    recordList.add(record);
+                }
+            }
+        }
+        return recordList;
+    }
+
+    private LineDataSet getLineDate(List<FuelRecordBean> recordList) {
+        if (recordList == null || recordList.size() <= 0) {
+            return null;
+        }
+        List<Entry> values = new ArrayList<>();
+        for (int i = 0; i < recordList.size() - 1; i++) {
+            Entry entry = new Entry();
+            FuelRecordBean record1 = recordList.get(i);
+            FuelRecordBean record2 = recordList.get(i + 1);
+            if (record1 != null && record2 != null) {
+                //里程
+                float mileage = record1.currentMileage - record2.currentMileage;
+
+            }
+        }
+        return null;
+    }
+
+    private int getTotalLiters(List<FuelRecordBean> recordList) {
+        return 0;
+    }
+
+    private float getAverageConsumption(List<FuelRecordBean> recordList) {
+        return 0;
+    }
+
+    private float getMaximumConsumption(List<FuelRecordBean> recordList) {
+        return 0;
+    }
+
+    private float getMinimumConsumption(List<FuelRecordBean> recordList) {
+        return 0;
+    }
+
+    private float getRecentConsumption(List<FuelRecordBean> recordList) {
+        return 0;
+    }
+
+    private float getAverageMileage(List<FuelRecordBean> recordList) {
+        return 0;
+    }
+
 
     @Override
     protected void refresh(Bundle data) {

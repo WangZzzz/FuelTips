@@ -56,6 +56,10 @@ public class FuelRecordBean implements Parcelable {
     public int fuelDay;
     //当前加油时里程
     public int currentMileage;
+    //是否加满
+    public boolean isFull;
+    //油箱是否空了
+    public boolean isEmpty;
 
 
     public static String getFuelTypeString(int fuelType) {
@@ -92,6 +96,8 @@ public class FuelRecordBean implements Parcelable {
         dest.writeInt(this.fuelYear);
         dest.writeInt(this.fuelDay);
         dest.writeInt(this.currentMileage);
+        dest.writeByte(this.isFull ? (byte) 1 : (byte) 0);
+        dest.writeByte(this.isEmpty ? (byte) 1 : (byte) 0);
     }
 
     public Long getId() {
@@ -182,6 +188,22 @@ public class FuelRecordBean implements Parcelable {
         this.currentMileage = currentMileage;
     }
 
+    public boolean getIsFull() {
+        return this.isFull;
+    }
+
+    public void setIsFull(boolean isFull) {
+        this.isFull = isFull;
+    }
+
+    public boolean getIsEmpty() {
+        return this.isEmpty;
+    }
+
+    public void setIsEmpty(boolean isEmpty) {
+        this.isEmpty = isEmpty;
+    }
+
     public FuelRecordBean() {
     }
 
@@ -197,12 +219,14 @@ public class FuelRecordBean implements Parcelable {
         this.fuelYear = in.readInt();
         this.fuelDay = in.readInt();
         this.currentMileage = in.readInt();
+        this.isFull = in.readByte() != 0;
+        this.isEmpty = in.readByte() != 0;
     }
 
-    @Generated(hash = 67425672)
+    @Generated(hash = 171747399)
     public FuelRecordBean(Long id, float totalPrice, float unitPrice, long fuelDate,
             float litres, int fuelType, String fuelTypeStr, int fuelMonth, int fuelYear,
-            int fuelDay, int currentMileage) {
+            int fuelDay, int currentMileage, boolean isFull, boolean isEmpty) {
         this.id = id;
         this.totalPrice = totalPrice;
         this.unitPrice = unitPrice;
@@ -214,6 +238,8 @@ public class FuelRecordBean implements Parcelable {
         this.fuelYear = fuelYear;
         this.fuelDay = fuelDay;
         this.currentMileage = currentMileage;
+        this.isFull = isFull;
+        this.isEmpty = isEmpty;
     }
 
     public static final Creator<FuelRecordBean> CREATOR = new Creator<FuelRecordBean>() {

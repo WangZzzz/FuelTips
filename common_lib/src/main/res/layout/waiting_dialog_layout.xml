@@ -31,9 +31,9 @@
         <TextView
             android:id="@+id/tv_message"
             android:layout_width="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_alignParentLeft="true"
             android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
             android:text="退出应用？"
             android:textColor="@color/black"
             android:textSize="18sp"/>
@@ -44,8 +44,8 @@
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_alignParentRight="true"
-            android:layout_marginRight="20dp"
             android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
             android:layout_toRightOf="@+id/tv_message"
             android:visibility="invisible"/>
     </RelativeLayout>
@@ -54,7 +54,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/ll_message"
-        android:layout_marginBottom="10dp"
         android:gravity="end"
         android:orientation="horizontal">
 
@@ -62,7 +61,10 @@
             android:id="@+id/tv_cancel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginRight="40dp"
+            android:paddingBottom="10dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="40dp"
+            android:paddingTop="10dp"
             android:text="取消"
             android:textColor="#049889"/>
 
@@ -70,7 +72,10 @@
             android:id="@+id/tv_confirm"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginRight="30dp"
+            android:paddingBottom="10dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="30dp"
+            android:paddingTop="10dp"
             android:text="确定"
             android:textColor="#049889"/>
     </LinearLayout>

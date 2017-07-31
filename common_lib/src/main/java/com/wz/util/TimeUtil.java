@@ -1647,4 +1647,19 @@ public class TimeUtil {
         }
         return sb.toString();
     }
+
+    /**
+     * 获取目前时分秒对应的毫秒数
+     *
+     * @return
+     */
+    public static long getCurrentExtraMillis() {
+        Calendar calendar = Calendar.getInstance();
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH) + 1;
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+        String ymd = year + "-" + month + "-" + day + " 00:00:00";
+        long tmpMillis = string2Millis(ymd, new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"));
+        return System.currentTimeMillis() - tmpMillis;
+    }
 }

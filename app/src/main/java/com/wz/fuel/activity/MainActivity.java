@@ -111,6 +111,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             @Override
             public void onTabChanged(String tabId) {
                 mCurrentTab = tabId;
+                mToolbarTitle.setText(tabId);
             }
         });
     }

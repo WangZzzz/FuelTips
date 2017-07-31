@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.support.annotation.IdRes;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.Gravity;
@@ -16,6 +17,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
+import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -25,7 +27,6 @@ import com.wz.fuel.db.GreenDaoManager;
 import com.wz.fuel.mvp.bean.FuelPriceBean;
 import com.wz.fuel.mvp.bean.FuelRecordBean;
 import com.wz.fuel.mvp.bean.FuelRecordBeanDao;
-import com.wz.util.AndroidUtil;
 import com.wz.util.DialogUtil;
 import com.wz.util.NumberUtil;
 import com.wz.util.ScreenUtil;
@@ -35,13 +36,13 @@ import com.wz.util.WLog;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.qqtheme.framework.picker.DatePicker;
 
-import static android.R.attr.width;
 import static com.wz.fuel.mvp.bean.FuelRecordBean.TYPE_DIESEL_0;
 import static com.wz.fuel.mvp.bean.FuelRecordBean.TYPE_GAS_89;
 import static com.wz.fuel.mvp.bean.FuelRecordBean.TYPE_GAS_92;
@@ -80,16 +81,23 @@ public class AddFuelRecordActivity extends BaseActivity implements View.OnClickL
     LinearLayout mLlOtherFuelType;
     @BindView(R.id.tv_fuel_date)
     TextView mTvFuelDate;
+    @BindView(R.id.radioGroup)
+    RadioGroup mRadioGroup;
     private FuelPriceBean mFuelPriceBean;
 
     //前一条记录
     private FuelRecordBean mPreRecordBean;
+    //后一条记录，用于计算油耗，确认数据合法性
+    private FuelRecordBean mAfterRecordBean;
 
     private PopupWindow mPopupWindow;
 
     private int mFuelMonth;
     private int mFuelDay;
     private int mFuelYear;
+
+    private boolean mIsFull = true;
+    private boolean mIsEmpty = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,7 +119,6 @@ public class AddFuelRecordActivity extends BaseActivity implements View.OnClickL
         Intent intent = getIntent();
         if (intent != null) {
             mFuelPriceBean = intent.getParcelableExtra(AppConstants.EXTRA_FUEL_PRICE_BEAN);
-            mPreRecordBean = intent.getParcelableExtra(AppConstants.EXTRA_FUEL_RECORD_BEAN);
         }
 
         Calendar calendar = Calendar.getInstance();
@@ -197,6 +204,18 @@ public class AddFuelRecordActivity extends BaseActivity implements View.OnClickL
                 picker.show();
             }
         });
+        mRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, @IdRes int checkedId) {
+                if (checkedId == R.id.rdoBtn_is_full) {
+                    mIsFull = true;
+                    mIsEmpty = false;
+                } else if (checkedId == R.id.rdoBtn_is_empty) {
+                    mIsFull = false;
+                    mIsEmpty = true;
+                }
+            }
+        });
     }
 
     @Override
@@ -265,7 +284,8 @@ public class AddFuelRecordActivity extends BaseActivity implements View.OnClickL
             fuelRecordBean.unitPrice = desUnitPrice;
             fuelRecordBean.totalPrice = totalPrice;
             fuelRecordBean.litres = fuelLiters;
-            long fuelDate = TimeUtil.string2Millis(mTvFuelDate.getText().toString(), new SimpleDateFormat(AppConstants.DATE_FORMAT));
+            long fuelDate = TimeUtil.string2Millis(mTvFuelDate.getText().toString(), new SimpleDateFormat(AppConstants.DATE_FORMAT)) + TimeUtil.getCurrentExtraMillis();
+            WLog.d(TAG, "加油时间：" + TimeUtil.millis2String(fuelDate, new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")));
             fuelRecordBean.fuelDate = fuelDate;
             int selectedPosition = mSpinnerFuelType.getSelectedItemPosition();
             fuelRecordBean.fuelType = selectedPosition;
@@ -273,6 +293,8 @@ public class AddFuelRecordActivity extends BaseActivity implements View.OnClickL
             fuelRecordBean.fuelYear = mFuelYear;
             fuelRecordBean.fuelDay = mFuelDay;
             fuelRecordBean.currentMileage = currentMileage;
+            fuelRecordBean.isFull = mIsFull;
+            fuelRecordBean.isEmpty = mIsEmpty;
             if (selectedPosition >= TYPE_OTHERS) {
                 fuelRecordBean.fuelTypeStr = mEtFuelOtherType.getText().toString();
             } else {
@@ -296,9 +318,28 @@ public class AddFuelRecordActivity extends BaseActivity implements View.OnClickL
         if (fuelRecordBean == null) {
             return false;
         }
+        FuelRecordBeanDao recordDao = GreenDaoManager.getInstance().getDaoSession().getFuelRecordBeanDao();
+        if (recordDao != null) {
+            //此次加油之前的记录
+            List<FuelRecordBean> tmpList1 = recordDao.queryBuilder().orderDesc(FuelRecordBeanDao.Properties.FuelDate).where(FuelRecordBeanDao.Properties.FuelDate.lt(fuelRecordBean.fuelDate)).limit(1).list();
+            if (tmpList1 != null && tmpList1.size() == 1) {
+                mPreRecordBean = tmpList1.get(0);
+            }
+
+            //此次加油后的记录
+            List<FuelRecordBean> tmpList2 = recordDao.queryBuilder().orderDesc(FuelRecordBeanDao.Properties.FuelDate).where(FuelRecordBeanDao.Properties.FuelDate.gt(fuelRecordBean.fuelDate)).limit(1).list();
+            if (tmpList2 != null && tmpList2.size() == 1) {
+                mAfterRecordBean = tmpList2.get(0);
+            }
+        }
         if (mPreRecordBean != null) {
             //里程必须是增加的
             if (fuelRecordBean.currentMileage <= mPreRecordBean.currentMileage) {
+                return false;
+            }
+        }
+        if (mAfterRecordBean != null) {
+            if (fuelRecordBean.currentMileage >= mAfterRecordBean.currentMileage) {
                 return false;
             }
         }
