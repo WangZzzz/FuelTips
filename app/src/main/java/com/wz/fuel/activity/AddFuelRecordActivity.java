@@ -177,21 +177,21 @@ public class AddFuelRecordActivity extends BaseActivity implements View.OnClickL
     }
 
     private void initAction() {
+        Calendar calendar = Calendar.getInstance();
+        mFuelYear = calendar.get(Calendar.YEAR);
+        mFuelMonth = calendar.get(Calendar.MONTH) + 1;
+        mFuelDay = calendar.get(Calendar.DAY_OF_MONTH);
         mTvFuelDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //显示日期选择
-                Calendar calendar = Calendar.getInstance();
-                int year = calendar.get(Calendar.YEAR);
-                int month = calendar.get(Calendar.MONTH) + 1;
-                int day = calendar.get(Calendar.DAY_OF_MONTH);
                 DatePicker picker = new DatePicker(AddFuelRecordActivity.this);
                 picker.setCanceledOnTouchOutside(true);
                 picker.setUseWeight(true);
 //                picker.setTopPadding(ConvertUtils.toPx(this, 10));
                 picker.setRangeEnd(2025, 1, 1);
                 picker.setRangeStart(2016, 1, 1);
-                picker.setSelectedItem(year, month, day);
+                picker.setSelectedItem(mFuelYear, mFuelMonth, mFuelDay);
                 picker.setOnDatePickListener(new DatePicker.OnYearMonthDayPickListener() {
                     @Override
                     public void onDatePicked(String year, String month, String day) {

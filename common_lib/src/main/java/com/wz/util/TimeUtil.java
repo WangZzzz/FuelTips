@@ -1662,4 +1662,34 @@ public class TimeUtil {
         long tmpMillis = string2Millis(ymd, new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"));
         return System.currentTimeMillis() - tmpMillis;
     }
+
+    /**
+     * 将时间戳转换为天数
+     *
+     * @param millis
+     * @return
+     */
+    public static float millisToDay(long millis) {
+        long perDay = 24 * 60 * 60 * 1000;
+        return millis / perDay;
+    }
+
+    /**
+     * 根据月份年份获取当月的天数
+     *
+     * @param year
+     * @param month
+     * @return
+     */
+    public static int getDaysByYearMonth(int year, int month) {
+
+        Calendar a = Calendar.getInstance();
+        a.set(Calendar.YEAR, year);
+        a.set(Calendar.MONTH, month - 1);
+        a.set(Calendar.DATE, 1);
+        a.roll(Calendar.DATE, -1);
+        int maxDate = a.get(Calendar.DATE);
+        return maxDate;
+    }
+
 }

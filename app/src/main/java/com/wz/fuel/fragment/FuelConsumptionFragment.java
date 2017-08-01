@@ -1,6 +1,8 @@
 package com.wz.fuel.fragment;
 
 
+import android.graphics.Color;
+import android.graphics.DashPathEffect;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -12,12 +14,16 @@ import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.wz.fuel.R;
 import com.wz.fuel.db.GreenDaoManager;
 import com.wz.fuel.mvp.bean.FuelRecordBean;
 import com.wz.fuel.mvp.bean.FuelRecordBeanDao;
+import com.wz.util.NumberUtil;
+import com.wz.util.TimeUtil;
 import com.wz.util.WLog;
 import com.wz.view.PointIndicatorView;
 
@@ -122,8 +128,8 @@ public class FuelConsumptionFragment extends BaseFragment implements View.OnClic
         mTitles[2] = getString(R.string.title_fuel_consumption_last_year);
         mTitles[3] = getString(R.string.title_fuel_consumption);
         mTvTitle.setText(mTitles[0]);
-        initChart(mLineChart1, TYPE_LAST_THREE_MONTH);
         queryData();
+        initChart(mLineChart1);
     }
 
     private void queryData() {
@@ -173,7 +179,7 @@ public class FuelConsumptionFragment extends BaseFragment implements View.OnClic
     /**
      * 初始化设置图表
      */
-    private void initChart(LineChart lineChart, int type) {
+    private void initChart(LineChart lineChart) {
         lineChart.setNoDataText(getString(R.string.tips_no_data));
         lineChart.setNoDataTextColor(getResources().getColor(R.color.orangered));
         lineChart.setDrawGridBackground(false);
@@ -190,8 +196,23 @@ public class FuelConsumptionFragment extends BaseFragment implements View.OnClic
         lineChart.setPinchZoom(false);
 
         XAxis xAxis = lineChart.getXAxis();
+        xAxis.enableGridDashedLine(10f, 10f, 0f);
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
 
-        setData(type);
+        YAxis yAxis = lineChart.getAxisLeft();
+        yAxis.removeAllLimitLines(); // reset all limit lines to avoid overlapping lines
+        //设置y轴最大值
+        yAxis.setAxisMaximum(120f);
+        //设置y轴最小值
+        yAxis.setAxisMinimum(-50f);
+        //leftAxis.setYOffset(20f);
+        yAxis.enableGridDashedLine(10f, 10f, 0f);
+        yAxis.setDrawZeroLine(false);
+
+        // limit lines are drawn behind data (and not on top)
+        yAxis.setDrawLimitLinesBehindData(true);
+
+        lineChart.getAxisRight().setEnabled(false);
     }
 
     /**
@@ -203,6 +224,9 @@ public class FuelConsumptionFragment extends BaseFragment implements View.OnClic
         switch (type) {
             case TYPE_LAST_THREE_MONTH:
                 List<FuelRecordBean> recordList1 = processData(3);
+                mLineChart1.setData(getLineDate(recordList1));
+                mLineChart1.getData().notifyDataChanged();
+                mLineChart1.notifyDataSetChanged();
                 break;
             case TYPE_LAST_HALF_YEAR:
                 List<FuelRecordBean> recordList2 = processData(6);
@@ -228,22 +252,59 @@ public class FuelConsumptionFragment extends BaseFragment implements View.OnClic
         return recordList;
     }
 
-    private LineDataSet getLineDate(List<FuelRecordBean> recordList) {
+    private LineData getLineDate(List<FuelRecordBean> recordList) {
         if (recordList == null || recordList.size() <= 0) {
             return null;
         }
         List<Entry> values = new ArrayList<>();
-        for (int i = 0; i < recordList.size() - 1; i++) {
-            Entry entry = new Entry();
-            FuelRecordBean record1 = recordList.get(i);
-            FuelRecordBean record2 = recordList.get(i + 1);
-            if (record1 != null && record2 != null) {
-                //里程
-                float mileage = record1.currentMileage - record2.currentMileage;
+//        for (int i = 0; i < recordList.size() - 1; i++) {
+//            FuelRecordBean record1 = recordList.get(i);
+//            FuelRecordBean record2 = recordList.get(i + 1);
+//            if (record1 != null && record2 != null) {
+//                //里程
+//                float mileage = record1.currentMileage - record2.currentMileage;
+//                float y = NumberUtil.format(record2.litres / mileage * 100);
+//                float x = getX(record1);
+//                WLog.d(TAG, x + " : " + y + " 升/百公里");
+//                Entry entry = new Entry(x, y);
+//                values.add(entry);
+//            }
+//        }
 
-            }
+
+        for (int i = 0; i < 45; i++) {
+
+            float val = (float) (Math.random() * 100) + 3;
+            values.add(new Entry(i, val));
         }
-        return null;
+
+        LineDataSet lineDataSet = new LineDataSet(values, "油耗");
+        lineDataSet.setDrawIcons(false);
+
+        // set the line to be drawn like this "- - - - - -"
+        lineDataSet.enableDashedLine(10f, 5f, 0f);
+        lineDataSet.enableDashedHighlightLine(10f, 5f, 0f);
+        lineDataSet.setColor(Color.BLACK);
+        lineDataSet.setCircleColor(Color.BLUE);
+        lineDataSet.setLineWidth(1f);
+        lineDataSet.setCircleRadius(3f);
+        lineDataSet.setDrawCircleHole(false);
+        lineDataSet.setValueTextSize(9f);
+        lineDataSet.setDrawFilled(true);
+        lineDataSet.setFormLineWidth(1f);
+        lineDataSet.setFormLineDashEffect(new DashPathEffect(new float[]{10f, 5f}, 0f));
+        lineDataSet.setFormSize(15.f);
+        LineData lineData = new LineData(lineDataSet);
+        return lineData;
+    }
+
+    private float getX(FuelRecordBean recordBean) {
+        if (recordBean != null) {
+            int days = TimeUtil.getDaysByYearMonth(recordBean.fuelYear, recordBean.fuelMonth);
+            float x = recordBean.fuelMonth + NumberUtil.format(recordBean.fuelDay / (days * 1.0f));
+            return x;
+        }
+        return 0;
     }
 
     private int getTotalLiters(List<FuelRecordBean> recordList) {
