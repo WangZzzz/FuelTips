@@ -12,20 +12,6 @@ import android.view.ViewGroup;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
-/**
- * <br>
- * FIREFLY
- * <p>
- * com.wz.fuel.fragment
- *
- * @author wangzhe
- * @version 3.2.0
- * @date 2017/7/4 15:13
- * @api 7
- * <br>
- * CMBC-版权所有
- * <br>
- */
 public abstract class BaseFragment extends Fragment {
     protected View mRootView = null;
     protected Activity mActivity;
